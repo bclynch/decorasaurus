@@ -1,0 +1,42 @@
+<div class="modalContainer">
+  <div class="mockNav">
+    <div class="mobilePromptClose" (click)="dismiss()">
+      <div><i class="material-icons">close</i></div>
+    </div>
+    <div class="logoWrapper">
+      <img class="logoImg" src="../../../assets/dino.svg" />
+    </div>
+    <div class="cartWrapper">
+      <div><i class="material-icons" (click)="dismiss('cart')">shopping_cart</i></div>
+    </div>
+  </div>
+  <div class="contentWrapper">
+    <!-- <div 
+      class="profileWrapper" 
+      (click)="modalContoller.dismiss('profile')"
+      *ngIf="userService.signedIn"
+    >
+      <div class="signedInUser">Welcome back {{userService.user.firstName || userService.user.username}}</div>
+      <ProfilePicture [photo]="userService.user?.profilePhoto"></ProfilePicture>
+      <div class="logoutBtn" (click)="logout($event)">Logout</div>
+    </div> -->
+    <!-- <div class="paneSectionContent" (click)="viewCtrl.dismiss('register')" *ngIf="!userService.signedIn">
+      <div><ion-icon name="md-person"></ion-icon></div>
+      <div class="loginDescription">Looks like you aren't signed into an account yet. Login or signup to become a POMB member and start chronicling your journey.</div>
+      <div class="paneSectionBtn">Get Started</div>
+    </div> -->
+    <div class="section" *ngFor="let option of sections; let i = index;" [ngClass]="[activeSection === i ? 'active' : '']">
+      <div class="sectionHeader" (click)="selectSection(i)">
+        <div class="sectionName">{{option.label}}</div>
+        <div class="arrowWrapper" *ngIf="option.subSections.length">
+          <i class="material-icons">arrow_forward</i>
+        </div>
+      </div>
+      <div class="subSectionsWrapper" *ngIf="option.subSections.length">
+        <div *ngFor="let subSection of option.subSections;" class="subSection" (click)="modalContoller.dismiss(subSection)">
+          {{subSection}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

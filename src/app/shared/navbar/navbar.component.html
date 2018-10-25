@@ -1,0 +1,37 @@
+<div 
+  class="navBarContainer" 
+  [style.height]="isExpanded ? '300px' : '54px'"
+  (mouseleave)="navHover($event)"
+  id="navBar"
+>
+  <div class="navBarWrapper">
+    <div class="barWrapper">
+      <div class="mobilePrompt" (click)="openMobileNav()">
+        <div><i class="material-icons">menu</i></div>
+      </div>
+      <div class="sectionsWrapper">
+        <div 
+          *ngFor="let section of sectionOptions;" 
+          class="section" 
+          (mouseenter)="navHover($event, i)" 
+          [ngClass]="section.value === activeSection?.value ? 'active' : ''"
+        >
+          <div (click)="routerService.navigateToPage(section.value)">{{section.label}}</div>
+          <div class="dropdown" *ngIf="section.subSections.length" [ngClass]="section.value">
+            <div *ngFor="let subSection of section.subSections" (click)="routerService.navigateToPage(subSection.path)">{{subSection.label}}</div>
+          </div>
+        </div>
+      </div>
+      <div class="logoWrapper">
+        <img class="logoImg" src="../../../assets/dino.svg" />
+        <span 
+          class="boldFont gradientText"
+          (click)="routerService.navigateToPage('/')" 
+        >Decorasaurus</span>
+      </div>
+      <div class="cartWrapper">
+        <div><i class="material-icons" (click)="routerService.navigateToPage('/cart')">shopping_cart</i></div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,170 @@
+.generatorContainer {
+  display: flex;
+  width: 100vw;
+  // height: 100vh;
+  padding-top: var(--height-navbar);
+  padding-bottom: 89px; // for mobile 39px of btn + arrow height
+
+  .posterContainer {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .emptyState {
+      font-size: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+    }
+    mat-spinner {
+      color: var(--color-secondary);
+      width: 60px !important;
+      height: 60px !important;
+    }
+    .posterWrapper {
+      padding: calc(300px * .035);
+      background: white;
+      display: inline-block;
+      border: solid 1px var(--color-border);
+      position: relative;
+
+      i {
+        display: none;
+        position: absolute;
+        background: rgba(51,55,68,0.5);
+        font-style: normal;
+        line-height: 38px;
+        text-align: center;
+        font-size: 10px;
+
+        &.horizontal {
+          width: 100%;
+          top: 100%;
+          margin-top: 30px;
+          height: 1px;
+          left: 0;
+        }
+        &.horizontal:before,
+        &.horizontal:after,
+        &.vertical:before,
+        &.vertical:after {
+          content: '';
+          background: rgba(51,55,68,0.5);
+          position: absolute;
+          box-sizing: content-box;
+        }
+        &.horizontal:before,
+        &.horizontal:after {
+          height: 15px;
+          padding-bottom: 1px;
+          top: -7.5px;
+          width: 1px;
+        }
+        &.horizontal:after {
+          right: 0;
+        }
+        &.horizontal:before {
+          left: 0;
+        }
+        &.vertical {
+          top: 0;
+          left: 100%;
+          margin-left: 30px;
+          height: 100%;
+          width: 1px;
+
+          > i {
+            font-style: normal;
+            position: absolute;
+            top: 50%;
+            width: 45px;
+            transform: rotate(90deg);
+            white-space: nowrap;
+            background: transparent;
+          }
+        }
+        &.vertical:before,
+        &.vertical:after {
+          width: 15px;
+          padding-right: 1px;
+          left: -7.5px;
+          height: 1px;
+        }
+        &.vertical:after {
+          bottom: 0;
+        }
+      }
+      img {
+        width: 300px;
+      }
+      .background {
+        position: relative;
+    
+        .posterGrid {
+          display: flex;
+          flex-wrap: wrap;
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          border: solid 1px var(--patentColor);
+          border-width: 1px 0 0 1px;
+      
+          > div {
+            flex-basis: calc(100% / 6);
+            border: solid 1px var(--patentColor);
+            border-width: 0 1px 1px 0;
+          }
+        }
+      }
+    }
+    .mobileOptionsContainer {
+
+      .addToCartBtn {
+        background: var(--color-secondary);
+        color: var(--color-white);
+        padding: 10px 0;
+        text-align: center;
+        cursor: pointer;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+      }
+    }
+  }
+
+  @media (min-width: 768px) {
+    padding-bottom:  0;
+
+    .posterContainer {
+
+      .mobileOptionsContainer {
+        display: none;
+      }
+      .posterWrapper {
+        
+        i {
+          display: block;
+        }
+      }
+    }
+    .optionsContainer {
+      display: flex;
+
+      .productContainer {
+        display: block;
+      }
+    }
+  }
+
+  @media (min-width: 1024px) {
+    app-options-container {
+      width: 40%;
+    }
+  }
+}

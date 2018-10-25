@@ -1,0 +1,52 @@
+<div class="basicOptionsContainer">
+  <app-colors-picker 
+    [trace]="posterTrace" 
+    [background]="posterBackground" 
+    (posterTrace)="processColor($event, null)" 
+    (posterBackground)="processColor(null, $event)"
+  ></app-colors-picker>
+  <div class="fileUploadContainer" *ngIf="!imgUrl && !readingFile">
+    <label for="file">
+      <file-drop (onFileDrop)="dropped($event)" customstyle="fileDrop">
+        <i class="material-icons">cloud_upload</i>
+        <div>Drag and drop image here or click to select</div>
+      </file-drop>
+    </label>
+    <input 
+      type="file" 
+      id="file" 
+      name="file" 
+      accept="image/*" 
+      (change)="fileChangeEvent($event)"
+    />
+  </div>
+  <div class="spinnerContainer" *ngIf="readingFile">
+    <mat-spinner></mat-spinner>
+  </div>
+  <div class="cropperContainer" *ngIf="imgUrl">
+    <angular-cropper #angularCropper [cropperOptions]="cropperConfig" [imageUrl]="imgUrl"></angular-cropper>
+    <div class="zoomContainer">
+      <!-- <ion-icon 
+        class="zoomIn" 
+        name="add" 
+        title="Zoom In"
+        (click)="zoom('in')"
+      ></ion-icon>
+      <ion-icon 
+        class="zoomOut" 
+        name="remove" 
+        title="Zoom Out" 
+        (click)="zoom('out')"
+      ></ion-icon> -->
+    </div>
+    <div class="buttonsWrapper">
+      <div class="btn" *ngFor="let btn of cropperBtns;" (mouseenter)="presentTooltipPopover($event, btn.tooltip)" (mouseleave)="dismissTooltip()">
+        <!-- <ion-icon [name]="btn.icon"></ion-icon> -->
+      </div>
+      <!-- <div (click)="flipRatio()">Flip Aspect Ratio</div>
+      <div (click)="rotate('left')">Rotate Forward</div>
+      <div (click)="rotate('right')">Rotate Backward</div> -->
+    </div>
+    <div (click)="processCrop()">Crop me</div>
+  </div>
+</div>

@@ -1,0 +1,14 @@
+<div 
+  class="pageWrapperContainer" 
+  [style.padding-bottom]="displayFooter ? '275px' : 0"
+  [ngClass]="noMargin ? 'noMargin' : ''"
+>
+<!-- On the display footer thing above making 275 for 25px of margin over the footer height 250 -->
+<!-- add appScroll directive to above div if we want scroll watching -->
+  <app-navbar 
+    *ngIf="displayNav"
+    [collapsibleNav]="collapsibleNav"
+  ></app-navbar>
+  <ng-content></ng-content>
+  <app-footer *ngIf="displayFooter"></app-footer>
+</div>

@@ -1,0 +1,83 @@
+<div class="optionsContainer" [ngClass]="mobileOptionsActive ? 'active' : ''">
+  <div class="toggleWrapper">
+    <i 
+      class="material-icons"
+      (click)="mobileOptionsActive ? mobileOptionsActive = false : mobileOptionsActive = true" 
+      class="mobileToggle"
+    >arrow_upward</i>
+  </div>
+  <div class="productContainer">
+    <div class="productName boldFont">{{product?.name}}</div>
+    <div class="productPrice">{{product?.meta.display_price.with_tax.formatted}}</div>
+  </div>
+  <div>
+    <div class="tabNav">
+      <div 
+        class="tab"
+        [ngClass]="i === selectedTab ? 'active' : ''" 
+        *ngFor="let tab of navTabs; let i = index;" 
+        (click)="selectTab(i)"
+      >
+        <span>{{i + 1}}.</span>
+        <div>{{tab}}</div>
+      </div>
+    </div>
+  </div>
+  <div class="basicContainer optionsWrapper" *ngIf="selectedTab === 0">
+    <app-patent-basic-options
+      [patentImages]="patentSearchResults" 
+      [patentName]="patentName"
+      [posterBackground]="background"
+      [posterTrace]="trace" 
+      (svg)="cleanSVG($event)" 
+      (name)="patentName = $event" 
+      (searchResults)="patentSearchResults = $event"
+      (background)="backgroundChange($event)"
+      (trace)="trace = $event"
+      (tracing)="beginTracing()"
+      *ngIf="generatorType === 'patent-poster'"
+    ></app-patent-basic-options>
+    <app-map-basic-options
+
+      *ngIf="generatorType === 'map-poster'"
+    ></app-map-basic-options>
+    <app-stylized-basic-options
+      [posterBackground]="background"
+      [posterTrace]="trace" 
+      (svg)="cleanSVG($event)"
+      (background)="backgroundChange($event)"
+      (trace)="trace = $event"
+      (tracing)="beginTracing()"
+      *ngIf="generatorType === 'stylized-poster'"
+    ></app-stylized-basic-options>
+  </div>
+  <div class="customizeContainer optionsWrapper" *ngIf="selectedTab === 1">
+    <!-- <input [(colorPicker)]="background" [style.background]="background" (colorPickerSelect)="rerunImage()" [cpOKButton]="true"/> -->
+  </div>
+  <div class="finishContainer optionsWrapper" *ngIf="selectedTab === 2">
+    <div class="optionWrapper">
+      <div class="optionHeader">Orientation</div>
+      <div class="choiceArr">
+        <div
+          class="optionBtn" 
+          *ngFor="let orientationOption of orientationOptions; let i = index;" 
+          (click)="selectOrientation(i)"
+          [ngClass]="orientation === orientationOption ? 'selected' : ''"
+        >{{orientationOption}}</div>
+      </div>
+    </div>
+    <div class="optionWrapper">
+      <div class="optionHeader">Sizing</div>
+      <div class="choiceArr">
+        <div 
+          class="optionBtn"
+          *ngFor="let sizeOption of sizeOptions; let i = index;" 
+          (click)="selectSize(i)"
+          [ngClass]="sizeOption === size ? 'selected' : ''"
+        >{{sizeOption}}<br>{{dimensions[sizeOption].width}} x {{dimensions[sizeOption].height}} in.</div>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="help">Need Help? Contact Us</div> -->
+  <div class="addToCartBtn boldFont">Add to Cart</div>
+</div>

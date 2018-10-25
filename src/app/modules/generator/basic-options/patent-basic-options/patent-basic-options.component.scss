@@ -1,0 +1,72 @@
+.basicOptionsContainer {
+
+  .optionHeader {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+
+    .material-icons {
+      margin-left: 5px;
+      cursor: pointer;
+    }
+  }
+  form {
+
+    .inputWrapper {
+      display: flex;
+      width: 100%;
+
+      input {
+        padding: 8px;
+        flex: 1;
+        border: solid 1px var(--color-border);
+      }
+      button {
+        background: var(--color-primary);
+        color: var(--color-white);
+        font-size: 16px;
+      }
+    }
+  }
+  .spinnerContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 20%;
+
+    mat-spinner {
+      color: var(--color-secondary);
+      width: 60px !important;
+      height: 60px !important;
+    }
+  }
+  .imgGrid {
+    display: flex;
+    flex-wrap: wrap;
+    overflow: scroll;
+    margin-top: 10px;
+
+    .imgWrapper {
+      width: 50%;
+      margin-bottom: 5px;
+
+      img {
+        border: solid 1px var(--color-border);
+        cursor: pointer;
+      }
+      .selectImg {
+        width: 100%;
+        text-align: center;
+        background: var(--color-primary);
+        color: var(--color-white);
+        padding: 5px 0;
+        cursor: pointer;
+      }
+    }
+    .imgWrapper:nth-child(odd) {
+      padding: 2px 2px 2px 0;
+    }
+    .imgWrapper:nth-child(even) {
+      padding: 2px 0 2px 2px;
+    }
+  }
+}

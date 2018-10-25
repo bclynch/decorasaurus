@@ -1,0 +1,21 @@
+<app-pagewrapper>
+  <div class="boldFont">Hello dipshits</div>
+  <input 
+    type="file" 
+    id="file" 
+    name="file" 
+    accept="image/*" 
+    (change)="fileChangeEvent($event)"
+    *ngIf="visible"
+  />
+  <input 
+    type="file" 
+    id="file" 
+    name="file" 
+    accept="image/*" 
+    (change)="fileChangeEvent($event)"
+    [style.display]="'none'"
+  />
+
+  <div *ngIf="visible">My view</div>
+</app-pagewrapper>

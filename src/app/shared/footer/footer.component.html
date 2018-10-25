@@ -1,0 +1,26 @@
+<div class="footerContainer">
+  <div class="footerWrapper">
+    <div class="logoWrapper">
+      <span class="boldFont">Decorasaurus</span>
+    </div>
+    <div class="socialWrapper">
+      <div *ngFor="let option of socialOptions;">
+        <a 
+           
+          [href]="option.url" 
+          target="_blank"
+          class="hover boldFont"
+          rel="noopener" 
+        >
+          <i class="material-icons">{{option.icon}}</i>
+        </a>
+      </div>
+    </div>
+    <div class="linksWrapper">
+      <div *ngFor="let link of links;" class="hover link" (click)="navigateTo(link)">{{link}}</div>
+    </div>
+    <div class="infoWrapper">
+      <div>©{{year | date:'y'}} Decorasaurus All rights reserved.</div>
+    </div>
+  </div>
+</div>

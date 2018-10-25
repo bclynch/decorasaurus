@@ -1,0 +1,43 @@
+<app-pagewrapper [displayFooter]="false" [noMargin]="true">
+  <div class="generatorContainer" [style.background]="background">
+    <div class="posterContainer">
+      <!-- <div class="patentTitle">{{patentName}}</div> -->
+      <div class="posterWrapper" *ngIf="posterSVG">
+        <div class="background" [style.background]="background">
+          <img [src]="posterSVG" />
+          <!-- <div class="posterGrid" [attr.style]="_DomSanitizationService.bypassSecurityTrustStyle('--patentColor:' + color)">
+            <div *ngFor="let x of 54 | times"></div>
+          </div> -->
+        </div>
+        <i class="horizontal">{{posterWidth}} inch</i>
+        <i class="vertical"><i>{{posterHeight}} inch</i></i>
+      </div>
+      <mat-spinner *ngIf="tracing"></mat-spinner>
+      <div *ngIf="!posterSVG && !tracing" class="emptyState">
+        <div><img class="logoImg" src="../../../assets/dino.svg" /></div>
+        <div>Select a patent to display your creation here</div>
+      </div>
+      <!-- <div class="mobileOptionsContainer">
+        <app-options-container
+          [generatorType]="generatorType" 
+          [product]="product" 
+          (posterSVG)="cleanSVG($event)" 
+          (tracing)="tracing = $event"
+          (posterBackground)="background = $event"
+          (posterWidth)="posterWidth = $event"
+          (posterHeight)="posterHeight = $event"
+        ></app-options-container>
+        <div class="addToCartBtn boldFont">Add to Cart</div>
+      </div> -->
+    </div>
+    <app-options-container 
+      [generatorType]="generatorType" 
+      [product]="product" 
+      (posterSVG)="cleanSVG($event)" 
+      (tracing)="tracing = $event"
+      (posterBackground)="background = $event"
+      (posterWidth)="posterWidth = $event"
+      (posterHeight)="posterHeight = $event"
+    ></app-options-container>
+  </div>
+</app-pagewrapper>

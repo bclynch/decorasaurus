@@ -1,0 +1,4 @@
+<app-pagewrapper>
+  <div class="boldFont">Create</div>
+  <div *ngFor="let poster of posters;" (click)="routerService.navigateToPage('/create/poster-generator/' +  poster.slug)">Create a {{poster.name}}</div>
+</app-pagewrapper>

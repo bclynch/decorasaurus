@@ -1,0 +1,26 @@
+<div class="colorsWrapper">
+  <div class="optionWrapper">
+    <div class="optionHeader">Trace Color</div>
+    <input 
+      cpPosition="left" 
+      cpOutputFormat="hsla"
+      cpAlphaChannel="disabled"
+      [cpDisableInput]="true" 
+      [(colorPicker)]="trace" 
+      [style.background]="trace" 
+      (colorPickerClose)="updateColors()"
+    />
+  </div>
+  <div class="optionWrapper">
+    <div class="optionHeader">Background</div>
+    <input 
+      cpPosition="left"
+      cpOutputFormat="hex"
+      cpAlphaChannel="disabled" 
+      [cpDisableInput]="true"
+      [(colorPicker)]="background" 
+      [style.background]="background" 
+      (colorPickerChange)="updateColors()"
+    />
+  </div>
+</div>
