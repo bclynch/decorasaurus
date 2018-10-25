@@ -16,15 +16,8 @@
       display: flex;
       width: 100%;
 
-      input {
-        padding: 8px;
+      mat-form-field {
         flex: 1;
-        border: solid 1px var(--color-border);
-      }
-      button {
-        background: var(--color-primary);
-        color: var(--color-white);
-        font-size: 16px;
       }
     }
   }
@@ -35,23 +28,22 @@
 
     mat-spinner {
       color: var(--color-secondary);
-      width: 60px !important;
-      height: 60px !important;
     }
   }
   .imgGrid {
     display: flex;
     flex-wrap: wrap;
     overflow: scroll;
-    margin-top: 10px;
+    padding-bottom: 25px;
 
     .imgWrapper {
-      width: 50%;
+      width: calc(50% - 4px);
       margin-bottom: 5px;
+      border: solid 1px var(--color-border);
 
       img {
-        border: solid 1px var(--color-border);
         cursor: pointer;
+        max-width: 100%;
       }
       .selectImg {
         width: 100%;
@@ -63,10 +55,15 @@
       }
     }
     .imgWrapper:nth-child(odd) {
-      padding: 2px 2px 2px 0;
+      margin: 2px 2px 2px 0;
     }
     .imgWrapper:nth-child(even) {
-      padding: 2px 0 2px 2px;
+      margin: 2px 0 2px 2px;
+    }
+  }
+  @media (min-width: 768px) {
+    .imgGrid {
+      padding-bottom: 0;
     }
   }
 }

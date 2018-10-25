@@ -1,10 +1,9 @@
 <div class="optionsContainer" [ngClass]="mobileOptionsActive ? 'active' : ''">
   <div class="toggleWrapper">
     <i 
-      class="material-icons"
-      (click)="mobileOptionsActive ? mobileOptionsActive = false : mobileOptionsActive = true" 
-      class="mobileToggle"
-    >arrow_upward</i>
+      class="material-icons mobileToggle" 
+      (click)="mobileOptionsActive ? mobileOptionsActive = false : mobileOptionsActive = true
+    ">arrow_upward</i>
   </div>
   <div class="productContainer">
     <div class="productName boldFont">{{product?.name}}</div>

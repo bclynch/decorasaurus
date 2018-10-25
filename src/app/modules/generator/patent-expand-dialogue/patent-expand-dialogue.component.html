@@ -1,0 +1,26 @@
+<div 
+  class="modalContainer" 
+  (window:keydown)="onKey($event)" 
+  (panstart)="panStart($event)" 
+  (panleft)="panGesture($event, 'left')" 
+  (panright)="panGesture($event, 'right')"
+>
+  <div 
+    class="closeModal" 
+    name="close"
+    (click)="onCloseModal()"
+    title="Close gallery"
+  >
+    <i class="material-icons">close</i>
+  </div>
+  <div class="imgWrapper">
+    <img [src]="data.images[data.currentIndex]" />
+    <div class="forwardBtn" (click)="pan('forward')">
+      <i class="material-icons">arrow_forward_ios</i>
+    </div>
+    <div class="backBtn" (click)="pan('back')">
+      <i class="material-icons">arrow_back_ios</i>
+    </div>
+  </div>
+  <div class="boldFont selectBtn" (click)="selectImage()">Select Image</div>
+</div>

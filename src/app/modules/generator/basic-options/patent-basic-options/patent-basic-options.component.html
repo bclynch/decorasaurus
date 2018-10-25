@@ -6,15 +6,18 @@
     (posterBackground)="background.emit($event)"
   ></app-colors-picker>
   <div class="optionWrapper">
-    <div class="optionHeader">Patent Search <i class="material-icons" (click)="presentInfoPopover($event)">info</i></div>
+    <div class="optionHeader">Patent Search <i class="material-icons" (click)="openDialog()">info</i></div>
     <form (submit)="searchPatent($event)">
       <div class="inputWrapper">
-        <input 
-          placeholder="Patent Number" 
-          [(ngModel)]="patentNumber" 
-          name="patentNumber"
-        />
-        <button type="submit" class="searchBtn boldFont">Search</button>
+        <mat-form-field>
+          <input
+            matInput
+            placeholder="Patent Number" 
+            [(ngModel)]="patentNumber" 
+            name="patentNumber"
+          />
+        </mat-form-field>
+        <button mat-button type="submit" class="searchBtn boldFont">Search</button>
       </div>
     </form>
   </div>

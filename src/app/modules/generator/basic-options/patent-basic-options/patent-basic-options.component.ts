@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { APIService } from '../../../../services/api.service';
-// import { PopoverComponent } from '../../../../shared/popover/popover.component';
-// import { PatentModalComponent } from '../../patent-modal/patent-modal.component';
+import { MatDialog } from '@angular/material';
+import { PatentExpandDialogueComponent } from '../../patent-expand-dialogue/patent-expand-dialogue.component';
 
 @Component({
   selector: 'app-patent-basic-options',
@@ -29,43 +29,35 @@ export class PatentBasicOptionsComponent implements OnInit {
 
   constructor(
     private apiService: APIService,
+    public dialog: MatDialog
   ) { }
 
   ngOnInit() {
   }
 
-  // async presentInfoPopover(ev: any) {
-  //   const popover = await this.popoverController.create({
-  //     component: PopoverComponent,
-  //     componentProps: { message: 'Check out <a href="https://patents.google.com/" target="_blank">Google Patents</a> for patent options and enter the application number (i.e \'US3751727A\') in the search field below to fetch patent images.' },
-  //     event: ev,
-  //     mode: 'ios'
-  //   });
-  //   return await popover.present();
-  // }
+  expandImage(index: number) {
 
-  // async expandImage(index: number) {
-  //   const modal = await this.popoverController.create({
-  //     component: PatentModalComponent,
-  //     componentProps: { images: this.patentImages, currentIndex: index },
-  //     cssClass: 'patentModal'
-  //   });
-  //   await modal.present();
+    const dialogRef = this.dialog.open(PatentExpandDialogueComponent, {
+      data: { images: this.patentImages, currentIndex: index }
+    });
 
-  //   this._dismiss = await modal.onDidDismiss();
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+      if (result) this.selectPatent(result);
+    });
+  }
 
-  //   if (this._dismiss.data) {
-  //     this.selectPatent(this._dismiss.data);
-  //   }
-  // }
+  openDialog(): void {
+    this.dialog.open(PatentInfoDialogue, {
+      width: '250px'
+    });
+  }
 
   selectPatent(i: number) {
     this.tracing.emit();
-    console.log(this.patentImages[i]);
     this.apiService.tracePatent(this.patentImages[i], this.posterTrace).subscribe(
       result => {
         this.patentSVG = result.resp;
-        console.log(this.patentSVG);
         this.svg.emit(this.patentSVG);
       }
     );
@@ -88,3 +80,23 @@ export class PatentBasicOptionsComponent implements OnInit {
     }
   }
 }
+
+@Component({
+  selector: 'app-patent-dialogue',
+  template: `
+    <div mat-dialog-content>
+      Check out <a href="https://patents.google.com/" target="_blank">Google Patents</a> for patent options and enter the application number (i.e \'US3751727A\') in the search field below to fetch patent images.
+      <div class="buttonWrapper"><button mat-button [mat-dialog-close]="" cdkFocusInitial>Ok</button></div>
+    </div>
+  `,
+  styles: [
+    `
+      .buttonWrapper {
+        margin: 10px auto 0;
+        display: flex;
+        justify-content: flex-end;
+      }
+    `
+  ]
+})
+export class PatentInfoDialogue { }

@@ -49,13 +49,6 @@ app-navbar {
   font-size: 14px;
 }
 
-textarea:focus,
-input:focus {
-  outline-style: solid;
-  outline-color: var(--color-primary);
-  outline-width: thin;
-}
-
 button:focus {
   outline: none;
 }

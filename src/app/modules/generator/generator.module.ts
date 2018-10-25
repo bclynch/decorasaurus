@@ -11,17 +11,22 @@ import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
 import { ENV } from '../../../environments/environment';
 import { MapBasicOptionsComponent } from './basic-options/map-basic-options/map-basic-options.component';
 import { StylizedBasicOptionsComponent } from './basic-options/stylized-basic-options/stylized-basic-options.component';
-import { PatentBasicOptionsComponent } from './basic-options/patent-basic-options/patent-basic-options.component';
+import { PatentBasicOptionsComponent, PatentInfoDialogue } from './basic-options/patent-basic-options/patent-basic-options.component';
 import { ColorsPickerComponent } from './colors-picker/colors-picker.component';
 import { OptionsContainerComponent } from './options-container/options-container.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { FormsModule } from '@angular/forms';
+import { PatentExpandDialogueComponent } from './patent-expand-dialogue/patent-expand-dialogue.component';
 
 const routes: Routes = [
   { path: ':type', component: GeneratorComponent }
 ];
 
 @NgModule({
+  entryComponents: [
+    PatentInfoDialogue,
+    PatentExpandDialogueComponent
+  ],
   imports: [
     CommonModule,
     AngularCropperjsModule,
@@ -34,6 +39,15 @@ const routes: Routes = [
     SharedModule,
     FormsModule
   ],
-  declarations: [GeneratorComponent, MapBasicOptionsComponent, StylizedBasicOptionsComponent, PatentBasicOptionsComponent, ColorsPickerComponent, OptionsContainerComponent]
+  declarations: [
+    GeneratorComponent,
+    MapBasicOptionsComponent,
+    StylizedBasicOptionsComponent,
+    PatentBasicOptionsComponent,
+    ColorsPickerComponent,
+    OptionsContainerComponent,
+    PatentInfoDialogue,
+    PatentExpandDialogueComponent
+  ]
 })
 export class GeneratorModule { }

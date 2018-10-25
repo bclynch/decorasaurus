@@ -8,8 +8,10 @@ import { MobileNavComponent } from './mobile-nav/mobile-nav.component';
 
 import {
   MatButtonModule,
-  MatCheckboxModule,
-  MatProgressSpinnerModule
+  MatProgressSpinnerModule,
+  MatTooltipModule,
+  MatDialogModule,
+  MatInputModule
 } from '@angular/material';
 
 @NgModule({
@@ -20,21 +22,26 @@ import {
     CommonModule,
     DirectivesModule,
     MatButtonModule,
-    MatCheckboxModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatTooltipModule,
+    MatDialogModule,
+    MatInputModule
   ],
   declarations: [
     PagewrapperComponent,
     FooterComponent,
     NavbarComponent,
-    MobileNavComponent],
+    MobileNavComponent
+  ],
   exports: [
     PagewrapperComponent,
     FooterComponent,
     NavbarComponent,
     MatButtonModule,
-    MatCheckboxModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatTooltipModule,
+    MatDialogModule,
+    MatInputModule
   ]
 })
 export class SharedModule { }

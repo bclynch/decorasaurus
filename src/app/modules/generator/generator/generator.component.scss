@@ -1,7 +1,7 @@
 .generatorContainer {
   display: flex;
   width: 100vw;
-  // height: 100vh;
+  height: calc(100vh - var(--height-navbar) - 89px);
   padding-top: var(--height-navbar);
   padding-bottom: 89px; // for mobile 39px of btn + arrow height
 
@@ -21,8 +21,6 @@
     }
     mat-spinner {
       color: var(--color-secondary);
-      width: 60px !important;
-      height: 60px !important;
     }
     .posterWrapper {
       padding: calc(300px * .035);
@@ -140,6 +138,7 @@
 
   @media (min-width: 768px) {
     padding-bottom:  0;
+    height: auto;
 
     .posterContainer {
 

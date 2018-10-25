@@ -1,0 +1,67 @@
+.modalContainer {
+  background: var(--color-white);
+  height: 100%;
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .closeModal {
+    cursor: pointer;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 10;
+
+    .material-icons {
+      color: var(--color-primary);
+      padding: 0 5px;
+      font-size: 32px;
+    }
+  }
+  .imgWrapper {
+    position: relative;
+    width: 300px;
+
+    img {
+      // width: 350px;
+      max-width: 300px;
+    }
+    .forwardBtn, .backBtn {
+      position: absolute; 
+      top: calc(50% - (50px / 2));
+      cursor: pointer;
+      padding: 0 5px;
+
+      ion-icon {
+        color: var(--color-primary);
+        font-size: 50px;
+      }
+    }
+    .forwardBtn {
+      right: 15px;
+    }
+    .backBtn {
+      left: 15px;
+    }
+  }
+  .selectBtn {
+    background: var(--color-primary);
+    color: var(--color-white);
+    padding: 10px;
+    text-align: center;
+    width: 100%;
+    cursor: pointer;
+  }
+
+  @media (min-width: 768px) {
+    .imgWrapper {
+  
+      img {
+        width: 350px;
+      }
+    }
+  }
+}
+
