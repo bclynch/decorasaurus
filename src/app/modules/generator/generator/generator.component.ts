@@ -64,4 +64,10 @@ export class GeneratorComponent implements OnInit {
       this.posterSVG = null;
     }
   }
+
+  addToCart(product: MoltinProduct) {
+    this.moltin.addToCart(this.moltin.cart.id, product).subscribe((data) => {
+      console.log(data);
+    });
+  }
 }

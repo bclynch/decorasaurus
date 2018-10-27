@@ -12,7 +12,7 @@
   &.hidden {
     transform: translateY(calc(var(--height-navbar) * -1));
   }
-  .material-icons {
+  mat-icon {
     font-size: 32px;
     color: var(--color-black);
     cursor: pointer;

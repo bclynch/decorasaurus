@@ -1,13 +1,13 @@
 <div class="modalContainer">
   <div class="mockNav">
     <div class="mobilePromptClose" (click)="dismiss()">
-      <div><i class="material-icons">close</i></div>
+      <div><mat-icon>close</mat-icon></div>
     </div>
     <div class="logoWrapper">
       <img class="logoImg" src="../../../assets/dino.svg" />
     </div>
     <div class="cartWrapper">
-      <div><i class="material-icons" (click)="dismiss('cart')">shopping_cart</i></div>
+      <div><mat-icon (click)="dismiss('cart')">shopping_cart</mat-icon></div>
     </div>
   </div>
   <div class="contentWrapper">
@@ -29,7 +29,7 @@
       <div class="sectionHeader" (click)="selectSection(i)">
         <div class="sectionName">{{option.label}}</div>
         <div class="arrowWrapper" *ngIf="option.subSections.length">
-          <i class="material-icons">arrow_forward</i>
+          <mat-icon>arrow_forward</mat-icon>
         </div>
       </div>
       <div class="subSectionsWrapper" *ngIf="option.subSections.length">

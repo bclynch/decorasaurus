@@ -6,7 +6,7 @@
     (posterBackground)="background.emit($event)"
   ></app-colors-picker>
   <div class="optionWrapper">
-    <div class="optionHeader">Patent Search <i class="material-icons" (click)="openDialog()">info</i></div>
+    <div class="optionHeader">Patent Search <mat-icon (click)="openDialog()">info</mat-icon></div>
     <form (submit)="searchPatent($event)">
       <div class="inputWrapper">
         <mat-form-field>

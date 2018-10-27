@@ -11,7 +11,9 @@ import {
   MatProgressSpinnerModule,
   MatTooltipModule,
   MatDialogModule,
-  MatInputModule
+  MatInputModule,
+  MatIconModule,
+  MatBadgeModule
 } from '@angular/material';
 
 @NgModule({
@@ -25,7 +27,9 @@ import {
     MatProgressSpinnerModule,
     MatTooltipModule,
     MatDialogModule,
-    MatInputModule
+    MatInputModule,
+    MatIconModule,
+    MatBadgeModule
   ],
   declarations: [
     PagewrapperComponent,
@@ -41,7 +45,9 @@ import {
     MatProgressSpinnerModule,
     MatTooltipModule,
     MatDialogModule,
-    MatInputModule
+    MatInputModule,
+    MatIconModule,
+    MatBadgeModule
   ]
 })
 export class SharedModule { }

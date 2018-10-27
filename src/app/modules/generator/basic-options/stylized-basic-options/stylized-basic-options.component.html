@@ -8,7 +8,7 @@
   <div class="fileUploadContainer" *ngIf="!imgUrl && !readingFile">
     <label for="file">
       <file-drop (onFileDrop)="dropped($event)" customstyle="fileDrop">
-        <i class="material-icons">cloud_upload</i>
+        <mat-icon>cloud_upload</mat-icon>
         <div>Drag and drop image here or click to select</div>
       </file-drop>
     </label>

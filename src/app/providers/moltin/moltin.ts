@@ -4,7 +4,7 @@ import { MoltinProduct } from './models/product';
 import { MoltinProducts } from './models/product';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { MoltinCart } from './models/cart';
+import { MoltinCart, MoltinCartItem } from './models/cart';
 import { MoltinOrder } from './models/order';
 
 import { ENV } from '../../../environments/environment';
@@ -14,6 +14,8 @@ export class Moltin {
     private moltin = MoltinGateway({
     	client_id: ENV.moltinClientId
     });
+
+    cart: MoltinCart;
 
     constructor(public httpClient: HttpClient) {
 
@@ -93,9 +95,9 @@ export class Moltin {
         });
     }
 
-    addToCart(product: MoltinProduct): Observable<any> {
+    addToCart(ref: string, product: MoltinProduct): Observable<any> {
         return new Observable<MoltinProduct>(observer => {
-            this.moltin.Cart().AddProduct(product.id).then(data => {
+            this.moltin.Cart(ref).AddProduct(product.id).then(data => {
                 observer.next(data);
                 observer.complete();
             }).catch(error => {
@@ -105,9 +107,10 @@ export class Moltin {
         });
     }
 
-    getCart(): Observable<MoltinCart> {
+    getCart(ref: string): Observable<MoltinCart> {
         return new Observable<MoltinCart>(observer => {
-            this.moltin.Cart().Items().then(data => {
+            this.moltin.Cart(ref).Get().then(data => {
+                this.cart = data.data;
                 observer.next(data);
                 observer.complete();
             }).catch(error => {
@@ -117,9 +120,9 @@ export class Moltin {
         });
     }
 
-    updateCartItem(itemID, quantity): Observable<MoltinCart> {
-        return new Observable<MoltinCart>(observer => {
-            this.moltin.Cart().UpdateItemQuantity(itemID, quantity).then((data) => {
+    getCartItems(ref: string): Observable<MoltinCartItem[]> {
+        return new Observable<MoltinCartItem[]>(observer => {
+            this.moltin.Cart(ref).Items().then(data => {
                 observer.next(data);
                 observer.complete();
             }).catch(error => {
@@ -129,9 +132,9 @@ export class Moltin {
         });
     }
 
-    deleteCartItem(itemID): Observable<MoltinCart> {
-        return new Observable<MoltinCart>(observer => {
-            this.moltin.Cart().RemoveItem(itemID).then((data) => {
+    updateCartItem(ref: string, itemID, quantity): Observable<MoltinCartItem> {
+        return new Observable<MoltinCartItem>(observer => {
+            this.moltin.Cart(ref).UpdateItemQuantity(itemID, quantity).then((data) => {
                 observer.next(data);
                 observer.complete();
             }).catch(error => {
@@ -141,9 +144,21 @@ export class Moltin {
         });
     }
 
-    applyPromoCode(promoCode): Observable<any> {
+    deleteCartItem(ref: string, itemID): Observable<MoltinCartItem> {
+        return new Observable<MoltinCartItem>(observer => {
+            this.moltin.Cart(ref).RemoveItem(itemID).then((data) => {
+                observer.next(data);
+                observer.complete();
+            }).catch(error => {
+                observer.error(error);
+                observer.complete();
+            });
+        });
+    }
+
+    applyPromoCode(ref: string, promoCode): Observable<any> {
         return new Observable(observer => {
-            this.moltin.Cart().AddPromotion(promoCode).then(data => {
+            this.moltin.Cart(ref).AddPromotion(promoCode).then(data => {
                 observer.next(data);
                 observer.complete();
             }).catch(error => {
@@ -153,9 +168,9 @@ export class Moltin {
         });
     }
 
-    checkoutCart(customer, billingAddress, shippingAddress): Observable<MoltinOrder> {
+    checkoutCart(ref: string, customer, billingAddress, shippingAddress): Observable<MoltinOrder> {
         return new Observable<MoltinOrder>(observer => {
-            this.moltin.Cart().Checkout(customer, billingAddress, shippingAddress).then((data) => {
+            this.moltin.Cart(ref).Checkout(customer, billingAddress, shippingAddress).then((data) => {
                 observer.next(data['data']);
                 observer.complete();
             }).catch(error => {
@@ -165,9 +180,9 @@ export class Moltin {
         });
     }
 
-    deleteCart(): Observable<any> {
+    deleteCart(ref: string): Observable<any> {
         return new Observable(observer => {
-            this.moltin.Cart().Delete().then(data => {
+            this.moltin.Cart(ref).Delete().then(data => {
                 observer.next(data);
                 observer.complete();
             }).catch(error => {

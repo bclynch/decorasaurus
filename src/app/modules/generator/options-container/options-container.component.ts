@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { MoltinProduct } from '../../../providers/moltin/models/product';
+import { Moltin } from '../../../providers/moltin/moltin';
 
 @Component({
   selector: 'app-options-container',
@@ -50,7 +51,8 @@ export class OptionsContainerComponent implements OnInit {
   patentName: string;
 
   constructor(
-    private _DomSanitizationService: DomSanitizer
+    private _DomSanitizationService: DomSanitizer,
+    private moltin: Moltin
   ) { }
 
   ngOnInit() {
@@ -98,5 +100,11 @@ export class OptionsContainerComponent implements OnInit {
   backgroundChange(color: string) {
     this.background = color;
     this.posterBackground.emit(color);
+  }
+
+  addToCart(product: MoltinProduct) {
+    this.moltin.addToCart(this.moltin.cart.id, product).subscribe((data) => {
+      console.log(data);
+    });
   }
 }

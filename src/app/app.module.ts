@@ -16,6 +16,8 @@ import { ApolloModule, Apollo } from 'apollo-angular';
 import { UtilService } from './services/util.service';
 import { APIService } from './services/api.service';
 import { RouterService } from './services/router.service';
+import { UserService } from './services/user.service';
+import { CookieService } from 'ngx-cookie-service';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,9 @@ import { RouterService } from './services/router.service';
     UtilService,
     APIService,
     RouterService,
-    Moltin
+    Moltin,
+    CookieService,
+    UserService
   ],
   bootstrap: [AppComponent]
 })

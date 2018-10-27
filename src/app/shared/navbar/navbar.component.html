@@ -7,7 +7,7 @@
   <div class="navBarWrapper">
     <div class="barWrapper">
       <div class="mobilePrompt" (click)="openMobileNav()">
-        <div><i class="material-icons">menu</i></div>
+        <div><mat-icon>menu</mat-icon></div>
       </div>
       <div class="sectionsWrapper">
         <div 
@@ -30,7 +30,13 @@
         >Decorasaurus</span>
       </div>
       <div class="cartWrapper">
-        <div><i class="material-icons" (click)="routerService.navigateToPage('/cart')">shopping_cart</i></div>
+        <div>
+          <mat-icon 
+            (click)="routerService.navigateToPage('/cart')" 
+            matBadge="22" 
+            matBadgePosition="above after"
+          >shopping_cart</mat-icon>
+        </div>
       </div>
     </div>
   </div>

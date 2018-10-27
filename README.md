@@ -7,6 +7,10 @@
     - Fix modals / tooltips / popovers
 - Splash page -1 day
 - Wire in Moltin API and see what's left for needs with our own db - 2 day
+- Cart Reference Id:
+    - When user logging in (or starts adding first product to cart) I generate a uuid on client side and I store it in a cookie
+    - I create a cart with this uuid (via the carts/{uuid}) endpoint or with the Moltin.Cart({uuid}) JS method
+    - I use this cart until the user is logged in and I delete the cart on logout with the Moltin.Cart({uuid}).Delete() (or I keep it, depends…)
 - Poster generator for maps + custom trace pics. - 6 days - spent 3/6
     - Patent:
         - Create modal to enlarge images / select

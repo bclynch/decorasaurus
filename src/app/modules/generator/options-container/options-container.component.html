@@ -1,9 +1,9 @@
 <div class="optionsContainer" [ngClass]="mobileOptionsActive ? 'active' : ''">
   <div class="toggleWrapper">
-    <i 
-      class="material-icons mobileToggle" 
+    <mat-icon 
+      class="mobileToggle" 
       (click)="mobileOptionsActive ? mobileOptionsActive = false : mobileOptionsActive = true
-    ">arrow_upward</i>
+    ">arrow_upward</mat-icon>
   </div>
   <div class="productContainer">
     <div class="productName boldFont">{{product?.name}}</div>
@@ -78,5 +78,5 @@
     </div>
   </div>
   <!-- <div class="help">Need Help? Contact Us</div> -->
-  <div class="addToCartBtn boldFont">Add to Cart</div>
+  <button class="addToCartBtn boldFont mat-button" (click)="addToCart(product)">Add to Cart</button>
 </div>

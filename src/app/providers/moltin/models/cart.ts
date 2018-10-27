@@ -71,6 +71,8 @@ export interface MoltinCartMeta {
 }
 
 export interface MoltinCart {
-  data: MoltinCartItem[];
+  id: string;
+  links: Links;
   meta: MoltinCartMeta;
+  type: string;
 }
