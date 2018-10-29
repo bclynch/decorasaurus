@@ -3,6 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { MoltinProduct } from '../../../providers/moltin/models/product';
 import { Moltin } from '../../../providers/moltin/moltin';
 import { DomSanitizer } from '@angular/platform-browser';
+import { CartService } from 'src/app/services/cart.service';
+
 
 @Component({
   selector: 'app-generator',
@@ -28,7 +30,8 @@ export class GeneratorComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private moltin: Moltin,
-    private _DomSanitizationService: DomSanitizer
+    private _DomSanitizationService: DomSanitizer,
+    private cartService: CartService
   ) {
     this.route.params.subscribe((params) => {
       this.generatorType = params.type;
@@ -48,7 +51,7 @@ export class GeneratorComponent implements OnInit {
 
       // fetch product info
       this.moltin.getProductById(this.productId).subscribe(product => {
-        console.log(product);
+        // console.log(product);
         this.product = product;
       });
     });
@@ -63,11 +66,5 @@ export class GeneratorComponent implements OnInit {
     } else {
       this.posterSVG = null;
     }
-  }
-
-  addToCart(product: MoltinProduct) {
-    this.moltin.addToCart(this.moltin.cart.id, product).subscribe((data) => {
-      console.log(data);
-    });
   }
 }

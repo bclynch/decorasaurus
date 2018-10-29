@@ -2,6 +2,8 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { MoltinProduct } from '../../../providers/moltin/models/product';
 import { Moltin } from '../../../providers/moltin/moltin';
+import { UserService } from 'src/app/services/user.service';
+import { CartService } from 'src/app/services/cart.service';
 
 @Component({
   selector: 'app-options-container',
@@ -52,7 +54,9 @@ export class OptionsContainerComponent implements OnInit {
 
   constructor(
     private _DomSanitizationService: DomSanitizer,
-    private moltin: Moltin
+    private moltin: Moltin,
+    private userService: UserService,
+    private cartService: CartService
   ) { }
 
   ngOnInit() {
@@ -103,8 +107,6 @@ export class OptionsContainerComponent implements OnInit {
   }
 
   addToCart(product: MoltinProduct) {
-    this.moltin.addToCart(this.moltin.cart.id, product).subscribe((data) => {
-      console.log(data);
-    });
+    this.cartService.addToCart(product);
   }
 }

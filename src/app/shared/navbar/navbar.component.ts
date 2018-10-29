@@ -3,6 +3,7 @@ import { Component, Input } from '@angular/core';
 import { UtilService } from '../../services/util.service';
 import { RouterService } from '../../services/router.service';
 import { MobileNavComponent } from '../mobile-nav/mobile-nav.component';
+import { CartService } from 'src/app/services/cart.service';
 
 interface Section {
   label: string;
@@ -77,6 +78,7 @@ export class NavbarComponent {
   constructor(
     private utilService: UtilService,
     private routerService: RouterService,
+    private cartService: CartService
   ) {
 
   }

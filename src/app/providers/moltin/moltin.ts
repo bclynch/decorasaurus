@@ -15,8 +15,6 @@ export class Moltin {
     	client_id: ENV.moltinClientId
     });
 
-    cart: MoltinCart;
-
     constructor(public httpClient: HttpClient) {
 
     }
@@ -110,7 +108,6 @@ export class Moltin {
     getCart(ref: string): Observable<MoltinCart> {
         return new Observable<MoltinCart>(observer => {
             this.moltin.Cart(ref).Get().then(data => {
-                this.cart = data.data;
                 observer.next(data);
                 observer.complete();
             }).catch(error => {

@@ -5,6 +5,7 @@ import { FooterComponent } from './footer/footer.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { DirectivesModule } from '../directives/directives.module';
 import { MobileNavComponent } from './mobile-nav/mobile-nav.component';
+import { InformationalComponent } from './informational/informational.component';
 
 import {
   MatButtonModule,
@@ -13,7 +14,8 @@ import {
   MatDialogModule,
   MatInputModule,
   MatIconModule,
-  MatBadgeModule
+  MatBadgeModule,
+  MatBottomSheetModule
 } from '@angular/material';
 
 @NgModule({
@@ -29,13 +31,15 @@ import {
     MatDialogModule,
     MatInputModule,
     MatIconModule,
-    MatBadgeModule
+    MatBadgeModule,
+    MatBottomSheetModule
   ],
   declarations: [
     PagewrapperComponent,
     FooterComponent,
     NavbarComponent,
-    MobileNavComponent
+    MobileNavComponent,
+    InformationalComponent
   ],
   exports: [
     PagewrapperComponent,
@@ -47,7 +51,9 @@ import {
     MatDialogModule,
     MatInputModule,
     MatIconModule,
-    MatBadgeModule
+    MatBadgeModule,
+    MatBottomSheetModule,
+    InformationalComponent
   ]
 })
 export class SharedModule { }

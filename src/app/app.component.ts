@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { v4 as uuid } from 'uuid';
 import { CookieService } from 'ngx-cookie-service';
 import { UserService } from './services/user.service';
-import { Moltin } from './providers/moltin/moltin';
+import { CartService } from './services/cart.service';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +15,7 @@ export class AppComponent {
   constructor(
     private cookieService: CookieService,
     private userService: UserService,
-    private moltin: Moltin
+    private cartService: CartService
   ) {
     this.setupUser();
   }
@@ -31,10 +31,6 @@ export class AppComponent {
       this.userService.userUuid = userUuid;
     }
 
-    this.moltin.getCart(this.userService.userUuid).subscribe(
-      (data => {
-        console.log(data);
-      })
-    );
+    this.cartService.getCart();
   }
 }

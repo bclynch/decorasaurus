@@ -1,0 +1,39 @@
+.infoContainer {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+
+  .infoWrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-top: solid 1px var(--color-border);
+    padding: 30px 10px;
+
+    mat-icon {
+      height: 36px;
+      width: 36px;
+      font-size: 36px;
+      margin-bottom: 5px;
+    }
+    .header {
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .subHeader {
+      color: #ccc;
+    }
+  }
+  div:last-child {
+    border-bottom: solid 1px var(--color-border);
+  }
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+
+    .infoWrapper {
+      border: none!important;
+    }
+  }
+}

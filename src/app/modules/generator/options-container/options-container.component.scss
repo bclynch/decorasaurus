@@ -88,12 +88,13 @@
     display: none;
     background: var(--color-secondary);
     color: var(--color-white);
-    padding: 10px 0;
+    padding: 5px 0;
     text-align: center;
     cursor: pointer;
     position: absolute;
     bottom: 0;
     width: 100%;
+    border-radius: 0;
   }
   .toggleWrapper {
     display: flex;

@@ -1,3 +1,28 @@
 <app-pagewrapper>
-  <div class="boldFont">Cart</div>
+  <div class="cartContainer">
+    <h1>Your Cart</h1>
+    <div class="tabContainer">
+      <div class="tab" *ngFor="let tab of tabs;">
+        <mat-icon>{{tab.icon}}</mat-icon>
+        <div>{{tab.label}}</div>
+        <div>({{tab.number}})</div>
+      </div>
+    </div>
+    <div class="headerContainer">
+
+    </div>
+    <div class="productContainer">
+      <div class="productWrapper" *ngFor="let product of products;">
+
+      </div>
+    </div>
+    <div class="totalsContainer">
+      <div class="subtotal"></div>
+      <div class="shipping"></div>
+      <div class="tax"></div>
+      <div class="total"></div>
+    </div>
+    <div>Proceed With Order</div>
+    <app-informational></app-informational>
+  </div>
 </app-pagewrapper>

@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 import { Moltin } from './providers/moltin/moltin';
 import { HttpLinkModule, HttpLink } from 'apollo-angular-link-http';
@@ -18,10 +19,15 @@ import { APIService } from './services/api.service';
 import { RouterService } from './services/router.service';
 import { UserService } from './services/user.service';
 import { CookieService } from 'ngx-cookie-service';
+import { CartService, AddCartNav } from './services/cart.service';
 
 @NgModule({
+  entryComponents: [
+    AddCartNav
+  ],
   declarations: [
-    AppComponent
+    AppComponent,
+    AddCartNav
   ],
   imports: [
     BrowserModule,
@@ -30,7 +36,8 @@ import { CookieService } from 'ngx-cookie-service';
     ApolloModule,
     HttpModule,
     BrowserAnimationsModule,
-    HttpClientModule
+    HttpClientModule,
+    SharedModule
   ],
   providers: [
     UtilService,
@@ -38,7 +45,8 @@ import { CookieService } from 'ngx-cookie-service';
     RouterService,
     Moltin,
     CookieService,
-    UserService
+    UserService,
+    CartService
   ],
   bootstrap: [AppComponent]
 })
