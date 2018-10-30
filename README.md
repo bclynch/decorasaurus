@@ -30,6 +30,7 @@
 - Find a poster producer... - ???
 - Cart + checkout page - 2 days
   - Moltin has some companies that use them listed. Check their UI
+  - Can't figure out fucking confirm pw - https://angular-templates.io/tutorials/about/angular-forms-and-validations
 - FAQ page - .5 day
 - About page - .5 day
 - Digital ocean setup - 3 days

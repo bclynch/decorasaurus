@@ -1,0 +1,15 @@
+.dialogueContainer {
+  
+  form {
+
+    .mat-form-field {
+      display: block;
+    }
+    button[type='submit'] {
+      color: var(--color-white);
+    }
+    .toggle {
+      margin-top: 15px;
+    }
+  }
+}

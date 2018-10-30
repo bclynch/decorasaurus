@@ -1,0 +1,18 @@
+.totalsContainer {
+  margin-top: 15px;
+
+  > div {
+    display: flex;
+    justify-content: space-between;
+    border-top: solid 1px var(--color-border);
+    padding: 10px;
+
+    .right {
+      text-align: right;
+    }
+  }
+
+  @media (min-width: 768px) {
+    width: 220px;
+  }
+}

@@ -16,61 +16,15 @@
     <div *ngIf="(activeTab === 0 && cart?.data.length) || (activeTab === 1 && wishlistProducts.length)" class="generalWrapper">
       <div class="headerContainer">
         <div>Item Description</div>
-        <div>Each</div>
+        <div class="perEa">Each</div>
         <div>Quantity</div>
         <div>Total</div>
       </div>
       <div class="productContainer" *ngIf="activeTab === 0">
-        <div class="productWrapper" *ngFor="let product of cart?.data; let i = index;">
-          <div class="descriptionContainer">
-            <div class="imgContainer">
-              <img [src]="product.image.href" />
-            </div>
-            <div class="productDescriptionContainer">
-              <div class="productName">{{product.name}}</div>
-              <div class="productDescription">{{product.description}}</div>
-              <div>{{product.product_id}}</div>
-            </div>
-            <div class="optionsContainer">
-              <div>Move To Wishlist</div>
-              <div (click)="remove(product)">Remove</div>
-            </div>
-          </div>
-          <div>{{product.meta.display_price.without_tax.unit.formatted}}</div>
-          <div class="quantityContainer">
-            <form (submit)="recalcQuant($event, product, i)">
-              <input 
-                matInput 
-                [(ngModel)]="product.quantity" 
-                type="number" 
-                min="1" 
-                name="quant" 
-              />
-              <button mat-button type="submit" color="primary">Recaculate</button>
-            </form>
-          </div>
-          <div>
-            {{product.meta.display_price.without_tax.value.formatted}}
-          </div>
+        <div class="cartItemWrapper" *ngFor="let product of cart?.data; let i = index;">
+          <app-cart-item-card [product]="product"></app-cart-item-card>
         </div>
-        <div class="totalsContainer">
-          <div class="subtotal">
-            <div>Subtotal</div>
-            <div>{{cart?.meta.display_price.without_tax.formatted}}</div>
-          </div>
-          <div class="shipping">
-            <div>Shipping</div>
-            <div>$0</div>
-          </div>
-          <div class="tax">
-            <div>Estimated Tax</div>
-            <div class="right">Calculated at Checkout</div>
-          </div>
-          <div class="total boldFont">
-            <div>Total</div>
-            <div>{{cart?.meta.display_price.without_tax.formatted}}</div>
-          </div>
-        </div>
+        <app-cart-totals [cart]="cart"></app-cart-totals>
         <div class="buttonWrapper">
           <button mat-flat-button color="primary" (click)="router.navigateByUrl('/checkout')">Proceed With Order</button>
         </div>

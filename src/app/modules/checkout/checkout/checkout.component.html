@@ -3,54 +3,254 @@
     <h1>Review and Place Your Order</h1>
     <div class="expressContainer">
       <div class="boldFont">Express Checkout</div>
-      <button mat-flat-button color="primary">Sign In</button>
+      <button mat-flat-button color="primary" (click)="userService.signin('login')">Sign In</button>
+      <button mat-flat-button color="primary" (click)="userService.testing()">Testing</button>
     </div>
-    <div class="sectionWrapper">
-      <div class="sectionHeader">1. Enter Your Billing Address</div>
-      <div class="sectionContent"></div>
-    </div>
-    <div class="sectionWrapper">
-      <div class="sectionHeader">2. Choose a Shipping Address</div>
-      <div class="sectionContent"></div>
-    </div>
-    <div class="sectionWrapper">
-      <div class="sectionHeader">3. Select Gift Options</div>
-      <div class="sectionContent"></div>
-    </div>
-    <div class="sectionWrapper">
-      <div class="sectionHeader">4. Verify Your Payment Info</div>
-      <div class="sectionContent"></div>
-    </div>
-    <div class="sectionWrapper">
-      <div class="sectionHeader">5. Review and Submit</div>
-      <div class="sectionContent"></div>
-    </div>
-    <div class="bottomContainer">
-      <div class="left"><button mat-flat-button color="primary">Back To Cart</button></div>
-      <div class="right">
-        <div class="totalsContainer">
-          <div class="subtotal">
-            <div>Subtotal</div>
-            <div>{{cart?.meta.display_price.without_tax.formatted}}</div>
-          </div>
-          <div class="shipping">
-            <div>Shipping</div>
-            <div>$0</div>
-          </div>
-          <div class="tax">
-            <div>Estimated Tax</div>
-            <div class="right">Calculated at Checkout</div>
-          </div>
-          <div class="total boldFont">
-            <div>Total</div>
-            <div>{{cart?.meta.display_price.without_tax.formatted}}</div>
-          </div>
-        </div>
-        <div class="buttonWrapper">
-          <button mat-flat-button color="primary" (click)="router.navigateByUrl('/checkout')">Proceed With Order</button>
+    <form [formGroup]="checkoutForm">
+      <div class="sectionWrapper">
+        <div class="sectionHeader">1. Enter Your Billing Address</div>
+        <div class="sectionContent">
+          <ng-container formGroupName="billingAddress">
+            <div>Please enter the billing information associated with your credit card.</div>
+            <div class="required">* Required Fields</div>
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="* Email" 
+                formControlName="email"
+                [errorStateMatcher]="matcher"
+              />
+              <mat-hint>Order confirmation will be sent to this email address.</mat-hint>
+              <mat-error *ngFor="let validation of formValidationMessages.email">
+                <mat-error class="error-message" *ngIf="checkoutForm.get('billingAddress').get('email').hasError(validation.type) && (checkoutForm.get('billingAddress').get('email').dirty || checkoutForm.get('billingAddress').get('email').touched)">{{validation.message}}</mat-error>
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="* First Name" 
+                formControlName="firstName"
+                [errorStateMatcher]="matcher"
+              />
+              <mat-error *ngFor="let validation of formValidationMessages.firstName">
+                <mat-error class="error-message" *ngIf="checkoutForm.get('billingAddress').get('firstName').hasError(validation.type) && (checkoutForm.get('billingAddress').get('firstName').dirty || checkoutForm.get('billingAddress').get('firstName').touched)">{{validation.message}}</mat-error>
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="* Last Name" 
+                formControlName="lastName"
+                [errorStateMatcher]="matcher"
+              />
+              <mat-error *ngFor="let validation of formValidationMessages.lastName">
+                <mat-error class="error-message" *ngIf="checkoutForm.get('billingAddress').get('lastName').hasError(validation.type) && (checkoutForm.get('billingAddress').get('lastName').dirty || checkoutForm.get('billingAddress').get('lastName').touched)">{{validation.message}}</mat-error>
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="Company" 
+                formControlName="company"
+                [errorStateMatcher]="matcher"
+              />
+            </mat-form-field>
+            <mat-form-field>
+              <mat-select placeholder="* Country" formControlName="country" [errorStateMatcher]="matcher">
+                <mat-option *ngFor="let country of countries" [value]="country">
+                  {{country}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="* Address Line 1" 
+                formControlName="address1"
+                [errorStateMatcher]="matcher"
+              />
+              <mat-error *ngFor="let validation of formValidationMessages.address1">
+                <mat-error class="error-message" *ngIf="checkoutForm.get('billingAddress').get('address1').hasError(validation.type) && (checkoutForm.get('billingAddress').get('address1').dirty || checkoutForm.get('billingAddress').get('address1').touched)">{{validation.message}}</mat-error>
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="Address Line 2" 
+                formControlName="address2"
+                [errorStateMatcher]="matcher"
+              />
+            </mat-form-field>
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="* City" 
+                formControlName="city"
+                [errorStateMatcher]="matcher"
+              />
+              <mat-error *ngFor="let validation of formValidationMessages.city">
+                <mat-error class="error-message" *ngIf="checkoutForm.get('billingAddress').get('city').hasError(validation.type) && (checkoutForm.get('billingAddress').get('city').dirty || checkoutForm.get('billingAddress').get('city').touched)">{{validation.message}}</mat-error>
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-select placeholder="* State" formControlName="state" [errorStateMatcher]="matcher">
+                <mat-option *ngFor="let state of states" [value]="state">
+                  {{state}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="* Zip Code" 
+                formControlName="zip"
+                [errorStateMatcher]="matcher"
+              />
+              <mat-error *ngFor="let validation of formValidationMessages.zip">
+                <mat-error class="error-message" *ngIf="checkoutForm.get('billingAddress').get('zip').hasError(validation.type) && (checkoutForm.get('billingAddress').get('zip').dirty || checkoutForm.get('billingAddress').get('zip').touched)">{{validation.message}}</mat-error>
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="Phone" 
+                formControlName="phone"
+                [errorStateMatcher]="matcher"
+              />
+            </mat-form-field>
+          </ng-container>
         </div>
       </div>
-    </div>
+      <div class="sectionWrapper">
+        <div class="sectionHeader">2. Choose a Shipping Address</div>
+        <div class="sectionContent">
+          <mat-checkbox [formControl]="isSameAddressControl" color="primary">Ship to same address as billing</mat-checkbox>
+          <ng-container formGroupName="shippingAddress" *ngIf="!formsSame">
+            <div class="shippingHeader">Enter a new shipping address below</div>
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="* First Name" 
+                formControlName="firstName"
+                [errorStateMatcher]="matcher"
+              />
+              <mat-error *ngFor="let validation of formValidationMessages.firstName">
+                <mat-error class="error-message" *ngIf="checkoutForm.get('shippingAddress').get('firstName').hasError(validation.type) && (checkoutForm.get('shippingAddress').get('firstName').dirty || checkoutForm.get('shippingAddress').get('firstName').touched)">{{validation.message}}</mat-error>
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="* Last Name" 
+                formControlName="lastName"
+                [errorStateMatcher]="matcher"
+              />
+              <mat-error *ngFor="let validation of formValidationMessages.lastName">
+                <mat-error class="error-message" *ngIf="checkoutForm.get('shippingAddress').get('lastName').hasError(validation.type) && (checkoutForm.get('shippingAddress').get('lastName').dirty || checkoutForm.get('shippingAddress').get('lastName').touched)">{{validation.message}}</mat-error>
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="Company" 
+                formControlName="company"
+                [errorStateMatcher]="matcher"
+              />
+            </mat-form-field>
+            <mat-form-field>
+              <mat-select placeholder="* Country" formControlName="country" [errorStateMatcher]="matcher">
+                <mat-option *ngFor="let country of countries" [value]="country">
+                  {{country}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="* Address Line 1" 
+                formControlName="address1"
+                [errorStateMatcher]="matcher"
+              />
+              <mat-error *ngFor="let validation of formValidationMessages.address1">
+                <mat-error class="error-message" *ngIf="checkoutForm.get('shippingAddress').get('address1').hasError(validation.type) && (checkoutForm.get('shippingAddress').get('address1').dirty || checkoutForm.get('shippingAddress').get('address1').touched)">{{validation.message}}</mat-error>
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="Address Line 2" 
+                formControlName="address2"
+                [errorStateMatcher]="matcher"
+              />
+            </mat-form-field>
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="* City" 
+                formControlName="city"
+                [errorStateMatcher]="matcher"
+              />
+              <mat-error *ngFor="let validation of formValidationMessages.city">
+                <mat-error class="error-message" *ngIf="checkoutForm.get('shippingAddress').get('city').hasError(validation.type) && (checkoutForm.get('shippingAddress').get('city').dirty || checkoutForm.get('shippingAddress').get('city').touched)">{{validation.message}}</mat-error>
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-select placeholder="* State" formControlName="state" [errorStateMatcher]="matcher">
+                <mat-option *ngFor="let state of states" [value]="state">
+                  {{state}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="* Zip Code" 
+                formControlName="zip"
+                [errorStateMatcher]="matcher"
+              />
+              <mat-error *ngFor="let validation of formValidationMessages.zip">
+                <mat-error class="error-message" *ngIf="checkoutForm.get('shippingAddress').get('zip').hasError(validation.type) && (checkoutForm.get('shippingAddress').get('zip').dirty || checkoutForm.get('shippingAddress').get('zip').touched)">{{validation.message}}</mat-error>
+              </mat-error>
+            </mat-form-field>
+          </ng-container>
+        </div>
+      </div>
+      <div class="sectionWrapper">
+        <div class="sectionHeader">3. Select Gift Options (Optional)</div>
+        <div class="sectionContent">
+          <mat-checkbox color="primary"><strong>Is this a gift?</strong> We will ship the package without prices listed on the invoice.</mat-checkbox>
+        </div>
+      </div>
+      <div class="sectionWrapper">
+        <div class="sectionHeader">4. Verify Your Payment Info</div>
+        <div class="sectionContent"></div>
+      </div>
+      <div class="sectionWrapper review">
+        <div class="sectionHeader">
+          <div>5. Review and Submit</div>
+          <div>Each</div>
+          <div>Quantity</div>
+          <div>Total</div>
+        </div>
+        <div class="sectionContent">
+          <div class="cartItemWrapper" *ngFor="let product of cart?.data; let i = index;">
+            <app-cart-item-card 
+              [product]="product" 
+              [isCheckout]="true"
+            ></app-cart-item-card>
+          </div>
+        </div>
+      </div>
+      <div class="bottomContainer">
+        <div class="left"><button mat-button color="primary" (click)="router.navigateByUrl('/cart')">Back To Cart</button></div>
+        <div class="right">
+          <app-cart-totals [cart]="cart"></app-cart-totals>
+          <div class="buttonWrapper">
+            <button mat-flat-button color="primary" (click)="submitOrder()">Submit Order</button>
+          </div>
+        </div>
+      </div>
+    </form>
     <app-informational></app-informational>
   </div>
 </app-pagewrapper>

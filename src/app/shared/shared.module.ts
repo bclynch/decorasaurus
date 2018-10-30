@@ -6,7 +6,10 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { DirectivesModule } from '../directives/directives.module';
 import { MobileNavComponent } from './mobile-nav/mobile-nav.component';
 import { InformationalComponent } from './informational/informational.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CartItemCardComponent, RemoveSnackbar } from './cart-item-card/cart-item-card.component';
+import { CartTotalsComponent } from './cart-totals/cart-totals.component';
+import { SigninDialogueComponent } from './signin-dialogue/signin-dialogue.component';
 
 import {
   MatButtonModule,
@@ -17,12 +20,16 @@ import {
   MatIconModule,
   MatBadgeModule,
   MatBottomSheetModule,
-  MatSnackBarModule
+  MatSnackBarModule,
+  MatSelectModule,
+  MatCheckboxModule
 } from '@angular/material';
 
 @NgModule({
   entryComponents: [
-    MobileNavComponent
+    MobileNavComponent,
+    RemoveSnackbar,
+    SigninDialogueComponent
   ],
   imports: [
     CommonModule,
@@ -36,14 +43,21 @@ import {
     MatBadgeModule,
     MatBottomSheetModule,
     FormsModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatSelectModule,
+    MatCheckboxModule,
+    ReactiveFormsModule
   ],
   declarations: [
     PagewrapperComponent,
     FooterComponent,
     NavbarComponent,
     MobileNavComponent,
-    InformationalComponent
+    InformationalComponent,
+    CartItemCardComponent,
+    RemoveSnackbar,
+    CartTotalsComponent,
+    SigninDialogueComponent
   ],
   exports: [
     PagewrapperComponent,
@@ -58,7 +72,11 @@ import {
     MatBadgeModule,
     MatBottomSheetModule,
     InformationalComponent,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatSelectModule,
+    MatCheckboxModule,
+    CartItemCardComponent,
+    CartTotalsComponent
   ]
 })
 export class SharedModule { }

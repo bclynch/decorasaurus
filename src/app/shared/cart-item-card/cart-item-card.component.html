@@ -1,0 +1,37 @@
+<div class="productWrapper">
+  <div class="descriptionContainer">
+    <div class="imgContainer">
+      <img [src]="product.image.href" />
+    </div>
+    <div class="descWrapper">
+      <div class="productDescriptionContainer">
+        <div class="productName">{{product.name}}</div>
+        <div class="productDescription">{{product.description}}</div>
+        <div class="productId">{{product.product_id}}</div>
+      </div>
+      <div class="optionsContainer" *ngIf="!isCheckout">
+        <div>Move To Wishlist</div>
+        <div (click)="remove(product)">Remove</div>
+      </div>
+    </div>
+  </div>
+  <div class="perEa">{{product.meta.display_price.without_tax.unit.formatted}}</div>
+  <div class="rightWrapper">
+    <div class="quantityContainer">
+      <form (submit)="recalcQuant($event, product, i)" *ngIf="!isCheckout">
+        <input 
+          matInput 
+          [(ngModel)]="product.quantity" 
+          type="number" 
+          min="1" 
+          name="quant" 
+        />
+        <button mat-button type="submit" color="primary">Recaculate</button>
+      </form>
+      <div *ngIf="isCheckout">{{product.quantity}}</div>
+    </div>
+    <div>
+      {{product.meta.display_price.without_tax.value.formatted}}
+    </div>
+  </div>
+</div>

@@ -12,12 +12,42 @@ import { ENV } from '../../../environments/environment';
 @Injectable()
 export class Moltin {
     private moltin = MoltinGateway({
-    	client_id: ENV.moltinClientId
+			client_id: ENV.moltinClientId,
+			client_secret: ENV.moltinClientSecret
     });
 
     constructor(public httpClient: HttpClient) {
 
-    }
+		}
+
+		fetchCustomerToken() {
+			Promise.resolve(this.moltin.Customers.Token('ron@swanson.com', 'mysecretpassword')).then(
+				customer => {
+					console.log(customer);
+					this.moltin.Addresses.All({
+						customer: customer.customer_id,
+						token: customer.token
+					}).then(address => {
+						// Do something
+						console.log(address);
+					});
+
+				}
+			);
+		}
+
+		getAllCustomers() {
+			this.moltin.Customers.All().then(customer => {
+				// Do something
+				console.log(customer);
+			});
+		}
+
+		getCustomer(id: string) {
+			this.moltin.Customers.Get(id).then(customer => {
+				console.log(customer);
+			});
+		}
 
     // get all Products
     getProducts(): Promise<MoltinProducts> {
@@ -30,7 +60,7 @@ export class Moltin {
 				// pass on to the next one
 				return products;
 			});
-		}
+    }
 
     getProduct(sku: string): Observable<MoltinProduct> {
 			return new Observable<MoltinProduct>(observer => {
