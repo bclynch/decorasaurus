@@ -6,6 +6,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { DirectivesModule } from '../directives/directives.module';
 import { MobileNavComponent } from './mobile-nav/mobile-nav.component';
 import { InformationalComponent } from './informational/informational.component';
+import { FormsModule } from '@angular/forms';
 
 import {
   MatButtonModule,
@@ -15,7 +16,8 @@ import {
   MatInputModule,
   MatIconModule,
   MatBadgeModule,
-  MatBottomSheetModule
+  MatBottomSheetModule,
+  MatSnackBarModule
 } from '@angular/material';
 
 @NgModule({
@@ -32,7 +34,9 @@ import {
     MatInputModule,
     MatIconModule,
     MatBadgeModule,
-    MatBottomSheetModule
+    MatBottomSheetModule,
+    FormsModule,
+    MatSnackBarModule
   ],
   declarations: [
     PagewrapperComponent,
@@ -53,7 +57,8 @@ import {
     MatIconModule,
     MatBadgeModule,
     MatBottomSheetModule,
-    InformationalComponent
+    InformationalComponent,
+    MatSnackBarModule
   ]
 })
 export class SharedModule { }

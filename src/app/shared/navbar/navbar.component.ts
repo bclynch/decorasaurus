@@ -23,6 +23,8 @@ interface Section {
 export class NavbarComponent {
   @Input() collapsibleNav: boolean;
 
+  cartNumber: number;
+
   private _dismiss: any;
   sectionOptions: Section[] = [
     {
@@ -80,7 +82,16 @@ export class NavbarComponent {
     private routerService: RouterService,
     private cartService: CartService
   ) {
-
+    this.cartService.cartItems.subscribe(
+      (items) => {
+        console.log(items);
+        if (items) {
+          let cart = 0;
+          items.data.forEach((item) => cart += item.quantity);
+          this.cartNumber = cart;
+        }
+      }
+    );
   }
 
   navHover(e, i: number) {

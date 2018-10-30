@@ -9,12 +9,22 @@
     <mat-icon>email</mat-icon>
     <div class="header">Stay In The Know</div>
     <div class="subHeader">Sign up for Decorasaurus news, sales and deals.</div>
-    <button mat-button>Contact Us</button>
+    <form (submit)="submitEmail($event)">
+      <mat-form-field>
+        <input
+          matInput
+          placeholder="example@domain.com" 
+          [(ngModel)]="email"
+          type="email"
+          name="email" 
+        />
+      </mat-form-field> 
+      <button mat-button type="submit">Submit</button>
+    </form>
   </div>
   <div class="infoWrapper">
     <mat-icon>attach_money</mat-icon>
     <div class="header">Buy With Confidence</div>
     <div class="subHeader">Our satisfaction guarantee means you can buy without worry</div>
-    <button mat-button>Contact Us</button>
   </div>
 </div>

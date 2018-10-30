@@ -4,7 +4,7 @@ import { MoltinProduct } from './models/product';
 import { MoltinProducts } from './models/product';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { MoltinCart, MoltinCartItem } from './models/cart';
+import { MoltinCart, MoltinCartItem, MoltinCartResp } from './models/cart';
 import { MoltinOrder } from './models/order';
 
 import { ENV } from '../../../environments/environment';
@@ -117,8 +117,8 @@ export class Moltin {
         });
     }
 
-    getCartItems(ref: string): Observable<MoltinCartItem[]> {
-        return new Observable<MoltinCartItem[]>(observer => {
+    getCartItems(ref: string): Observable<MoltinCartResp> {
+        return new Observable<MoltinCartResp>(observer => {
             this.moltin.Cart(ref).Items().then(data => {
                 observer.next(data);
                 observer.complete();
@@ -129,8 +129,8 @@ export class Moltin {
         });
     }
 
-    updateCartItem(ref: string, itemID, quantity): Observable<MoltinCartItem> {
-        return new Observable<MoltinCartItem>(observer => {
+    updateCartItem(ref: string, itemID, quantity): Observable<MoltinCartResp> {
+        return new Observable<MoltinCartResp>(observer => {
             this.moltin.Cart(ref).UpdateItemQuantity(itemID, quantity).then((data) => {
                 observer.next(data);
                 observer.complete();
@@ -141,8 +141,8 @@ export class Moltin {
         });
     }
 
-    deleteCartItem(ref: string, itemID): Observable<MoltinCartItem> {
-        return new Observable<MoltinCartItem>(observer => {
+    deleteCartItem(ref: string, itemID): Observable<MoltinCartResp> {
+        return new Observable<MoltinCartResp>(observer => {
             this.moltin.Cart(ref).RemoveItem(itemID).then((data) => {
                 observer.next(data);
                 observer.complete();

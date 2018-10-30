@@ -86,7 +86,7 @@ export class PatentBasicOptionsComponent implements OnInit {
   template: `
     <div mat-dialog-content>
       Check out <a href="https://patents.google.com/" target="_blank">Google Patents</a> for patent options and enter the application number (i.e \'US3751727A\') in the search field below to fetch patent images.
-      <div class="buttonWrapper"><button mat-button [mat-dialog-close]="" cdkFocusInitial>Ok</button></div>
+      <div class="buttonWrapper"><button mat-button [mat-dialog-close]="" cdkFocusInitial color="primary">Ok</button></div>
     </div>
   `,
   styles: [

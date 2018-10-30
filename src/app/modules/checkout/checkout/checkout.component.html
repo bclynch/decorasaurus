@@ -1,4 +1,56 @@
 <app-pagewrapper>
-  <div class="boldFont">Checkout</div>
-  <app-informational></app-informational>
+  <div class="checkoutContainer">
+    <h1>Review and Place Your Order</h1>
+    <div class="expressContainer">
+      <div class="boldFont">Express Checkout</div>
+      <button mat-flat-button color="primary">Sign In</button>
+    </div>
+    <div class="sectionWrapper">
+      <div class="sectionHeader">1. Enter Your Billing Address</div>
+      <div class="sectionContent"></div>
+    </div>
+    <div class="sectionWrapper">
+      <div class="sectionHeader">2. Choose a Shipping Address</div>
+      <div class="sectionContent"></div>
+    </div>
+    <div class="sectionWrapper">
+      <div class="sectionHeader">3. Select Gift Options</div>
+      <div class="sectionContent"></div>
+    </div>
+    <div class="sectionWrapper">
+      <div class="sectionHeader">4. Verify Your Payment Info</div>
+      <div class="sectionContent"></div>
+    </div>
+    <div class="sectionWrapper">
+      <div class="sectionHeader">5. Review and Submit</div>
+      <div class="sectionContent"></div>
+    </div>
+    <div class="bottomContainer">
+      <div class="left"><button mat-flat-button color="primary">Back To Cart</button></div>
+      <div class="right">
+        <div class="totalsContainer">
+          <div class="subtotal">
+            <div>Subtotal</div>
+            <div>{{cart?.meta.display_price.without_tax.formatted}}</div>
+          </div>
+          <div class="shipping">
+            <div>Shipping</div>
+            <div>$0</div>
+          </div>
+          <div class="tax">
+            <div>Estimated Tax</div>
+            <div class="right">Calculated at Checkout</div>
+          </div>
+          <div class="total boldFont">
+            <div>Total</div>
+            <div>{{cart?.meta.display_price.without_tax.formatted}}</div>
+          </div>
+        </div>
+        <div class="buttonWrapper">
+          <button mat-flat-button color="primary" (click)="router.navigateByUrl('/checkout')">Proceed With Order</button>
+        </div>
+      </div>
+    </div>
+    <app-informational></app-informational>
+  </div>
 </app-pagewrapper>

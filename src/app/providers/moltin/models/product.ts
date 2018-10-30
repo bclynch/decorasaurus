@@ -13,6 +13,7 @@ export interface MoltinProduct {
   sku: string;
   description: string;
   main_image: MoltinFile;
+  quantity: number;
 
   price: MoltinProductPrice[];
   meta: MoltinProductMeta;

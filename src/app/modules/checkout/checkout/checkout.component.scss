@@ -1,0 +1,37 @@
+.checkoutContainer {
+
+  .expressContainer {
+    display: flex;
+    align-items: center;
+
+    button {
+      color: var(--color-white);
+      margin-left: 10px;
+    }
+  }
+  .sectionWrapper {
+    margin-top: 20px;
+    border: solid 1px var(--color-border);
+
+    .sectionHeader {
+      font-size: 18px;
+      padding: 6px 0;
+      font-weight: bold;
+      background: #ccc;
+    }
+    .sectionContent {
+      padding: 20px;
+    }
+  }
+  .bottomContainer {
+    display: flex;
+    justify-content: space-between;
+
+    .right {
+      width: 220px;
+    }
+    .left {
+      flex: 1;
+    }
+  }
+}

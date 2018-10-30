@@ -1,0 +1,127 @@
+.cartContainer {
+  padding: 10px;
+
+  .tabContainer {
+    display: flex;
+    border-bottom: solid 1px var(--color-black);
+
+    .tab {
+      display: flex;
+      align-items: center;
+      border: solid 1px var(--color-black);
+      padding: 15px;
+      position: relative;
+      top: 1px;
+      cursor: pointer;
+      transition: .1s ease-in;
+
+      &:first-child {
+        margin: 0 15px;
+      }
+      &.active {
+        border-bottom: solid 1px var(--color-white);
+      }
+      .tabLabel {
+        margin: 0 10px;
+      }
+    }
+  }
+  .generalWrapper {
+
+    .headerContainer {
+      display: flex;
+      font-weight: bold;
+      background: #ccc;
+      padding: 6px 0;
+      text-align: center;
+      margin-top: 30px;
+  
+      > div {
+        flex: 1;
+      }
+      > div:first-child {
+        flex: 3;
+      }
+    }
+    .productContainer {
+      display: flex;
+      flex-direction: column;
+  
+      .productWrapper {
+        display: flex;
+        padding: 10px;
+  
+        > div {
+          flex: 1;
+          text-align: center;
+        }
+        > div:first-child {
+          flex: 3;
+          text-align: left;
+        }
+        .descriptionContainer {
+          display: flex;
+  
+          img {
+            width: 100px;
+            margin-right: 10px;
+          }
+          .productDescriptionContainer {
+  
+            .productName {
+              font-size: 18px;
+            }
+            .productDescription {
+  
+            }
+          }
+        }
+        .optionsContainer {
+  
+          > div {
+            cursor: pointer;
+            font-weight: bold;
+          }
+          > div:hover {
+            color: var(--color-secondary);
+          }
+          > div:first-child {
+            margin-bottom: 10px;
+          }
+        }
+      }
+    }
+    .totalsContainer {
+      width: 220px;
+      align-self: flex-end;
+  
+      > div {
+        display: flex;
+        justify-content: space-between;
+        border-top: solid 1px var(--color-border);
+        padding: 10px;
+  
+        .right {
+          text-align: right;
+        }
+      }
+    }
+    .buttonWrapper {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 15px;
+
+      button {
+        color: var(--color-white);
+      }
+    }
+  }
+  .emptyState {
+    font-size: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+  }
+}

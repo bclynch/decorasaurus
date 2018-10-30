@@ -7,9 +7,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class InformationalComponent implements OnInit {
 
+  email: string;
+
   constructor() { }
 
   ngOnInit() {
   }
 
+  submitEmail() {
+    // something happens
+  }
 }

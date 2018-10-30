@@ -33,7 +33,7 @@
         <div>
           <mat-icon 
             (click)="routerService.navigateToPage('/cart')" 
-            [matBadge]="cartService.cartItems?.length" 
+            [matBadge]="cartNumber" 
             matBadgePosition="above after"
           >shopping_cart</mat-icon>
         </div>
