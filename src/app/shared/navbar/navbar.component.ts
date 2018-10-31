@@ -1,9 +1,11 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy } from '@angular/core';
 
 import { UtilService } from '../../services/util.service';
 import { RouterService } from '../../services/router.service';
-import { MobileNavComponent } from '../mobile-nav/mobile-nav.component';
+import { MobileNavDialogueComponent } from '../mobile-nav-dialogue/mobile-nav-dialogue.component';
 import { CartService } from 'src/app/services/cart.service';
+import { SubscriptionLike } from 'rxjs';
+import { MatDialog } from '@angular/material';
 
 interface Section {
   label: string;
@@ -20,8 +22,11 @@ interface Section {
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnDestroy {
   @Input() collapsibleNav: boolean;
+
+  cartSubscription: SubscriptionLike;
+  dialogueSubscription: SubscriptionLike;
 
   cartNumber: number;
 
@@ -80,9 +85,10 @@ export class NavbarComponent {
   constructor(
     private utilService: UtilService,
     private routerService: RouterService,
-    private cartService: CartService
+    private cartService: CartService,
+    public dialog: MatDialog
   ) {
-    this.cartService.cartItems.subscribe(
+    this.cartSubscription = this.cartService.cartItems.subscribe(
       (items) => {
         console.log(items);
         if (items) {
@@ -92,6 +98,11 @@ export class NavbarComponent {
         }
       }
     );
+  }
+
+  ngOnDestroy() {
+    this.cartSubscription.unsubscribe();
+    if (this.dialogueSubscription) this.dialogueSubscription.unsubscribe();
   }
 
   navHover(e, i: number) {
@@ -104,34 +115,29 @@ export class NavbarComponent {
     }
   }
 
-  // async openMobileNav() {
-  //   const modal = await this.modalCtrl.create({
-  //     component: MobileNavComponent,
-  //     cssClass: 'mobileNavModal',
-  //     // animated: false,
-  //     backdropDismiss: false
-  //   });
-  //   await modal.present();
+  async openMobileNav() {
+    const dialogRef = this.dialog.open(MobileNavDialogueComponent, {
+      panelClass: 'mobiledialog-panel'
+    });
 
-  //   this._dismiss = await modal.onDidDismiss();
+    this.dialogueSubscription = dialogRef.afterClosed().subscribe(result => {
 
-
-  //   console.log('Dismissed modal', this._dismiss);
-  //   if (this._dismiss.data) {
-  //     switch (this._dismiss.data) {
-  //       case 'About':
-  //         this.routerService.navigateToPage('/about');
-  //         break;
-  //       case 'Custom Stylized Posters':
-  //         this.routerService.navigateToPage('/create/poster-generator/stylized-poster');
-  //         break;
-  //       case 'City Map Posters':
-  //         this.routerService.navigateToPage('/create/poster-generator/map-poster');
-  //         break;
-  //       case 'Patent Posters':
-  //         this.routerService.navigateToPage('/create/poster-generator/patent-poster');
-  //         break;
-  //     }
-  //   }
-  // }
+      if (result) {
+        switch (result) {
+          case 'About':
+            this.routerService.navigateToPage('/about');
+            break;
+          case 'Custom Stylized Posters':
+            this.routerService.navigateToPage('/create/poster-generator/stylized-poster');
+            break;
+          case 'City Map Posters':
+            this.routerService.navigateToPage('/create/poster-generator/map-poster');
+            break;
+          case 'Patent Posters':
+            this.routerService.navigateToPage('/create/poster-generator/patent-poster');
+            break;
+        }
+      }
+    });
+  }
 }

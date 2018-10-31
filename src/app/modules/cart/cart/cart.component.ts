@@ -1,16 +1,17 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { CartService } from 'src/app/services/cart.service';
 import { SettingsService } from 'src/app/services/settings.service';
 
 import { MoltinCartItem, MoltinCartResp } from 'src/app/providers/moltin/models/cart';
 import { Router } from '@angular/router';
+import { SubscriptionLike } from 'rxjs';
 
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.scss']
 })
-export class CartComponent implements OnInit {
+export class CartComponent implements OnInit, OnDestroy {
 
   tabs = [
     {
@@ -27,6 +28,7 @@ export class CartComponent implements OnInit {
   activeTab = 0;
   cart: MoltinCartResp;
   wishlistProducts = [];
+  cartSubscription: SubscriptionLike;
 
   constructor(
     private cartService: CartService,
@@ -39,8 +41,12 @@ export class CartComponent implements OnInit {
   ngOnInit() {
   }
 
+  ngOnDestroy() {
+    this.cartSubscription.unsubscribe();
+  }
+
   init(): void {
-    this.cartService.cartItems.subscribe(
+    this.cartSubscription = this.cartService.cartItems.subscribe(
       items => {
         console.log(items);
         this.cart = items;

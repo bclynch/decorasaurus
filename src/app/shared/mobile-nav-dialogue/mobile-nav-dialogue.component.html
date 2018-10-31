@@ -33,7 +33,7 @@
         </div>
       </div>
       <div class="subSectionsWrapper" *ngIf="option.subSections.length">
-        <div *ngFor="let subSection of option.subSections;" class="subSection" (click)="modalContoller.dismiss(subSection)">
+        <div *ngFor="let subSection of option.subSections;" class="subSection" (click)="dialogRef.close(subSection)">
           {{subSection}}
         </div>
       </div>

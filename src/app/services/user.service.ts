@@ -1,13 +1,15 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { SigninDialogueComponent } from '../shared/signin-dialogue/signin-dialogue.component';
 import { Moltin } from '../providers/moltin/moltin';
+import { SubscriptionLike } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UserService {
+export class UserService implements OnDestroy {
 
+  dialogueSubscription: SubscriptionLike;
   userUuid: string;
 
   constructor(
@@ -15,12 +17,16 @@ export class UserService {
     private moltin: Moltin
   ) { }
 
+  ngOnDestroy() {
+    this.dialogueSubscription.unsubscribe();
+  }
+
   signin(type: 'login' | 'signup') {
     const dialogRef = this.dialog.open(SigninDialogueComponent, {
       data: { isLogin: type === 'login' }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    this.dialogueSubscription = dialogRef.afterClosed().subscribe(result => {
       console.log(result);
       if (result.type === 'signup') this.createUser(result.data);
       if (result.type === 'login') this.loginUser(result.data);

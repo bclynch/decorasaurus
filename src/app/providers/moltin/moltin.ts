@@ -219,11 +219,14 @@ export class Moltin {
         });
     }
 
-    payForOrder(order: MoltinOrder, token) {
+    payForOrder(order: MoltinOrder, token: string) {
         const payload = {
             'gateway': 'stripe',
             'method': 'purchase',
-            'payment': token
+            'payment': token,
+            'options': {
+                receipt_email: 'bclynch7@gmail.com'
+            }
         };
         return new Observable<MoltinOrder>(observer => {
             this.moltin.Orders.Payment(order.id, payload).then((data) => {

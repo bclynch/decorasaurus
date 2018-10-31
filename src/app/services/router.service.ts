@@ -1,12 +1,17 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, NavigationStart, NavigationExtras } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
 // Services
 import { UtilService } from '../services/util.service';
+import { SubscriptionLike } from 'rxjs';
 
 @Injectable()
-export class RouterService {
+export class RouterService implements OnDestroy {
+
+  paramsSubscription: SubscriptionLike;
+  fragmentSubscription: SubscriptionLike;
+  eventsSubscription: SubscriptionLike;
 
   params;
   fragment;
@@ -16,17 +21,23 @@ export class RouterService {
     private route: ActivatedRoute,
     private utilService: UtilService
   ) {
-    this.route.queryParams.subscribe((params) => {
+    this.paramsSubscription = this.route.queryParams.subscribe((params) => {
       this.params = params;
     });
-    this.route.fragment.subscribe((fragment) => {
-      this.fragment = fragment;
-    });
-    this.router.events.pipe(
-      filter((event) => event instanceof NavigationStart))
-      .subscribe((event) => {
-        this.utilService.checkScrollInfinite = false;
-      });
+    // this.fragment = this.route.fragment.subscribe((fragment) => {
+    //   this.fragment = fragment;
+    // });
+    // this.eventsSubscription = this.router.events.pipe(
+    //   filter((event) => event instanceof NavigationStart))
+    //   .subscribe((event) => {
+    //     this.utilService.checkScrollInfinite = false;
+    //   });
+  }
+
+  ngOnDestroy() {
+    this.paramsSubscription.unsubscribe();
+    this.fragmentSubscription.unsubscribe();
+    this.eventsSubscription.unsubscribe();
   }
 
   grabBaseRoute(url: string): string {

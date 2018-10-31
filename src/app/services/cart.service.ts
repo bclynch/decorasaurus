@@ -1,16 +1,22 @@
-import { Injectable, Component, Inject } from '@angular/core';
+import { Injectable, Component, Inject, OnDestroy } from '@angular/core';
 import { Moltin } from '../providers/moltin/moltin';
 import { UserService } from './user.service';
 import { MoltinCart, MoltinCartItem, MoltinCartMeta, MoltinCartResp } from '../providers/moltin/models/cart';
 import { Router } from '@angular/router';
 import { MAT_BOTTOM_SHEET_DATA, MatBottomSheet, MatBottomSheetRef } from '@angular/material';
 import { MoltinProduct } from '../providers/moltin/models/product';
-import { BehaviorSubject, Observable} from 'rxjs';
+import { BehaviorSubject, Observable, SubscriptionLike} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CartService {
+export class CartService implements OnDestroy {
+
+  getCartSubscription: SubscriptionLike;
+  cartItemsSubscription: SubscriptionLike;
+  addToCartSubscription: SubscriptionLike;
+  removeFromCartSubscription: SubscriptionLike;
+  updateCartSubscription: SubscriptionLike;
 
   cart: MoltinCart;
   public cartItems: Observable<MoltinCartResp>;
@@ -26,9 +32,17 @@ export class CartService {
     this.cartItems = this.cartSubject;
   }
 
+  ngOnDestroy() {
+    this.getCartSubscription.unsubscribe();
+    this.cartItemsSubscription.unsubscribe();
+    this.addToCartSubscription.unsubscribe();
+    this.removeFromCartSubscription.unsubscribe();
+    this.updateCartSubscription.unsubscribe();
+  }
+
   getCart(): Promise<void> {
     return new Promise((resolve) => {
-      this.moltin.getCart(this.userService.userUuid).subscribe(
+      this.getCartSubscription = this.moltin.getCart(this.userService.userUuid).subscribe(
         (data => {
           const anyData: any = data;
           this.cart = anyData.data;
@@ -43,7 +57,7 @@ export class CartService {
 
   getCartItems(): Promise<void> {
     return new Promise((resolve) => {
-      this.moltin.getCartItems(this.userService.userUuid).subscribe(
+      this.cartItemsSubscription = this.moltin.getCartItems(this.userService.userUuid).subscribe(
         (data => {
           this.cartSubject.next(data);
           resolve();
@@ -53,7 +67,7 @@ export class CartService {
   }
 
   addToCart(product: MoltinProduct): void {
-    this.moltin.addToCart(this.userService.userUuid, product).subscribe(
+    this.addToCartSubscription = this.moltin.addToCart(this.userService.userUuid, product).subscribe(
       (data => {
         console.log(data);
         this.cartSubject.next(data);
@@ -67,7 +81,7 @@ export class CartService {
   }
 
   removeFromCart(product: MoltinCartItem): void {
-    this.moltin.deleteCartItem(this.userService.userUuid, product.id).subscribe(
+    this.removeFromCartSubscription = this.moltin.deleteCartItem(this.userService.userUuid, product.id).subscribe(
       (data) => {
         this.cartSubject.next(data);
       }
@@ -75,7 +89,7 @@ export class CartService {
   }
 
   updateCartItem(product: MoltinCartItem, quantity: number) {
-    this.moltin.updateCartItem(this.userService.userUuid, product.id, quantity).subscribe(
+    this.updateCartSubscription = this.moltin.updateCartItem(this.userService.userUuid, product.id, quantity).subscribe(
       (data) => {
         this.cartSubject.next(data);
       }

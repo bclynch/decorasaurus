@@ -1,14 +1,15 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, OnDestroy } from '@angular/core';
 import { APIService } from '../../../../services/api.service';
 import { MatDialog } from '@angular/material';
 import { PatentExpandDialogueComponent } from '../../patent-expand-dialogue/patent-expand-dialogue.component';
+import { SubscriptionLike } from 'rxjs';
 
 @Component({
   selector: 'app-patent-basic-options',
   templateUrl: './patent-basic-options.component.html',
   styleUrls: ['./patent-basic-options.component.scss']
 })
-export class PatentBasicOptionsComponent implements OnInit {
+export class PatentBasicOptionsComponent implements OnInit, OnDestroy {
   @Input() patentImages: string[];
   @Input() patentName: string;
   @Input() posterBackground: string;
@@ -19,6 +20,10 @@ export class PatentBasicOptionsComponent implements OnInit {
   @Output() background: EventEmitter<string> = new EventEmitter<string>();
   @Output() trace: EventEmitter<string> = new EventEmitter<string>();
   @Output() tracing: EventEmitter<void> = new EventEmitter<void>();
+
+  dialogueSubscription: SubscriptionLike;
+  traceSubscription: SubscriptionLike;
+  patentSubscription: SubscriptionLike;
 
   patentSVG;
   patentNumber: string;
@@ -33,6 +38,12 @@ export class PatentBasicOptionsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+  }
+
+  ngOnDestroy() {
+    if (this.dialogueSubscription) this.dialogueSubscription.unsubscribe();
+    if (this.traceSubscription) this.traceSubscription.unsubscribe();
+    if (this.patentSubscription) this.patentSubscription.unsubscribe();
   }
 
   expandImage(index: number) {
@@ -55,7 +66,7 @@ export class PatentBasicOptionsComponent implements OnInit {
 
   selectPatent(i: number) {
     this.tracing.emit();
-    this.apiService.tracePatent(this.patentImages[i], this.posterTrace).subscribe(
+    this.traceSubscription = this.apiService.tracePatent(this.patentImages[i], this.posterTrace).subscribe(
       result => {
         this.patentSVG = result.resp;
         this.svg.emit(this.patentSVG);
@@ -68,7 +79,7 @@ export class PatentBasicOptionsComponent implements OnInit {
     if (this.patentNumber) {
       this.loadingPatentImages = true;
       this.searchResults.emit([]);
-      this.apiService.fetchPatent(this.patentNumber).subscribe(
+      this.patentSubscription = this.apiService.fetchPatent(this.patentNumber).subscribe(
         result => {
           this.patentImages = result.resp.images;
           this.patentName = result.resp.name;

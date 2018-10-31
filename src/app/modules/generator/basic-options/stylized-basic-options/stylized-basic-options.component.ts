@@ -1,14 +1,15 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, NgZone, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, NgZone, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { UploadEvent, FileSystemFileEntry, FileSystemDirectoryEntry } from 'ngx-file-drop';
 import { APIService } from '../../../../services/api.service';
 import { DomSanitizer } from '@angular/platform-browser';
+import { SubscriptionLike } from 'rxjs';
 
 @Component({
   selector: 'app-stylized-basic-options',
   templateUrl: './stylized-basic-options.component.html',
   styleUrls: ['./stylized-basic-options.component.scss']
 })
-export class StylizedBasicOptionsComponent implements OnInit {
+export class StylizedBasicOptionsComponent implements OnInit, OnDestroy {
   @Input() posterBackground: string;
   @Input() posterTrace: string;
   @Output() background: EventEmitter<string> = new EventEmitter<string>();
@@ -16,6 +17,8 @@ export class StylizedBasicOptionsComponent implements OnInit {
   @Output() svg: EventEmitter<string> = new EventEmitter<string>();
   @Output() tracing: EventEmitter<void> = new EventEmitter<void>();
   @ViewChild('angularCropper') public angularCropper: any;
+
+  posterizeSubscription: SubscriptionLike;
 
   displayUpload = true;
   uploadedFile;
@@ -55,6 +58,10 @@ export class StylizedBasicOptionsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+  }
+
+  ngOnDestroy() {
+    if (this.posterizeSubscription) this.posterizeSubscription.unsubscribe();
   }
 
   public dropped(event: UploadEvent) {
@@ -133,7 +140,7 @@ export class StylizedBasicOptionsComponent implements OnInit {
       formData.append('cropped', blob);
       formData.append('color', this.posterTrace);
 
-      this.apiService.posterizeImage(formData).subscribe(
+      this.posterizeSubscription = this.apiService.posterizeImage(formData).subscribe(
         result => {
           this.svg.emit(result.image);
           // this.tracing = false;

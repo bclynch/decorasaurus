@@ -4,7 +4,7 @@ import { PagewrapperComponent } from './pagewrapper/pagewrapper.component';
 import { FooterComponent } from './footer/footer.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { DirectivesModule } from '../directives/directives.module';
-import { MobileNavComponent } from './mobile-nav/mobile-nav.component';
+import { MobileNavDialogueComponent } from './mobile-nav-dialogue/mobile-nav-dialogue.component';
 import { InformationalComponent } from './informational/informational.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CartItemCardComponent, RemoveSnackbar } from './cart-item-card/cart-item-card.component';
@@ -27,7 +27,7 @@ import {
 
 @NgModule({
   entryComponents: [
-    MobileNavComponent,
+    MobileNavDialogueComponent,
     RemoveSnackbar,
     SigninDialogueComponent
   ],
@@ -52,7 +52,7 @@ import {
     PagewrapperComponent,
     FooterComponent,
     NavbarComponent,
-    MobileNavComponent,
+    MobileNavDialogueComponent,
     InformationalComponent,
     CartItemCardComponent,
     RemoveSnackbar,

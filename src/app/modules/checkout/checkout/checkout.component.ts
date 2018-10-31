@@ -1,13 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroupDirective, NgForm, Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { EMPTY } from 'rxjs';
+import { EMPTY, SubscriptionLike } from 'rxjs';
 import { tap, distinctUntilChanged, switchMap, startWith } from 'rxjs/operators';
 import { CartService } from 'src/app/services/cart.service';
 import { SettingsService } from 'src/app/services/settings.service';
 import { MoltinCartResp } from 'src/app/providers/moltin/models/cart';
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
+import { Moltin } from 'src/app/providers/moltin/moltin';
+
+declare var Stripe: any;
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -22,9 +25,19 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.scss']
 })
-export class CheckoutComponent implements OnInit {
+export class CheckoutComponent implements OnInit, OnDestroy {
+
+  settingsSubscription: SubscriptionLike;
+  cartSubscription: SubscriptionLike;
+  paySubscription: SubscriptionLike;
+  formSubscription: SubscriptionLike;
+  checkoutSubscription: SubscriptionLike;
 
   cart: MoltinCartResp;
+  stripe = Stripe('pk_test_TyIF6JRdYRzrZq8lsK0FPhNC');
+  card: any;
+  formIsValid = false;
+  cardToken;
 
   countries = [
     'United States',
@@ -126,13 +139,15 @@ export class CheckoutComponent implements OnInit {
     private cartService: CartService,
     private settingsService: SettingsService,
     private router: Router,
-    private userService: UserService
+    private userService: UserService,
+    private moltin: Moltin
   ) {
-    this.settingsService.appInited.subscribe((inited) =>  { if (inited) this.init(); });
+    this.settingsSubscription = this.settingsService.appInited.subscribe((inited) =>  { if (inited) this.init(); });
   }
 
   ngOnInit() {
-    this.isSameAddressControl
+    this.constructPaymentForm();
+    this.formSubscription = this.isSameAddressControl
       .valueChanges
       .pipe(
         distinctUntilChanged(),
@@ -161,13 +176,20 @@ export class CheckoutComponent implements OnInit {
             return EMPTY;
           }
         })
-        // don't forget to unsubscribe when component's destroyed
       )
       .subscribe();
   }
 
+  ngOnDestroy() {
+    this.settingsSubscription.unsubscribe();
+    this.cartSubscription.unsubscribe();
+    if (this.paySubscription) this.paySubscription.unsubscribe();
+    this.formSubscription.unsubscribe();
+    if (this.checkoutSubscription) this.checkoutSubscription.unsubscribe();
+  }
+
   init(): void {
-    this.cartService.cartItems.subscribe(
+    this.cartSubscription = this.cartService.cartItems.subscribe(
       items => {
         this.cart = items;
       }
@@ -177,4 +199,55 @@ export class CheckoutComponent implements OnInit {
   submitOrder() {
     console.log('submit');
   }
+
+  constructPaymentForm() {
+    this.card = this.stripe.elements().create('card', {
+      hidePostalCode: true
+    });
+    this.card.mount('#card-element');
+
+    this.card.on('change', (ev) => {
+      this.formIsValid = ev.complete;
+    });
+  }
+
+  addCard() {
+    console.log(this.card);
+
+    this.stripe.createToken(this.card).then((result) => {
+      if (result.error) {
+          console.error(result.error);
+      } else {
+        console.log('Card Token: ', result.token);
+        this.cardToken = result.token;
+        this.pay();
+      }
+    });
+  }
+
+  pay() {
+    const billingAddress = {
+        'first_name': '',
+        'last_name': '',
+        'line_1': '',
+        'postcode': '',
+        'county': '',
+        'country': ''
+    };
+    const shippingAddress = Object.assign(billingAddress);
+    this.checkoutSubscription = this.moltin.checkoutCart(
+        this.userService.userUuid,
+        { email: 'abc@aol.com', name: 'fuckoff' },
+        billingAddress,
+        shippingAddress
+    ).subscribe(data => this.payForOrder(data));
+}
+
+payForOrder(order) {
+  console.log('Order: ', order);
+  this.paySubscription = this.moltin.payForOrder(order, this.cardToken.id).subscribe(
+      data => console.log('Pay resp: ', data),
+      error => console.error(error)
+  );
+}
 }

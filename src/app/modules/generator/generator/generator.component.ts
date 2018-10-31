@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MoltinProduct } from '../../../providers/moltin/models/product';
 import { Moltin } from '../../../providers/moltin/moltin';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CartService } from 'src/app/services/cart.service';
+import { SubscriptionLike } from 'rxjs';
 
 
 @Component({
@@ -12,7 +13,10 @@ import { CartService } from 'src/app/services/cart.service';
   styleUrls: ['./generator.component.scss'],
 })
 
-export class GeneratorComponent implements OnInit {
+export class GeneratorComponent implements OnInit, OnDestroy {
+
+  paramsSubscription: SubscriptionLike;
+  productSubscription: SubscriptionLike;
 
   generatorType;
   productId: string;
@@ -33,7 +37,7 @@ export class GeneratorComponent implements OnInit {
     private _DomSanitizationService: DomSanitizer,
     private cartService: CartService
   ) {
-    this.route.params.subscribe((params) => {
+    this.paramsSubscription = this.route.params.subscribe((params) => {
       this.generatorType = params.type;
 
       // identify product id
@@ -50,7 +54,7 @@ export class GeneratorComponent implements OnInit {
       }
 
       // fetch product info
-      this.moltin.getProductById(this.productId).subscribe(product => {
+      this.productSubscription = this.moltin.getProductById(this.productId).subscribe(product => {
         // console.log(product);
         this.product = product;
       });
@@ -58,6 +62,11 @@ export class GeneratorComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  ngOnDestroy() {
+    this.paramsSubscription.unsubscribe();
+    this.productSubscription.unsubscribe();
   }
 
   cleanSVG(svg: string) {

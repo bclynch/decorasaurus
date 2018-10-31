@@ -61,6 +61,18 @@ button:focus {
   }
 }
 
+.mobiledialog-panel {
+  max-width: none !important;
+  max-height: none !important;
+
+  width: 100% !important;
+  height: 100% !important;
+
+  mat-dialog-container {
+    padding: 0;
+  }
+}
+
 .fileDrop {
   border: dashed 1px var(--color-primary);
   height: 100%;
