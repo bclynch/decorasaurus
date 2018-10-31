@@ -1,6 +1,6 @@
 import { Injectable, Component, Inject, OnDestroy } from '@angular/core';
 import { Moltin } from '../providers/moltin/moltin';
-import { UserService } from './user.service';
+import { CustomerService } from './customer.service';
 import { MoltinCart, MoltinCartItem, MoltinCartMeta, MoltinCartResp } from '../providers/moltin/models/cart';
 import { Router } from '@angular/router';
 import { MAT_BOTTOM_SHEET_DATA, MatBottomSheet, MatBottomSheetRef } from '@angular/material';
@@ -24,7 +24,7 @@ export class CartService implements OnDestroy {
 
   constructor(
     private moltin: Moltin,
-    private userService: UserService,
+    private customerService: CustomerService,
     private router: Router,
     private bottomSheet: MatBottomSheet
   ) {
@@ -42,7 +42,7 @@ export class CartService implements OnDestroy {
 
   getCart(): Promise<void> {
     return new Promise((resolve) => {
-      this.getCartSubscription = this.moltin.getCart(this.userService.userUuid).subscribe(
+      this.getCartSubscription = this.moltin.getCart(this.customerService.customerUuid).subscribe(
         (data => {
           const anyData: any = data;
           this.cart = anyData.data;
@@ -57,7 +57,7 @@ export class CartService implements OnDestroy {
 
   getCartItems(): Promise<void> {
     return new Promise((resolve) => {
-      this.cartItemsSubscription = this.moltin.getCartItems(this.userService.userUuid).subscribe(
+      this.cartItemsSubscription = this.moltin.getCartItems(this.customerService.customerUuid).subscribe(
         (data => {
           this.cartSubject.next(data);
           resolve();
@@ -67,7 +67,7 @@ export class CartService implements OnDestroy {
   }
 
   addToCart(product: MoltinProduct): void {
-    this.addToCartSubscription = this.moltin.addToCart(this.userService.userUuid, product).subscribe(
+    this.addToCartSubscription = this.moltin.addToCart(this.customerService.customerUuid, product).subscribe(
       (data => {
         console.log(data);
         this.cartSubject.next(data);
@@ -81,7 +81,7 @@ export class CartService implements OnDestroy {
   }
 
   removeFromCart(product: MoltinCartItem): void {
-    this.removeFromCartSubscription = this.moltin.deleteCartItem(this.userService.userUuid, product.id).subscribe(
+    this.removeFromCartSubscription = this.moltin.deleteCartItem(this.customerService.customerUuid, product.id).subscribe(
       (data) => {
         this.cartSubject.next(data);
       }
@@ -89,7 +89,7 @@ export class CartService implements OnDestroy {
   }
 
   updateCartItem(product: MoltinCartItem, quantity: number) {
-    this.updateCartSubscription = this.moltin.updateCartItem(this.userService.userUuid, product.id, quantity).subscribe(
+    this.updateCartSubscription = this.moltin.updateCartItem(this.customerService.customerUuid, product.id, quantity).subscribe(
       (data) => {
         this.cartSubject.next(data);
       }

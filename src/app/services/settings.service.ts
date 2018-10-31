@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { v4 as uuid } from 'uuid';
 import { CookieService } from 'ngx-cookie-service';
-import { UserService } from './user.service';
+import { CustomerService } from './customer.service';
 import { CartService } from './cart.service';
 import { BehaviorSubject, Observable} from 'rxjs';
 
@@ -14,7 +14,7 @@ export class SettingsService {
 
   constructor(
     private cookieService: CookieService,
-    private userService: UserService,
+    private customerService: CustomerService,
     private cartService: CartService
   ) {
     this._subject = new BehaviorSubject<boolean>(false);
@@ -25,11 +25,11 @@ export class SettingsService {
     // create uuid and put in cookie if doesn't exist or ref the existing one
     const cookieUuid = this.cookieService.get('user');
     if (cookieUuid) {
-      this.userService.userUuid = cookieUuid;
+      this.customerService.customerUuid = cookieUuid;
     } else {
       const userUuid = uuid();
       this.cookieService.set( 'user', userUuid );
-      this.userService.userUuid = userUuid;
+      this.customerService.customerUuid = userUuid;
     }
 
     this.cartService.getCart().then(() => this._subject.next(true));

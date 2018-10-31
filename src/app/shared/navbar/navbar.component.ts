@@ -6,6 +6,7 @@ import { MobileNavDialogueComponent } from '../mobile-nav-dialogue/mobile-nav-di
 import { CartService } from 'src/app/services/cart.service';
 import { SubscriptionLike } from 'rxjs';
 import { MatDialog } from '@angular/material';
+import { CustomerService } from 'src/app/services/customer.service';
 
 interface Section {
   label: string;
@@ -86,7 +87,8 @@ export class NavbarComponent implements OnDestroy {
     private utilService: UtilService,
     private routerService: RouterService,
     private cartService: CartService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private customerService: CustomerService
   ) {
     this.cartSubscription = this.cartService.cartItems.subscribe(
       (items) => {
@@ -115,7 +117,7 @@ export class NavbarComponent implements OnDestroy {
     }
   }
 
-  async openMobileNav() {
+  openMobileNav() {
     const dialogRef = this.dialog.open(MobileNavDialogueComponent, {
       panelClass: 'mobiledialog-panel'
     });
@@ -139,5 +141,10 @@ export class NavbarComponent implements OnDestroy {
         }
       }
     });
+  }
+
+  goToAccount() {
+    // if logged in gp to accont page otherwise pop open login dialogue
+    this.customerService.signin('login');
   }
 }

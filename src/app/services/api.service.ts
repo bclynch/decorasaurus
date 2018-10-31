@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { ENV } from '../../environments/environment';
 
@@ -13,6 +13,40 @@ export class APIService {
     private http: Http,
     private apollo: Apollo
   ) {}
+
+  // Create User
+  createUser(name: string, email: string, password: string) {
+    return this.http.post(`${ENV.apiBaseURL}/moltin/create-user`, { name, email, password })
+    .pipe(map(
+        (response: Response) => {
+          const data = response.json();
+          return data;
+        }
+      )
+    ).pipe(catchError(
+        (error: Response) => {
+          console.log(error);
+          return throwError('Something went wrong');
+        }
+    ));
+  }
+
+    // Login User
+    loginUser(email: string, password: string) {
+      return this.http.post(`${ENV.apiBaseURL}/moltin/login-user`, { email, password })
+      .pipe(map(
+          (response: Response) => {
+            const data = response.json();
+            return data;
+          }
+        )
+      ).pipe(catchError(
+          (error: Response) => {
+            console.log(error);
+            return throwError('Something went wrong');
+          }
+      ));
+    }
 
   // Posterize Uploads
   posterizeImage(formData: FormData) {

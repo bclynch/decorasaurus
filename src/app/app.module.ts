@@ -17,7 +17,7 @@ import { ApolloModule, Apollo } from 'apollo-angular';
 import { UtilService } from './services/util.service';
 import { APIService } from './services/api.service';
 import { RouterService } from './services/router.service';
-import { UserService } from './services/user.service';
+import { CustomerService } from './services/customer.service';
 import { AnalyticsService } from './services/analytics.service';
 import { SettingsService } from './services/settings.service';
 import { CookieService } from 'ngx-cookie-service';
@@ -47,7 +47,7 @@ import { CartService, AddCartNav } from './services/cart.service';
     RouterService,
     Moltin,
     CookieService,
-    UserService,
+    CustomerService,
     CartService,
     AnalyticsService,
     SettingsService

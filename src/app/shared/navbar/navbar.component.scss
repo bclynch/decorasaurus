@@ -97,6 +97,20 @@
       }
       .cartWrapper {
         text-align: right;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+
+        .account {
+          transition: .3s;
+          font-size: 18px;
+          margin-right: 10px;
+          cursor: pointer;
+          padding: 10px;
+        }
+        .account:hover {
+          color: var(--color-primary);
+        }
       }
     }
   }

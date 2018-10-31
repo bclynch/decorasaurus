@@ -7,7 +7,7 @@ import { CartService } from 'src/app/services/cart.service';
 import { SettingsService } from 'src/app/services/settings.service';
 import { MoltinCartResp } from 'src/app/providers/moltin/models/cart';
 import { Router } from '@angular/router';
-import { UserService } from 'src/app/services/user.service';
+import { CustomerService } from 'src/app/services/customer.service';
 import { Moltin } from 'src/app/providers/moltin/moltin';
 
 declare var Stripe: any;
@@ -139,7 +139,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     private cartService: CartService,
     private settingsService: SettingsService,
     private router: Router,
-    private userService: UserService,
+    private customerService: CustomerService,
     private moltin: Moltin
   ) {
     this.settingsSubscription = this.settingsService.appInited.subscribe((inited) =>  { if (inited) this.init(); });
@@ -236,18 +236,18 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     };
     const shippingAddress = Object.assign(billingAddress);
     this.checkoutSubscription = this.moltin.checkoutCart(
-        this.userService.userUuid,
+        this.customerService.customerUuid,
         { email: 'abc@aol.com', name: 'fuckoff' },
         billingAddress,
         shippingAddress
     ).subscribe(data => this.payForOrder(data));
-}
+  }
 
-payForOrder(order) {
-  console.log('Order: ', order);
-  this.paySubscription = this.moltin.payForOrder(order, this.cardToken.id).subscribe(
-      data => console.log('Pay resp: ', data),
-      error => console.error(error)
-  );
-}
+  payForOrder(order) {
+    console.log('Order: ', order);
+    this.paySubscription = this.moltin.payForOrder(order, this.cardToken.id).subscribe(
+        data => console.log('Pay resp: ', data),
+        error => console.error(error)
+    );
+  }
 }

@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { MoltinProduct } from '../../../providers/moltin/models/product';
 import { Moltin } from '../../../providers/moltin/moltin';
-import { UserService } from 'src/app/services/user.service';
+import { CustomerService } from 'src/app/services/customer.service';
 import { CartService } from 'src/app/services/cart.service';
 
 @Component({
@@ -55,7 +55,7 @@ export class OptionsContainerComponent implements OnInit {
   constructor(
     private _DomSanitizationService: DomSanitizer,
     private moltin: Moltin,
-    private userService: UserService,
+    private customerService: CustomerService,
     private cartService: CartService
   ) { }
 
