@@ -10,7 +10,7 @@
         <div class="productId">{{product.product_id}}</div>
       </div>
       <div class="optionsContainer" *ngIf="!isCheckout">
-        <div>Move To Wishlist</div>
+        <div *ngIf="product.type === 'cart_item'">Move To Wishlist</div>
         <div (click)="remove(product)">Remove</div>
       </div>
     </div>
@@ -18,7 +18,7 @@
   <div class="perEa">{{product.meta.display_price.without_tax.unit.formatted}}</div>
   <div class="rightWrapper">
     <div class="quantityContainer">
-      <form (submit)="recalcQuant($event, product, i)" *ngIf="!isCheckout">
+      <form (submit)="recalcQuant($event, product, i)" *ngIf="!isCheckout && product.type === 'cart_item'">
         <input 
           matInput 
           [(ngModel)]="product.quantity" 

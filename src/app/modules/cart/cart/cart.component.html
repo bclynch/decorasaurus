@@ -24,9 +24,31 @@
         <div class="cartItemWrapper" *ngFor="let product of cart?.data; let i = index;">
           <app-cart-item-card [product]="product"></app-cart-item-card>
         </div>
-        <app-cart-totals [cart]="cart"></app-cart-totals>
-        <div class="buttonWrapper">
-          <button mat-flat-button color="primary" (click)="router.navigateByUrl('/checkout')">Proceed With Order</button>
+        <div class="infoWrapper">
+          <div class="promoContainer">
+            <form (submit)="cartService.applyPromoCode(promoCode)">
+              <div class="inputWrapper">
+                <mat-form-field>
+                  <input
+                    matInput
+                    placeholder="Promo Code" 
+                    [(ngModel)]="promoCode" 
+                    name="promoCode"
+                  />
+                </mat-form-field>
+                <button 
+                  mat-button 
+                  type="submit" 
+                  class="boldFont" 
+                  color="primary"
+                >Apply</button>
+              </div>
+            </form>
+          </div>
+          <app-cart-totals [cart]="cart"></app-cart-totals>
+          <div class="buttonWrapper">
+            <button mat-flat-button color="primary" (click)="router.navigateByUrl('/checkout')">Proceed With Order</button>
+          </div>
         </div>
       </div>
       <div class="wishlistContainer" *ngIf="activeTab === 1">

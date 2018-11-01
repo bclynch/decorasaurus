@@ -95,6 +95,12 @@ export class CartService implements OnDestroy {
       }
     );
   }
+
+  applyPromoCode(code) {
+    this.moltin.applyPromoCode(this.customerService.customerUuid, code).subscribe(
+      (data) => this.cartSubject.next(data)
+    );
+  }
 }
 
 @Component({

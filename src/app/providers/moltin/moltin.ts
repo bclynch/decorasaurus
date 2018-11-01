@@ -8,6 +8,7 @@ import { MoltinCart, MoltinCartItem, MoltinCartResp } from './models/cart';
 import { MoltinOrder } from './models/order';
 
 import { ENV } from '../../../environments/environment';
+import { MoltinAddress } from './models/customer';
 
 @Injectable()
 export class Moltin {
@@ -18,6 +19,21 @@ export class Moltin {
 
 	constructor(public httpClient: HttpClient) {
 
+	}
+
+	getAddresses(customerId: string, customerToken: string): Observable<MoltinAddress[]> {
+		return new Observable<MoltinAddress[]>(observer => {
+			this.moltin.Addresses.All({
+				customer: customerId,
+				token: customerToken
+			}).then(data => {
+				observer.next(data.data);
+				observer.complete();
+			}).catch(error => {
+				observer.error(error);
+				observer.complete();
+			});
+		});
 	}
 
 	// get all Products
@@ -119,15 +135,15 @@ export class Moltin {
 	}
 
 	getCartItems(ref: string): Observable<MoltinCartResp> {
-			return new Observable<MoltinCartResp>(observer => {
-					this.moltin.Cart(ref).Items().then(data => {
-							observer.next(data);
-							observer.complete();
-					}).catch(error => {
-							observer.error(error);
-							observer.complete();
-					});
+		return new Observable<MoltinCartResp>(observer => {
+			this.moltin.Cart(ref).Items().then(data => {
+				observer.next(data);
+				observer.complete();
+			}).catch(error => {
+				observer.error(error);
+				observer.complete();
 			});
+		});
 	}
 
 	updateCartItem(ref: string, itemID, quantity): Observable<MoltinCartResp> {
@@ -155,15 +171,15 @@ export class Moltin {
 	}
 
 	applyPromoCode(ref: string, promoCode): Observable<any> {
-			return new Observable(observer => {
-					this.moltin.Cart(ref).AddPromotion(promoCode).then(data => {
-							observer.next(data);
-							observer.complete();
-					}).catch(error => {
-							observer.error(error);
-							observer.complete();
-					});
+		return new Observable(observer => {
+			this.moltin.Cart(ref).AddPromotion(promoCode).then(data => {
+				observer.next(data);
+				observer.complete();
+			}).catch(error => {
+				observer.error(error);
+				observer.complete();
 			});
+		});
 	}
 
 	checkoutCart(ref: string, customer, billingAddress, shippingAddress): Observable<MoltinOrder> {

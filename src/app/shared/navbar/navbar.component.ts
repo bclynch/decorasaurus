@@ -144,7 +144,11 @@ export class NavbarComponent implements OnDestroy {
   }
 
   goToAccount() {
-    // if logged in gp to accont page otherwise pop open login dialogue
-    this.customerService.signin('login');
+    // if logged in go to accont page otherwise pop open login dialogue
+    if (this.customerService.customerToken.getValue()) {
+      this.routerService.navigateToPage('/account');
+    } else {
+      this.customerService.signin('login', 'account');
+    }
   }
 }

@@ -17,7 +17,7 @@ import { ApolloModule, Apollo } from 'apollo-angular';
 import { UtilService } from './services/util.service';
 import { APIService } from './services/api.service';
 import { RouterService } from './services/router.service';
-import { CustomerService } from './services/customer.service';
+import { CustomerService, CustomerStateSnackbar } from './services/customer.service';
 import { AnalyticsService } from './services/analytics.service';
 import { SettingsService } from './services/settings.service';
 import { CookieService } from 'ngx-cookie-service';
@@ -25,11 +25,13 @@ import { CartService, AddCartNav } from './services/cart.service';
 
 @NgModule({
   entryComponents: [
-    AddCartNav
+    AddCartNav,
+    CustomerStateSnackbar
   ],
   declarations: [
     AppComponent,
-    AddCartNav
+    AddCartNav,
+    CustomerStateSnackbar
   ],
   imports: [
     BrowserModule,

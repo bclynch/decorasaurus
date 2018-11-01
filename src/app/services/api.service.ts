@@ -14,9 +14,9 @@ export class APIService {
     private apollo: Apollo
   ) {}
 
-  // Create User
-  createUser(name: string, email: string, password: string) {
-    return this.http.post(`${ENV.apiBaseURL}/moltin/create-user`, { name, email, password })
+  // Create Customer
+  createCustomer(name: string, email: string, password: string) {
+    return this.http.post(`${ENV.apiBaseURL}/moltin/create-customer`, { name, email, password })
     .pipe(map(
         (response: Response) => {
           const data = response.json();
@@ -31,9 +31,9 @@ export class APIService {
     ));
   }
 
-    // Login User
-    loginUser(email: string, password: string) {
-      return this.http.post(`${ENV.apiBaseURL}/moltin/login-user`, { email, password })
+    // Login Customer
+    loginCustomer(email: string, password: string) {
+      return this.http.post(`${ENV.apiBaseURL}/moltin/login-customer`, { email, password })
       .pipe(map(
           (response: Response) => {
             const data = response.json();

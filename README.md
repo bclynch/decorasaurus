@@ -2,14 +2,20 @@
 
 
 ## Todos
+- Finish order flow
+    - Tweak validation for submission
+    - UI for customer creating account
+    - Take to order page after successfull submission and reset cart
+    - Seems like submission fn is firing for add card / submit
+    - Add / See addresses
+    - Display orders on account page
+    - Account page similar to S&C with addresses / customer info / etc
 - Moltin Wiring
     - Probably best to just move everything from js sdk to the direct API calls. Seems more stable
-    - Need to generate a token for logged in user on the backend otherwise the client keys are exposed in the API request. Figured out the call though so ought to be good to go.
-    - Once we have the bearer token it is trivial to create users and make calls to other endpoints as long as we aren't using the sdk
-    - That said if the bearer token is exposed in the network call users can hit any and all endpoints. Need to make those calls (create customer, get previous orders by customer, create a new order for a customer and add or update customer addresses, etc) from backend to hide that info
-    - Need to finish log in / signup flow
     - Need add / save / fetch addresses for signed in users
     - Stripe integration - check
+    - Paypal Integration
+        - https://forum.moltin.com/t/can-we-get-demo-app-on-nextjs-with-moltin-if-yes-then-how-can-you-please-help-me/809/7
     - Can grab a user token for accessing addresses and what not and it correctly locks you out from other user's info
 - Ionic -> Material transformation - 1 day 1/1
     - Integrate material components for buttons and inputs and use going forward

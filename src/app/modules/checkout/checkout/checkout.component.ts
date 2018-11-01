@@ -9,6 +9,8 @@ import { MoltinCartResp } from 'src/app/providers/moltin/models/cart';
 import { Router } from '@angular/router';
 import { CustomerService } from 'src/app/services/customer.service';
 import { Moltin } from 'src/app/providers/moltin/moltin';
+import { ENV } from '../../../../environments/environment';
+import { MoltinAddress } from 'src/app/providers/moltin/models/customer';
 
 declare var Stripe: any;
 
@@ -32,16 +34,18 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   paySubscription: SubscriptionLike;
   formSubscription: SubscriptionLike;
   checkoutSubscription: SubscriptionLike;
+  tokenSubscription: SubscriptionLike;
 
   cart: MoltinCartResp;
-  stripe = Stripe('pk_test_TyIF6JRdYRzrZq8lsK0FPhNC');
+  stripe = Stripe(ENV.stripeKey);
   card: any;
   formIsValid = false;
   cardToken;
 
   countries = [
-    'United States',
-    'Canada'
+    'US',
+    'CA',
+    'MX'
   ];
 
   states = [
@@ -56,54 +60,42 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   checkoutForm: FormGroup = this.fb.group({
     billingAddress: this.fb.group({
-      email: [
-        '',
-        Validators.compose([
-          Validators.required,
-          Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
-        ])
-      ],
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      company: [''],
+      name: [''],
+      first_name: ['', Validators.required],
+      last_name: ['', Validators.required],
+      company_name: [''],
       country: new FormControl(this.countries[0], Validators.required),
-      address1: ['', Validators.required],
-      address2: [''],
+      line_1: ['', Validators.required],
+      line_2: [''],
       city: ['', Validators.required],
-      state: new FormControl(this.states[0], Validators.required),
-      zip: [
+      county: new FormControl(this.states[0], Validators.required),
+      postcode: [
         '',
         Validators.compose([
           Validators.required,
           Validators.pattern('^[0-9]{5}(?:-[0-9]{4})?$')
         ])
       ],
-      phone: [''],
+      phone_number: [''],
     }),
     shippingAddress: this.fb.group({
-      email: [
-        '',
-        Validators.compose([
-          Validators.required,
-          Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
-        ])
-      ],
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      company: [''],
+      name: [''],
+      first_name: ['', Validators.required],
+      last_name: ['', Validators.required],
+      company_name: [''],
       country: new FormControl(this.countries[0], Validators.required),
-      address1: ['', Validators.required],
-      address2: [''],
+      line_1: ['', Validators.required],
+      line_2: [''],
       city: ['', Validators.required],
-      state: new FormControl(this.states[0], Validators.required),
-      zip: [
+      county: new FormControl(this.states[0], Validators.required),
+      postcode: [
         '',
         Validators.compose([
           Validators.required,
           Validators.pattern('^[0-9]{5}(?:-[0-9]{4})?$')
         ])
       ],
-      phone: [''],
+      phone_number: [''],
     })
   });
 
@@ -113,22 +105,22 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       { type: 'pattern', message: 'Enter a valid email' }
       // need a check for unique eventually
     ],
-    'firstName': [
+    'first_name': [
       { type: 'required', message: 'First name is required' },
     ],
-    'lastName': [
+    'last_name': [
       { type: 'required', message: 'Last name is required' },
     ],
-    'address1': [
+    'line_1': [
       { type: 'required', message: 'Address is required' },
     ],
     'city': [
       { type: 'required', message: 'City is required' },
     ],
-    'state': [
+    'county': [
       { type: 'required', message: 'State is required' },
     ],
-    'zip': [
+    'postcode': [
       { type: 'required', message: 'Zip code is required' },
       { type: 'pattern', message: 'Enter a valid zip code ex. 12345 or 12345-6789' }
     ]
@@ -143,6 +135,11 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     private moltin: Moltin
   ) {
     this.settingsSubscription = this.settingsService.appInited.subscribe((inited) =>  { if (inited) this.init(); });
+    this.tokenSubscription = this.customerService.customerToken.subscribe(
+      (data) => {
+        if (data) this.getAddresses();
+      }
+    );
   }
 
   ngOnInit() {
@@ -186,18 +183,29 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     if (this.paySubscription) this.paySubscription.unsubscribe();
     this.formSubscription.unsubscribe();
     if (this.checkoutSubscription) this.checkoutSubscription.unsubscribe();
+    this.tokenSubscription.unsubscribe();
   }
 
   init(): void {
+    // grab cart
     this.cartSubscription = this.cartService.cartItems.subscribe(
       items => {
         this.cart = items;
       }
     );
+    this.getAddresses();
   }
 
-  submitOrder() {
-    console.log('submit');
+  getAddresses(): void {
+    // Check if customer logged in. If so grab address
+    if (this.customerService.customerToken.getValue()) {
+      this.moltin.getAddresses(this.customerService.customerId, this.customerService.customerToken.getValue()).subscribe(
+        (addresses: MoltinAddress[]) => {
+          if (addresses.length) this.populateAddress(addresses[0], 'billingAddress');
+        },
+        (err) => console.log(err)
+      );
+    }
   }
 
   constructPaymentForm() {
@@ -220,27 +228,20 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       } else {
         console.log('Card Token: ', result.token);
         this.cardToken = result.token;
-        this.pay();
       }
     });
   }
 
-  pay() {
-    const billingAddress = {
-        'first_name': '',
-        'last_name': '',
-        'line_1': '',
-        'postcode': '',
-        'county': '',
-        'country': ''
-    };
-    const shippingAddress = Object.assign(billingAddress);
-    this.checkoutSubscription = this.moltin.checkoutCart(
+  submitOrder() {
+    // need more validation for this
+    if (this.cardToken && this.checkoutForm.valid) {
+      this.checkoutSubscription = this.moltin.checkoutCart(
         this.customerService.customerUuid,
-        { email: 'abc@aol.com', name: 'fuckoff' },
-        billingAddress,
-        shippingAddress
-    ).subscribe(data => this.payForOrder(data));
+        this.customerService.customerId,
+        this.checkoutForm.value.billingAddress,
+        this.checkoutForm.value.shippingAddress
+      ).subscribe(data => this.payForOrder(data));
+    }
   }
 
   payForOrder(order) {
@@ -249,5 +250,29 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         data => console.log('Pay resp: ', data),
         error => console.error(error)
     );
+  }
+
+  populateAddress(address: MoltinAddress, form: 'billingAddress' | 'shippingAddress') {
+    // eventually would be nice to have a naming scheme to identify a default
+    // perhaps could look at most recent order to see what address they used
+    const createObject = (formName: string, key: string, value: any) => {
+      const obj = {};
+      obj[formName] = {};
+      obj[formName][key] = value;
+      return obj;
+    };
+    this.isSameAddressControl.setValue(true);
+    this.formsSame = true;
+
+    if (address.first_name) this.checkoutForm.patchValue(createObject(form, 'first_name', address.first_name));
+    if (address.last_name) this.checkoutForm.patchValue(createObject(form, 'last_name', address.last_name));
+    if (address.company_name) this.checkoutForm.patchValue(createObject(form, 'company_name', address.company_name));
+    if (address.country) this.checkoutForm.patchValue(createObject(form, 'country', address.country));
+    if (address.line_1) this.checkoutForm.patchValue(createObject(form, 'line_1', address.line_1));
+    if (address.line_2) this.checkoutForm.patchValue(createObject(form, 'line_2', address.line_2));
+    if (address.city) this.checkoutForm.patchValue(createObject(form, 'city', address.city));
+    if (address.county) this.checkoutForm.patchValue(createObject(form, 'county', address.county));
+    if (address.postcode) this.checkoutForm.patchValue(createObject(form, 'postcode', address.postcode));
+    if (address.phone_number) this.checkoutForm.patchValue(createObject(form, 'phone_number', address.phone_number));
   }
 }

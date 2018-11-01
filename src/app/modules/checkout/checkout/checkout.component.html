@@ -1,11 +1,11 @@
 <app-pagewrapper>
   <div class="checkoutContainer">
     <h1>Review and Place Your Order</h1>
-    <div class="expressContainer">
+    <div class="expressContainer" *ngIf="!customerService.customerToken.getValue()">
       <div class="boldFont">Express Checkout</div>
       <button mat-flat-button color="primary" (click)="customerService.signin('login')">Sign In</button>
     </div>
-    <form [formGroup]="checkoutForm">
+    <form [formGroup]="checkoutForm" (submit)="submitOrder()">
       <div class="sectionWrapper">
         <div class="sectionHeader">1. Enter Your Billing Address</div>
         <div class="sectionContent">
@@ -15,42 +15,30 @@
             <mat-form-field>
               <input
                 matInput
-                placeholder="* Email" 
-                formControlName="email"
-                [errorStateMatcher]="matcher"
-              />
-              <mat-hint>Order confirmation will be sent to this email address.</mat-hint>
-              <mat-error *ngFor="let validation of formValidationMessages.email">
-                <mat-error class="error-message" *ngIf="checkoutForm.get('billingAddress').get('email').hasError(validation.type) && (checkoutForm.get('billingAddress').get('email').dirty || checkoutForm.get('billingAddress').get('email').touched)">{{validation.message}}</mat-error>
-              </mat-error>
-            </mat-form-field>
-            <mat-form-field>
-              <input
-                matInput
                 placeholder="* First Name" 
-                formControlName="firstName"
+                formControlName="first_name"
                 [errorStateMatcher]="matcher"
               />
-              <mat-error *ngFor="let validation of formValidationMessages.firstName">
-                <mat-error class="error-message" *ngIf="checkoutForm.get('billingAddress').get('firstName').hasError(validation.type) && (checkoutForm.get('billingAddress').get('firstName').dirty || checkoutForm.get('billingAddress').get('firstName').touched)">{{validation.message}}</mat-error>
+              <mat-error *ngFor="let validation of formValidationMessages.first_name">
+                <mat-error class="error-message" *ngIf="checkoutForm.get('billingAddress').get('first_name').hasError(validation.type) && (checkoutForm.get('billingAddress').get('first_name').dirty || checkoutForm.get('billingAddress').get('first_name').touched)">{{validation.message}}</mat-error>
               </mat-error>
             </mat-form-field>
             <mat-form-field>
               <input
                 matInput
                 placeholder="* Last Name" 
-                formControlName="lastName"
+                formControlName="last_name"
                 [errorStateMatcher]="matcher"
               />
-              <mat-error *ngFor="let validation of formValidationMessages.lastName">
-                <mat-error class="error-message" *ngIf="checkoutForm.get('billingAddress').get('lastName').hasError(validation.type) && (checkoutForm.get('billingAddress').get('lastName').dirty || checkoutForm.get('billingAddress').get('lastName').touched)">{{validation.message}}</mat-error>
+              <mat-error *ngFor="let validation of formValidationMessages.last_name">
+                <mat-error class="error-message" *ngIf="checkoutForm.get('billingAddress').get('last_name').hasError(validation.type) && (checkoutForm.get('billingAddress').get('last_name').dirty || checkoutForm.get('billingAddress').get('last_name').touched)">{{validation.message}}</mat-error>
               </mat-error>
             </mat-form-field>
             <mat-form-field>
               <input
                 matInput
                 placeholder="Company" 
-                formControlName="company"
+                formControlName="company_name"
                 [errorStateMatcher]="matcher"
               />
             </mat-form-field>
@@ -65,18 +53,18 @@
               <input
                 matInput
                 placeholder="* Address Line 1" 
-                formControlName="address1"
+                formControlName="line_1"
                 [errorStateMatcher]="matcher"
               />
-              <mat-error *ngFor="let validation of formValidationMessages.address1">
-                <mat-error class="error-message" *ngIf="checkoutForm.get('billingAddress').get('address1').hasError(validation.type) && (checkoutForm.get('billingAddress').get('address1').dirty || checkoutForm.get('billingAddress').get('address1').touched)">{{validation.message}}</mat-error>
+              <mat-error *ngFor="let validation of formValidationMessages.line_1">
+                <mat-error class="error-message" *ngIf="checkoutForm.get('billingAddress').get('line_1').hasError(validation.type) && (checkoutForm.get('billingAddress').get('line_1').dirty || checkoutForm.get('billingAddress').get('line_1').touched)">{{validation.message}}</mat-error>
               </mat-error>
             </mat-form-field>
             <mat-form-field>
               <input
                 matInput
                 placeholder="Address Line 2" 
-                formControlName="address2"
+                formControlName="line_2"
                 [errorStateMatcher]="matcher"
               />
             </mat-form-field>
@@ -92,7 +80,7 @@
               </mat-error>
             </mat-form-field>
             <mat-form-field>
-              <mat-select placeholder="* State" formControlName="state" [errorStateMatcher]="matcher">
+              <mat-select placeholder="* State" formControlName="county" [errorStateMatcher]="matcher">
                 <mat-option *ngFor="let state of states" [value]="state">
                   {{state}}
                 </mat-option>
@@ -102,19 +90,20 @@
               <input
                 matInput
                 placeholder="* Zip Code" 
-                formControlName="zip"
+                formControlName="postcode"
                 [errorStateMatcher]="matcher"
               />
-              <mat-error *ngFor="let validation of formValidationMessages.zip">
-                <mat-error class="error-message" *ngIf="checkoutForm.get('billingAddress').get('zip').hasError(validation.type) && (checkoutForm.get('billingAddress').get('zip').dirty || checkoutForm.get('billingAddress').get('zip').touched)">{{validation.message}}</mat-error>
+              <mat-error *ngFor="let validation of formValidationMessages.postcode">
+                <mat-error class="error-message" *ngIf="checkoutForm.get('billingAddress').get('postcode').hasError(validation.type) && (checkoutForm.get('billingAddress').get('postcode').dirty || checkoutForm.get('billingAddress').get('postcode').touched)">{{validation.message}}</mat-error>
               </mat-error>
             </mat-form-field>
             <mat-form-field>
               <input
                 matInput
                 placeholder="Phone" 
-                formControlName="phone"
+                formControlName="phone_number"
                 [errorStateMatcher]="matcher"
+                type="tel"
               />
             </mat-form-field>
           </ng-container>
@@ -129,30 +118,38 @@
             <mat-form-field>
               <input
                 matInput
+                placeholder="Name" 
+                formControlName="name"
+              />
+              <mat-hint>Name this address i.e "Home"</mat-hint>
+            </mat-form-field>
+            <mat-form-field>
+              <input
+                matInput
                 placeholder="* First Name" 
-                formControlName="firstName"
+                formControlName="first_name"
                 [errorStateMatcher]="matcher"
               />
-              <mat-error *ngFor="let validation of formValidationMessages.firstName">
-                <mat-error class="error-message" *ngIf="checkoutForm.get('shippingAddress').get('firstName').hasError(validation.type) && (checkoutForm.get('shippingAddress').get('firstName').dirty || checkoutForm.get('shippingAddress').get('firstName').touched)">{{validation.message}}</mat-error>
+              <mat-error *ngFor="let validation of formValidationMessages.first_name">
+                <mat-error class="error-message" *ngIf="checkoutForm.get('shippingAddress').get('first_name').hasError(validation.type) && (checkoutForm.get('shippingAddress').get('first_name').dirty || checkoutForm.get('shippingAddress').get('first_name').touched)">{{validation.message}}</mat-error>
               </mat-error>
             </mat-form-field>
             <mat-form-field>
               <input
                 matInput
                 placeholder="* Last Name" 
-                formControlName="lastName"
+                formControlName="last_name"
                 [errorStateMatcher]="matcher"
               />
-              <mat-error *ngFor="let validation of formValidationMessages.lastName">
-                <mat-error class="error-message" *ngIf="checkoutForm.get('shippingAddress').get('lastName').hasError(validation.type) && (checkoutForm.get('shippingAddress').get('lastName').dirty || checkoutForm.get('shippingAddress').get('lastName').touched)">{{validation.message}}</mat-error>
+              <mat-error *ngFor="let validation of formValidationMessages.last_name">
+                <mat-error class="error-message" *ngIf="checkoutForm.get('shippingAddress').get('last_name').hasError(validation.type) && (checkoutForm.get('shippingAddress').get('last_name').dirty || checkoutForm.get('shippingAddress').get('last_name').touched)">{{validation.message}}</mat-error>
               </mat-error>
             </mat-form-field>
             <mat-form-field>
               <input
                 matInput
                 placeholder="Company" 
-                formControlName="company"
+                formControlName="company_name"
                 [errorStateMatcher]="matcher"
               />
             </mat-form-field>
@@ -167,18 +164,18 @@
               <input
                 matInput
                 placeholder="* Address Line 1" 
-                formControlName="address1"
+                formControlName="line_1"
                 [errorStateMatcher]="matcher"
               />
-              <mat-error *ngFor="let validation of formValidationMessages.address1">
-                <mat-error class="error-message" *ngIf="checkoutForm.get('shippingAddress').get('address1').hasError(validation.type) && (checkoutForm.get('shippingAddress').get('address1').dirty || checkoutForm.get('shippingAddress').get('address1').touched)">{{validation.message}}</mat-error>
+              <mat-error *ngFor="let validation of formValidationMessages.line_1">
+                <mat-error class="error-message" *ngIf="checkoutForm.get('shippingAddress').get('line_1').hasError(validation.type) && (checkoutForm.get('shippingAddress').get('line_1').dirty || checkoutForm.get('shippingAddress').get('line_1').touched)">{{validation.message}}</mat-error>
               </mat-error>
             </mat-form-field>
             <mat-form-field>
               <input
                 matInput
                 placeholder="Address Line 2" 
-                formControlName="address2"
+                formControlName="line_2"
                 [errorStateMatcher]="matcher"
               />
             </mat-form-field>
@@ -194,7 +191,7 @@
               </mat-error>
             </mat-form-field>
             <mat-form-field>
-              <mat-select placeholder="* State" formControlName="state" [errorStateMatcher]="matcher">
+              <mat-select placeholder="* State" formControlName="county" [errorStateMatcher]="matcher">
                 <mat-option *ngFor="let state of states" [value]="state">
                   {{state}}
                 </mat-option>
@@ -204,11 +201,11 @@
               <input
                 matInput
                 placeholder="* Zip Code" 
-                formControlName="zip"
+                formControlName="postcode"
                 [errorStateMatcher]="matcher"
               />
-              <mat-error *ngFor="let validation of formValidationMessages.zip">
-                <mat-error class="error-message" *ngIf="checkoutForm.get('shippingAddress').get('zip').hasError(validation.type) && (checkoutForm.get('shippingAddress').get('zip').dirty || checkoutForm.get('shippingAddress').get('zip').touched)">{{validation.message}}</mat-error>
+              <mat-error *ngFor="let validation of formValidationMessages.postcode">
+                <mat-error class="error-message" *ngIf="checkoutForm.get('shippingAddress').get('postcode').hasError(validation.type) && (checkoutForm.get('shippingAddress').get('postcode').dirty || checkoutForm.get('shippingAddress').get('postcode').touched)">{{validation.message}}</mat-error>
               </mat-error>
             </mat-form-field>
           </ng-container>
@@ -248,7 +245,7 @@
         <div class="right">
           <app-cart-totals [cart]="cart"></app-cart-totals>
           <div class="buttonWrapper">
-            <button mat-flat-button color="primary" (click)="submitOrder()">Submit Order</button>
+            <button mat-flat-button color="primary" type="submit">Submit Order</button>
           </div>
         </div>
       </div>
