@@ -1,0 +1,52 @@
+.componentContainer {
+
+  .header {
+    display: flex;
+    width: 100%;
+    padding: 6px 0 6px 6px;
+    font-weight: bold;
+    background: #ccc;
+
+    > div:first-child {
+      flex: 3;
+      text-align: left;
+    }
+    > div {
+      flex: 1;
+      text-align: center;
+    }
+  }
+  mat-radio-button {
+    width: 100%;
+
+    .rowWrapper {
+      display: flex;
+      align-items: center;
+    }
+    .cardWrapper {
+      display: flex;
+      align-items: center;
+      flex: 3;
+  
+      img {
+        height: 30px;
+      }
+      .brand {
+        margin: 0 5px;
+      }
+      .default {
+        font-size: 10px;
+        margin-left: 10px;
+        color: var(--color-primary);
+      }
+    }
+    .expiration {
+      flex: 1;
+      text-align: center;
+    }
+  }
+  .btnRow {
+    display: flex;
+    justify-content: flex-end;
+  }
+}

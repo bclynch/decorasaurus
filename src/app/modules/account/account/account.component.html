@@ -1,4 +1,7 @@
 <app-pagewrapper>
   <div class="boldFont">Account</div>
   <button mat-flat-button color="primary" (click)="logoutCustomer()">Logout</button>
+  <app-payment-cards [canDelete]="true" [canMakeDefault]="true"></app-payment-cards>
+  <h1>Orders</h1>
+  <div *ngFor="let order of orders;" (click)="router.navigateByUrl('account/order/' + order.id)">Go to #{{order.id}}</div>
 </app-pagewrapper>

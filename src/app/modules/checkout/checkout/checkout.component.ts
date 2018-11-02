@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroupDirective, NgForm, Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { EMPTY, SubscriptionLike } from 'rxjs';
+import { EMPTY, SubscriptionLike, Observable } from 'rxjs';
 import { tap, distinctUntilChanged, switchMap, startWith } from 'rxjs/operators';
 import { CartService } from 'src/app/services/cart.service';
 import { SettingsService } from 'src/app/services/settings.service';
@@ -9,10 +9,9 @@ import { MoltinCartResp } from 'src/app/providers/moltin/models/cart';
 import { Router } from '@angular/router';
 import { CustomerService } from 'src/app/services/customer.service';
 import { Moltin } from 'src/app/providers/moltin/moltin';
-import { ENV } from '../../../../environments/environment';
 import { MoltinAddress } from 'src/app/providers/moltin/models/customer';
-
-declare var Stripe: any;
+import { StripeService } from 'src/app/services/stripe.service';
+import { MatDialog, MatDialogRef } from '@angular/material';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -37,10 +36,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   tokenSubscription: SubscriptionLike;
 
   cart: MoltinCartResp;
-  stripe = Stripe(ENV.stripeKey);
-  card: any;
+  cardForm: any;
   formIsValid = false;
-  cardToken;
 
   countries = [
     'US',
@@ -126,18 +123,25 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     ]
   };
 
+  isCardSelected$: Observable<boolean>;
+
   constructor(
     private fb: FormBuilder,
     private cartService: CartService,
     private settingsService: SettingsService,
     private router: Router,
     private customerService: CustomerService,
-    private moltin: Moltin
+    private moltin: Moltin,
+    private stripeService: StripeService,
+    public dialog: MatDialog
   ) {
     this.settingsSubscription = this.settingsService.appInited.subscribe((inited) =>  { if (inited) this.init(); });
     this.tokenSubscription = this.customerService.customerToken.subscribe(
       (data) => {
-        if (data) this.getAddresses();
+        if (data) {
+          this.getAddresses();
+          this.getPaymentInfo();
+        }
       }
     );
   }
@@ -175,6 +179,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe();
+
+      this.isCardSelected$ = this.stripeService.isCardSelected;
   }
 
   ngOnDestroy() {
@@ -208,33 +214,36 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     }
   }
 
-  constructPaymentForm() {
-    this.card = this.stripe.elements().create('card', {
-      hidePostalCode: true
-    });
-    this.card.mount('#card-element');
+  getPaymentInfo(): void {
+    // Check if customer logged in
+    if (this.customerService.customerToken.getValue()) {
+      // check stripe to see if they have an account
+      this.stripeService.fetchCustomer('abc@aol.com');
+    }
+  }
 
-    this.card.on('change', (ev) => {
+  constructPaymentForm() {
+    this.cardForm = this.stripeService.createCardElement();
+    this.cardForm.mount('#card-element');
+
+    this.cardForm.on('change', (ev) => {
       this.formIsValid = ev.complete;
     });
   }
 
   addCard() {
-    console.log(this.card);
+    this.stripeService.createPaymentSource(this.cardForm).then(
+      () => this.cardForm.clear()
+    );
+  }
 
-    this.stripe.createToken(this.card).then((result) => {
-      if (result.error) {
-          console.error(result.error);
-      } else {
-        console.log('Card Token: ', result.token);
-        this.cardToken = result.token;
-      }
-    });
+  chooseNewCard() {
+    this.dialog.open(CardChangeDialogue);
   }
 
   submitOrder() {
     // need more validation for this
-    if (this.cardToken && this.checkoutForm.valid) {
+    if (this.stripeService.selectedCard.id && this.checkoutForm.valid) {
       this.checkoutSubscription = this.moltin.checkoutCart(
         this.customerService.customerUuid,
         this.customerService.customerId,
@@ -246,8 +255,11 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   payForOrder(order) {
     console.log('Order: ', order);
-    this.paySubscription = this.moltin.payForOrder(order, this.cardToken.id).subscribe(
-        data => console.log('Pay resp: ', data),
+    this.paySubscription = this.moltin.payForOrder(order, this.stripeService.selectedCard.id).subscribe(
+        () => {
+          this.router.navigateByUrl(`account/order/${order.id}`);
+          this.moltin.deleteCart(this.customerService.customerUuid);
+        },
         error => console.error(error)
     );
   }
@@ -275,4 +287,21 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     if (address.postcode) this.checkoutForm.patchValue(createObject(form, 'postcode', address.postcode));
     if (address.phone_number) this.checkoutForm.patchValue(createObject(form, 'phone_number', address.phone_number));
   }
+}
+
+@Component({
+  selector: 'app-change-card',
+  template: `
+    <div mat-dialog-content>
+      <app-payment-cards [canSelect]="true" (selected)="dialogRef.close()"></app-payment-cards>
+    </div>
+  `,
+  styles: [
+    ``
+  ]
+})
+export class CardChangeDialogue {
+  constructor(
+    public dialogRef: MatDialogRef<CardChangeDialogue>
+  ) {}
 }

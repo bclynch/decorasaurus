@@ -22,8 +22,11 @@ import {
   MatBottomSheetModule,
   MatSnackBarModule,
   MatSelectModule,
-  MatCheckboxModule
+  MatCheckboxModule,
+  MatRadioModule
 } from '@angular/material';
+import { PaymentCardsComponent } from './payment-cards/payment-cards.component';
+import { CustomerAddressesComponent } from './customer-addresses/customer-addresses.component';
 
 @NgModule({
   entryComponents: [
@@ -46,7 +49,8 @@ import {
     MatSnackBarModule,
     MatSelectModule,
     MatCheckboxModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatRadioModule
   ],
   declarations: [
     PagewrapperComponent,
@@ -57,7 +61,9 @@ import {
     CartItemCardComponent,
     RemoveSnackbar,
     CartTotalsComponent,
-    SigninDialogueComponent
+    SigninDialogueComponent,
+    PaymentCardsComponent,
+    CustomerAddressesComponent
   ],
   exports: [
     PagewrapperComponent,
@@ -76,7 +82,10 @@ import {
     MatSelectModule,
     MatCheckboxModule,
     CartItemCardComponent,
-    CartTotalsComponent
+    CartTotalsComponent,
+    MatRadioModule,
+    PaymentCardsComponent,
+    CustomerAddressesComponent
   ]
 })
 export class SharedModule { }

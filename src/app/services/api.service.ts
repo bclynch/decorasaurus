@@ -31,22 +31,22 @@ export class APIService {
     ));
   }
 
-    // Login Customer
-    loginCustomer(email: string, password: string) {
-      return this.http.post(`${ENV.apiBaseURL}/moltin/login-customer`, { email, password })
-      .pipe(map(
-          (response: Response) => {
-            const data = response.json();
-            return data;
-          }
-        )
-      ).pipe(catchError(
-          (error: Response) => {
-            console.log(error);
-            return throwError('Something went wrong');
-          }
-      ));
-    }
+  // Login Customer
+  loginCustomer(email: string, password: string) {
+    return this.http.post(`${ENV.apiBaseURL}/moltin/login-customer`, { email, password })
+    .pipe(map(
+        (response: Response) => {
+          const data = response.json();
+          return data;
+        }
+      )
+    ).pipe(catchError(
+        (error: Response) => {
+          console.log(error);
+          return throwError('Something went wrong');
+        }
+    ));
+  }
 
   // Posterize Uploads
   posterizeImage(formData: FormData) {
@@ -82,6 +82,67 @@ export class APIService {
 
   tracePatent(url: string, color: string) {
     return this.http.post(`${ENV.apiBaseURL}/patent/trace`, { patent: url, color })
+    .pipe(map(
+        (response: Response) => {
+          const data = response.json();
+          return data;
+        }
+      )
+    ).pipe(catchError(
+        (error: Response) => {
+          return Observable.throw('Something went wrong');
+        }
+    ));
+  }
+
+  // Stripe routes
+  createStripeCustomer(email: string, token: string) {
+    return this.http.post(`${ENV.apiBaseURL}/stripe/create-customer`, { email, token })
+    .pipe(map(
+        (response: Response) => {
+          const data = response.json();
+          return data;
+        }
+      )
+    ).pipe(catchError(
+        (error: Response) => {
+          return Observable.throw('Something went wrong');
+        }
+    ));
+  }
+
+  fetchStripeCustomer(email: string) {
+    return this.http.post(`${ENV.apiBaseURL}/stripe/fetch-customer`, { email })
+    .pipe(map(
+        (response: Response) => {
+          const data = response.json();
+          return data;
+        }
+      )
+    ).pipe(catchError(
+        (error: Response) => {
+          return Observable.throw('Something went wrong');
+        }
+    ));
+  }
+
+  deleteCard(customerId: string, cardId: string) {
+    return this.http.post(`${ENV.apiBaseURL}/stripe/delete-card`, { customerId, cardId })
+    .pipe(map(
+        (response: Response) => {
+          const data = response.json();
+          return data;
+        }
+      )
+    ).pipe(catchError(
+        (error: Response) => {
+          return Observable.throw('Something went wrong');
+        }
+    ));
+  }
+
+  changeDefaultCard(customerId: string, sourceId: string) {
+    return this.http.post(`${ENV.apiBaseURL}/stripe/change-default-card`, { customerId, sourceId })
     .pipe(map(
         (response: Response) => {
           const data = response.json();

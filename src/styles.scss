@@ -87,3 +87,19 @@ button:focus {
     }
   }
 }
+
+.snackbar-theme {
+  background: var(--color-primary);
+  font-weight: bold;
+}
+
+mat-radio-button {
+
+  > .mat-radio-label {
+    width: 100%;
+
+    > .mat-radio-label-content {
+      width: inherit;
+    }
+  }
+}

@@ -25,7 +25,8 @@ export class CartItemCardComponent implements OnInit {
     this.snackBar.openFromComponent(RemoveSnackbar, {
       duration: 3000,
       verticalPosition: 'top',
-      data: { product }
+      data: { product },
+      panelClass: ['snackbar-theme']
     });
   }
 

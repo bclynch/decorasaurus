@@ -22,16 +22,19 @@ import { AnalyticsService } from './services/analytics.service';
 import { SettingsService } from './services/settings.service';
 import { CookieService } from 'ngx-cookie-service';
 import { CartService, AddCartNav } from './services/cart.service';
+import { StripeService, AddedSnackbar } from './services/stripe.service';
 
 @NgModule({
   entryComponents: [
     AddCartNav,
-    CustomerStateSnackbar
+    CustomerStateSnackbar,
+    AddedSnackbar
   ],
   declarations: [
     AppComponent,
     AddCartNav,
-    CustomerStateSnackbar
+    CustomerStateSnackbar,
+    AddedSnackbar
   ],
   imports: [
     BrowserModule,
@@ -52,7 +55,8 @@ import { CartService, AddCartNav } from './services/cart.service';
     CustomerService,
     CartService,
     AnalyticsService,
-    SettingsService
+    SettingsService,
+    StripeService
   ],
   bootstrap: [AppComponent]
 })

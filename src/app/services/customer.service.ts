@@ -88,7 +88,8 @@ export class CustomerService implements OnDestroy {
           this.snackBar.openFromComponent(CustomerStateSnackbar, {
             duration: 3000,
             verticalPosition: 'top',
-            data: { message: `Successfully logged in!` }
+            data: { message: `Successfully logged in!` },
+            panelClass: ['snackbar-theme']
           });
           resolve();
         },
@@ -107,7 +108,8 @@ export class CustomerService implements OnDestroy {
       this.snackBar.openFromComponent(CustomerStateSnackbar, {
         duration: 3000,
         verticalPosition: 'top',
-        data: { message: 'Successfully logged out' }
+        data: { message: 'Successfully logged out' },
+        panelClass: ['snackbar-theme']
       });
       resolve();
     });

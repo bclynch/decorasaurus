@@ -3,8 +3,9 @@
 
 ## Todos
 - Finish order flow
+    - Payment id didn't work
     - Tweak validation for submission
-    - UI for customer creating account
+    - Mobile tweaking for payment on checkout
     - Take to order page after successfull submission and reset cart
     - Seems like submission fn is firing for add card / submit
     - Add / See addresses

@@ -1,18 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AccountComponent } from './account/account.component';
+import { OrderComponent } from './order/order.component';
 import { Routes, RouterModule } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
 
 const routes: Routes = [
-  {
-    path: '',
-    component: AccountComponent
-  },
-  {
-    path: 'order',
-    loadChildren: '../order/order.module#OrderModule'
-  }
+  { path: ':order', component: OrderComponent }
 ];
 
 @NgModule({
@@ -21,6 +14,6 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     SharedModule
   ],
-  declarations: [AccountComponent]
+  declarations: [OrderComponent]
 })
-export class AccountModule { }
+export class OrderModule { }

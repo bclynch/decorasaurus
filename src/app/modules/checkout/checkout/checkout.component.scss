@@ -27,6 +27,39 @@
         padding: 5px;
       }
     }
+    &.payment {
+
+      .existingCard {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+
+        .cardWrapper {
+          display: flex;
+          align-items: center;
+          flex: 1;
+
+          .brand {
+            margin: 0 5px;
+          }
+          img {
+            height: 25px;
+          }
+        }
+      }
+      .newCard {
+        display: flex;
+        align-items: center;
+        margin-top: 20px;
+
+        #card-element {
+          width: 100%;
+        }
+        button {
+          min-width: auto;
+        }
+      }
+    }
     .sectionHeader {
       font-size: 18px;
       padding: 6px 0 6px 6px;

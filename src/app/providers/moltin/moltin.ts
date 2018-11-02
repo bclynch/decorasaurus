@@ -183,34 +183,34 @@ export class Moltin {
 	}
 
 	checkoutCart(ref: string, customer, billingAddress, shippingAddress): Observable<MoltinOrder> {
-			return new Observable<MoltinOrder>(observer => {
-					this.moltin.Cart(ref).Checkout(customer, billingAddress, shippingAddress).then((data) => {
-							observer.next(data['data']);
-							observer.complete();
-					}).catch(error => {
-							observer.error(error);
-							observer.complete();
-					});
+		return new Observable<MoltinOrder>(observer => {
+			this.moltin.Cart(ref).Checkout(customer, billingAddress, shippingAddress).then((data) => {
+				observer.next(data['data']);
+				observer.complete();
+			}).catch(error => {
+				observer.error(error);
+				observer.complete();
 			});
+		});
 	}
 
 	deleteCart(ref: string): Observable<any> {
-			return new Observable(observer => {
-					this.moltin.Cart(ref).Delete().then(data => {
-							observer.next(data);
-							observer.complete();
-					}).catch(error => {
-							observer.error(error);
-							observer.complete();
-					});
+		return new Observable(observer => {
+			this.moltin.Cart(ref).Delete().then(data => {
+				observer.next(data);
+				observer.complete();
+			}).catch(error => {
+				observer.error(error);
+				observer.complete();
 			});
+		});
 	}
 
-	payForOrder(order: MoltinOrder, token: string) {
+	payForOrder(order: MoltinOrder, source: string) {
 			const payload = {
 					'gateway': 'stripe',
 					'method': 'purchase',
-					'payment': token,
+					'payment': source,
 					'options': {
 							receipt_email: 'bclynch7@gmail.com'
 					}
@@ -224,6 +224,10 @@ export class Moltin {
 							observer.complete();
 					});
 			});
+	}
+
+	getCustomerOrders(customerId: string) {
+		return this.moltin.Orders.Filter({ eq: { customer_id: customerId } }).All();
 	}
 
 	private rollUpSingleRelationship(item, key, included, included_key) {
