@@ -155,4 +155,19 @@ export class APIService {
         }
     ));
   }
+
+  processPoster(formData: FormData) {
+    return this.http.post(`${ENV.apiBaseURL}/poster/process`, formData)
+    .pipe(map(
+        (response: Response) => {
+          const data = response.json();
+          return data;
+        }
+      )
+    ).pipe(catchError(
+        (error: Response) => {
+          return Observable.throw('Something went wrong');
+        }
+    ));
+  }
 }

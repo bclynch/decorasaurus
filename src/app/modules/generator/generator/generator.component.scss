@@ -5,6 +5,17 @@
   padding-top: var(--height-navbar);
   padding-bottom: 89px; // for mobile 39px of btn + arrow height
 
+  .hidden {
+    position: absolute;
+    height: 1px;
+    width: 1px;
+    bottom: 0;
+    overflow: hidden;
+
+    .background {
+      width: 4000px; // size of svg-- might be modding depending on how big is required for a nice print
+    }
+  }
   .posterContainer {
     flex: 1;
     display: flex;

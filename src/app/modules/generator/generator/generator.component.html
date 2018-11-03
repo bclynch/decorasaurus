@@ -30,7 +30,7 @@
         <button 
           class="addToCartBtn boldFont" 
           mat-flat-button color="primary" 
-          (click)="cartService.addToCart(product)"
+          (click)="addToCart()"
         >Add to Cart</button>
       </div>
     </div>
@@ -42,6 +42,13 @@
       (posterBackground)="background = $event"
       (posterWidth)="posterWidth = $event"
       (posterHeight)="posterHeight = $event"
+      (addToCart)="addToCart()"
     ></app-options-container>
+    <!-- hidden container to have full size image to use for dom to image -->
+    <div class="hidden" *ngIf="posterSVG">
+      <div class="background" [style.background]="background" id="poster">
+        <img [src]="posterSVG" />
+      </div>
+    </div>
   </div>
 </app-pagewrapper>

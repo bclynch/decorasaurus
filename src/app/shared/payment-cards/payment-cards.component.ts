@@ -23,6 +23,7 @@ export class PaymentCardsComponent implements OnInit {
 
   selectCard() {
     this.stripeService.selectedCard = this.selectedCard;
+    console.log(this.selectedCard);
     this.selected.emit();
   }
 }

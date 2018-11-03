@@ -1,10 +1,12 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MoltinProduct } from '../../../providers/moltin/models/product';
 import { Moltin } from '../../../providers/moltin/moltin';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CartService } from 'src/app/services/cart.service';
 import { SubscriptionLike } from 'rxjs';
+import * as domtoimage from 'dom-to-image';
+// import { saveAs } from 'file-saver';
 
 
 @Component({
@@ -35,7 +37,8 @@ export class GeneratorComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private moltin: Moltin,
     private _DomSanitizationService: DomSanitizer,
-    private cartService: CartService
+    private cartService: CartService,
+    private elRef: ElementRef
   ) {
     this.paramsSubscription = this.route.params.subscribe((params) => {
       this.generatorType = params.type;
@@ -75,5 +78,19 @@ export class GeneratorComponent implements OnInit, OnDestroy {
     } else {
       this.posterSVG = null;
     }
+  }
+
+  addToCart() {
+    const node = this.elRef.nativeElement.querySelector('#poster');
+    console.log(node);
+
+    domtoimage.toBlob(node)
+      .then((blob) => {
+        // saveAs(blob, 'Student-Talks-poster.png');
+        this.cartService.addToCart(this.product, blob, this.background);
+      })
+      .catch(function (error) {
+        console.error('oops, something went wrong!', error);
+      });
   }
 }

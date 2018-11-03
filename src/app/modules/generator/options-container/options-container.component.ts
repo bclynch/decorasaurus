@@ -18,6 +18,7 @@ export class OptionsContainerComponent implements OnInit {
   @Output() posterBackground: EventEmitter<string> = new EventEmitter<string>();
   @Output() posterWidth: EventEmitter<number> = new EventEmitter<number>();
   @Output() posterHeight: EventEmitter<number> = new EventEmitter<number>();
+  @Output() addToCart: EventEmitter<void> = new EventEmitter<void>();
 
   navTabs = ['Basics', 'Customize', 'Finish'];
   selectedTab = 0;
@@ -104,9 +105,5 @@ export class OptionsContainerComponent implements OnInit {
   backgroundChange(color: string) {
     this.background = color;
     this.posterBackground.emit(color);
-  }
-
-  addToCart(product: MoltinProduct) {
-    this.cartService.addToCart(product);
   }
 }

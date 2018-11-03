@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { MAT_BOTTOM_SHEET_DATA, MatBottomSheet, MatBottomSheetRef } from '@angular/material';
 import { MoltinProduct } from '../providers/moltin/models/product';
 import { BehaviorSubject, Observable, SubscriptionLike} from 'rxjs';
+import { APIService } from './api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +27,8 @@ export class CartService implements OnDestroy {
     private moltin: Moltin,
     private customerService: CustomerService,
     private router: Router,
-    private bottomSheet: MatBottomSheet
+    private bottomSheet: MatBottomSheet,
+    private apiService: APIService
   ) {
     this.cartSubject = new BehaviorSubject<MoltinCartItem[]>(null);
     this.cartItems = this.cartSubject;
@@ -66,18 +68,27 @@ export class CartService implements OnDestroy {
     });
   }
 
-  addToCart(product: MoltinProduct): void {
-    this.addToCartSubscription = this.moltin.addToCart(this.customerService.customerUuid, product).subscribe(
-      (data => {
-        console.log(data);
-        this.cartSubject.next(data);
+  addToCart(product: MoltinProduct, blob: Blob, background: string): void {
+    const formData = new FormData();
+    formData.append('poster', blob);
+    formData.append('background', background);
+    // Need to create thumbnail for product + pdf to s3 then add to cart
+    this.apiService.processPoster(formData).subscribe(
+      result => {
 
-        this.bottomSheet.open(AddCartNav, {
-          data: { product },
-          hasBackdrop: false
-        });
-      })
+      }
     );
+    // this.addToCartSubscription = this.moltin.addToCart(this.customerService.customerUuid, product).subscribe(
+    //   (data => {
+    //     console.log(data);
+    //     this.cartSubject.next(data);
+
+    //     this.bottomSheet.open(AddCartNav, {
+    //       data: { product },
+    //       hasBackdrop: false
+    //     });
+    //   })
+    // );
   }
 
   removeFromCart(product: MoltinCartItem): void {

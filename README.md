@@ -2,17 +2,24 @@
 
 
 ## Todos
+- On add to cart work
+    - Custom product thoughts https://forum.moltin.com/t/raise-the-maximum-limit-of-child-products-number/618/5
+    - To send back the poster probably need to package it up as a png so we can include custom background and all and send back as a blob. Can use domtoimage to create a blob then send on back. - check
+        - Need to make sure the size is okay. Maybe need to blow up size of svg in a hidden way then run the domtoimg. Should scale okay - check
+    - Create thumbnails
+        - Moltin uses 220 x 330 jpg (depends orientation)
+        - Should hopefully be able to create file and overwrite main_image
+    - Create pdf of print, upload to s3, and add to custom field / flow on product
 - Finish order flow
     - Payment id didn't work
+    - Need to grab customer email at some point to refer to them on stripe
     - Tweak validation for submission
     - Mobile tweaking for payment on checkout
     - Take to order page after successfull submission and reset cart
-    - Seems like submission fn is firing for add card / submit
     - Add / See addresses
     - Display orders on account page
     - Account page similar to S&C with addresses / customer info / etc
 - Moltin Wiring
-    - Probably best to just move everything from js sdk to the direct API calls. Seems more stable
     - Need add / save / fetch addresses for signed in users
     - Stripe integration - check
     - Paypal Integration
@@ -28,6 +35,10 @@
     - I create a cart with this uuid (via the carts/{uuid}) endpoint or with the Moltin.Cart({uuid}) JS method
     - I use this cart until the user is logged in and I delete the cart on logout with the Moltin.Cart({uuid}).Delete() (or I keep it, depends…)
 - Poster generator for maps + custom trace pics. - 6 days - spent 3/6
+    - Recommended min size requirements from walgreens
+        - 12x18 : 2682x1788
+        - 20x30 : 4470x2980
+        - 11x14 : 1008x792
     - Patent:
         - Create modal to enlarge images / select
             - Bug with closing modal programmatically https://github.com/ionic-team/ionic/issues/15349

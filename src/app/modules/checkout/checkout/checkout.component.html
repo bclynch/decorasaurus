@@ -226,7 +226,7 @@
               <div class="brand">{{stripeService.selectedCard.brand}}</div>
               <div>ending in {{stripeService.selectedCard.last4}}</div>
             </div>
-            <button mat-button color="primary" (click)="chooseNewCard()">Change</button>
+            <button mat-button color="primary" (click)="chooseNewCard()" type="button">Change</button>
           </div>
           <div class="newCard">
             <div id="card-element" class="rounded"></div>
@@ -234,6 +234,7 @@
               mat-button 
               color="primary" 
               (click)="addCard()"
+              type="button"
             >Add Card</button>
           </div>
         </div>
@@ -255,7 +256,14 @@
         </div>
       </div>
       <div class="bottomContainer">
-        <div class="left"><button mat-button color="primary" (click)="router.navigateByUrl('/cart')">Back To Cart</button></div>
+        <div class="left">
+          <button 
+            mat-button 
+            color="primary" 
+            (click)="router.navigateByUrl('/cart')" 
+            type="button"
+          >Back To Cart</button>
+        </div>
         <div class="right">
           <app-cart-totals [cart]="cart"></app-cart-totals>
           <div class="buttonWrapper">
