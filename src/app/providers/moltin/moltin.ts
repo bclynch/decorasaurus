@@ -83,55 +83,67 @@ export class Moltin {
 	}
 
 	getProductById(id: string): Observable<MoltinProduct> {
-			return new Observable<MoltinProduct>(observer => {
-					const request = this.moltin.Products.With(['main_image', 'files', 'categories']);
-					request.Get(id).then((data) => {
-							const product = data.data;
-							if (!product) {
-									observer.error({'error': 'No product found'});
-									observer.complete();
-									return;
-							}
-							return [ product, data.included ];
-					}).then(data => {
-							let product = data[0];
-							const included = data[1];
-							product = this.rollUpSingleRelationship(product, 'main_image', included, 'main_images');
-							product = this.rollUpManyRelationship(product, 'categories', included, 'categories');
-							product = this.rollUpManyRelationship(product, 'files', included, 'files');
-							return product;
-					}).then(data => {
-							observer.next(data);
-							observer.complete();
-					}).catch(error => {
-							observer.error(error);
-							observer.complete();
-					});
+		return new Observable<MoltinProduct>(observer => {
+			const request = this.moltin.Products.With(['main_image', 'files', 'categories']);
+			request.Get(id).then((data) => {
+				const product = data.data;
+				if (!product) {
+					observer.error({'error': 'No product found'});
+					observer.complete();
+					return;
+				}
+				return [ product, data.included ];
+			}).then(data => {
+				let product = data[0];
+				const included = data[1];
+				product = this.rollUpSingleRelationship(product, 'main_image', included, 'main_images');
+				product = this.rollUpManyRelationship(product, 'categories', included, 'categories');
+				product = this.rollUpManyRelationship(product, 'files', included, 'files');
+					return product;
+			}).then(data => {
+				observer.next(data);
+				observer.complete();
+			}).catch(error => {
+				observer.error(error);
+				observer.complete();
 			});
+		});
 	}
 
 	addToCart(ref: string, product: MoltinProduct): Observable<any> {
-			return new Observable<MoltinProduct>(observer => {
-					this.moltin.Cart(ref).AddProduct(product.id).then(data => {
-							observer.next(data);
-							observer.complete();
-					}).catch(error => {
-							observer.error(error);
-							observer.complete();
-					});
+		return new Observable<MoltinProduct>(observer => {
+			this.moltin.Cart(ref).AddProduct(product.id).then(data => {
+				observer.next(data);
+				observer.complete();
+			}).catch(error => {
+				observer.error(error);
+				observer.complete();
 			});
+		});
+	}
+
+	addCustomToCart(ref: string, product: any): Observable<any> {
+		return new Observable<MoltinProduct>(observer => {
+			this.moltin.Cart(ref).AddCustomItem(product).then(data => {
+				observer.next(data);
+				observer.complete();
+			}).catch(error => {
+				observer.error(error);
+				observer.complete();
+			});
+		});
 	}
 
 	getCart(ref: string): Observable<MoltinCart> {
-			return new Observable<MoltinCart>(observer => {
-					this.moltin.Cart(ref).Get().then(data => {
-							observer.next(data);
-							observer.complete();
-					}).catch(error => {
-							observer.error(error);
-							observer.complete();
-					});
+		return new Observable<MoltinCart>(observer => {
+			this.moltin.Cart(ref).Get().then(data => {
+				observer.next(data);
+				observer.complete();
+			}).catch(error => {
+				observer.error(error);
+				observer.complete();
 			});
+		});
 	}
 
 	getCartItems(ref: string): Observable<MoltinCartResp> {

@@ -13,6 +13,7 @@
 - Finish order flow
     - Payment id didn't work
     - Need to grab customer email at some point to refer to them on stripe
+    - Adding a card on checkout does not save it to the Stripe account
     - Tweak validation for submission
     - Mobile tweaking for payment on checkout
     - Take to order page after successfull submission and reset cart

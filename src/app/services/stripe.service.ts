@@ -69,6 +69,7 @@ export class StripeService {
     return new Promise((resolve, reject) => {
       this.stripe.createToken(card).then(
         (resp) => {
+          console.log(resp.token);
           this.selectedCard = resp.token.card;
           this.cardIsSelected.next(true);
           this.snackBar.openFromComponent(AddedSnackbar, {

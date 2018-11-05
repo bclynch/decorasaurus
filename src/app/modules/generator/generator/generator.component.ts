@@ -82,12 +82,11 @@ export class GeneratorComponent implements OnInit, OnDestroy {
 
   addToCart() {
     const node = this.elRef.nativeElement.querySelector('#poster');
-    console.log(node);
 
-    domtoimage.toBlob(node)
-      .then((blob) => {
-        // saveAs(blob, 'Student-Talks-poster.png');
-        this.cartService.addToCart(this.product, blob, this.background);
+    domtoimage.toPng(node)
+      .then((png) => {
+        // saveAs(blob, 'Student-Talks-poster.png'); -- Must be 'toBLob' not 'toPng
+        this.cartService.addCustomToCart(this.product, png, this.background);
       })
       .catch(function (error) {
         console.error('oops, something went wrong!', error);

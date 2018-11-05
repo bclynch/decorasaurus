@@ -74,21 +74,69 @@ export class CartService implements OnDestroy {
     formData.append('background', background);
     // Need to create thumbnail for product + pdf to s3 then add to cart
     this.apiService.processPoster(formData).subscribe(
-      result => {
+      (result: { type: 'thumbnail' | 'pdf', S3Url: string }[]) => {
+        console.log(result);
+        // product.thumbnail_url = result.filter((link) => link.type === 'thumbnail')[0].S3Url;
+        // product.pdf_url = result.filter((link) => link.type === 'pdf')[0].S3Url;
+        console.log(product);
+        this.addToCartSubscription = this.moltin.addToCart(this.customerService.customerUuid, product).subscribe(
+          (data => {
+            console.log(data);
 
+            // append links to cart items
+            // this.moltin.
+
+            this.cartSubject.next(data);
+
+            this.bottomSheet.open(AddCartNav, {
+              data: { product },
+              hasBackdrop: false
+            });
+          })
+        );
       }
     );
-    // this.addToCartSubscription = this.moltin.addToCart(this.customerService.customerUuid, product).subscribe(
-    //   (data => {
-    //     console.log(data);
-    //     this.cartSubject.next(data);
+  }
 
-    //     this.bottomSheet.open(AddCartNav, {
-    //       data: { product },
-    //       hasBackdrop: false
-    //     });
-    //   })
-    // );
+  addCustomToCart(product: MoltinProduct, blob: Blob, background: string): void {
+    const formData = new FormData();
+    formData.append('poster', blob);
+    formData.append('background', background);
+    // Need to create thumbnail for product + pdf to s3 then add to cart
+    this.apiService.processPoster(formData).subscribe(
+      (result: { type: 'thumbnail' | 'pdf', S3Url: string }[]) => {
+        console.log(result);
+        // product.thumbnail_url = result.filter((link) => link.type === 'thumbnail')[0].S3Url;
+        // product.pdf_url = result.filter((link) => link.type === 'pdf')[0].S3Url;
+        console.log(product);
+        const item = {
+          name: `My ${Date.now().toString()} Item`,
+          sku: Date.now().toString(),
+          description: 'My first custom item!',
+          thumbnail_url: result.filter((link) => link.type === 'thumbnail')[0].S3Url,
+          quantity: 1,
+          price: {
+            amount: 10000
+          }
+        };
+        console.log(item);
+        this.addToCartSubscription = this.moltin.addCustomToCart(this.customerService.customerUuid, item).subscribe(
+          (derp) => {
+            console.log(derp);
+
+            // append links to cart items
+            // this.moltin.
+
+            this.cartSubject.next(derp);
+
+            this.bottomSheet.open(AddCartNav, {
+              data: { product },
+              hasBackdrop: false
+            });
+          }
+        );
+      }
+    );
   }
 
   removeFromCart(product: MoltinCartItem): void {
