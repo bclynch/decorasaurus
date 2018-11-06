@@ -1,32 +1,24 @@
 <app-pagewrapper [displayFooter]="false" [noMargin]="true">
-  <div class="generatorContainer" [style.background]="background">
+  <div class="generatorContainer" [style.background]="generatorService.backgroundColor">
     <div class="posterContainer">
       <!-- <div class="patentTitle">{{patentName}}</div> -->
-      <div class="posterWrapper" *ngIf="posterSVG">
-        <div class="background" [style.background]="background">
-          <img [src]="posterSVG" />
-          <!-- <div class="posterGrid" [attr.style]="_DomSanitizationService.bypassSecurityTrustStyle('--patentColor:' + color)">
-            <div *ngFor="let x of 54 | times"></div>
-          </div> -->
+      <div class="posterWrapper" *ngIf="generatorService.posterSrc">
+        <div class="background" [style.background]="generatorService.backgroundColor">
+          <img [src]="generatorService.posterSrc" />
         </div>
-        <i class="horizontal">{{posterWidth}} inch</i>
-        <i class="vertical"><i>{{posterHeight}} inch</i></i>
+        <i class="horizontal">{{generatorService.posterWidth}} inch</i>
+        <i class="vertical"><i>{{generatorService.posterHeight}} inch</i></i>
       </div>
       <mat-spinner *ngIf="tracing"></mat-spinner>
-      <div *ngIf="!posterSVG && !tracing" class="emptyState">
+      <div *ngIf="!generatorService.posterSrc && !tracing" class="emptyState">
         <div><img class="logoImg" src="../../../assets/dino.svg" /></div>
-        <div>Select a patent to display your creation here</div>
+        <div *ngIf="generatorService.generatorType === 'patent-poster'">Select a patent to display your creation here</div>
+        <div *ngIf="generatorService.generatorType === 'remix-poster'">Upload and remix an image to display your creation here</div>
       </div>
       <div class="mobileOptionsContainer">
-        <app-options-container
-          [generatorType]="generatorType" 
-          [product]="product" 
-          (posterSVG)="cleanSVG($event)" 
-          (tracing)="tracing = $event"
-          (posterBackground)="background = $event"
-          (posterWidth)="posterWidth = $event"
-          (posterHeight)="posterHeight = $event"
-        ></app-options-container>
+        <!-- <app-options-container
+          (addToCart)="addToCart()"
+        ></app-options-container> -->
         <button 
           class="addToCartBtn boldFont" 
           mat-flat-button color="primary" 
@@ -35,19 +27,12 @@
       </div>
     </div>
     <app-options-container 
-      [generatorType]="generatorType" 
-      [product]="product" 
-      (posterSVG)="cleanSVG($event)" 
-      (tracing)="tracing = $event"
-      (posterBackground)="background = $event"
-      (posterWidth)="posterWidth = $event"
-      (posterHeight)="posterHeight = $event"
       (addToCart)="addToCart()"
     ></app-options-container>
     <!-- hidden container to have full size image to use for dom to image -->
-    <div class="hidden" *ngIf="posterSVG">
-      <div class="background" [style.background]="background" id="poster">
-        <img [src]="posterSVG" />
+    <div class="hidden">
+      <div class="background" [style.background]="generatorService.backgroundColor" id="poster">
+        <img [src]="generatorService.posterSrc" id="inputImage" />
       </div>
     </div>
   </div>

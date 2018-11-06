@@ -1,0 +1,29 @@
+.basicOptionsContainer {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  .fileUploadContainer {
+    height: calc(100% - 59px); // 100% padding  - height of color pickers
+    
+    label {
+      cursor: pointer;
+    }
+    input {
+      display: none;
+    }
+    // file drop styles in global
+  }
+  .spinnerContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 40%;
+
+    mat-spinner {
+      color: var(--color-secondary);
+      width: 60px !important;
+      height: 60px !important;
+    }
+  }
+}

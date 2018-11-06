@@ -1,8 +1,10 @@
-import { Component, OnInit, Output, EventEmitter, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { APIService } from '../../../../services/api.service';
 import { MatDialog } from '@angular/material';
 import { PatentExpandDialogueComponent } from '../../patent-expand-dialogue/patent-expand-dialogue.component';
 import { SubscriptionLike } from 'rxjs';
+import { GeneratorService } from 'src/app/services/generator.service';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-patent-basic-options',
@@ -10,23 +12,10 @@ import { SubscriptionLike } from 'rxjs';
   styleUrls: ['./patent-basic-options.component.scss']
 })
 export class PatentBasicOptionsComponent implements OnInit, OnDestroy {
-  @Input() patentImages: string[];
-  @Input() patentName: string;
-  @Input() posterBackground: string;
-  @Input() posterTrace: string;
-  @Output() svg: EventEmitter<string> = new EventEmitter<string>();
-  @Output() name: EventEmitter<string> = new EventEmitter<string>();
-  @Output() searchResults: EventEmitter<string[]> = new EventEmitter<string[]>();
-  @Output() background: EventEmitter<string> = new EventEmitter<string>();
-  @Output() trace: EventEmitter<string> = new EventEmitter<string>();
-  @Output() tracing: EventEmitter<void> = new EventEmitter<void>();
 
   dialogueSubscription: SubscriptionLike;
   traceSubscription: SubscriptionLike;
   patentSubscription: SubscriptionLike;
-
-  patentSVG;
-  patentNumber: string;
 
   loadingPatentImages = false;
 
@@ -34,7 +23,9 @@ export class PatentBasicOptionsComponent implements OnInit, OnDestroy {
 
   constructor(
     private apiService: APIService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private generatorService: GeneratorService,
+    private _DomSanitizationService: DomSanitizer,
   ) { }
 
   ngOnInit() {
@@ -49,7 +40,7 @@ export class PatentBasicOptionsComponent implements OnInit, OnDestroy {
   expandImage(index: number) {
 
     const dialogRef = this.dialog.open(PatentExpandDialogueComponent, {
-      data: { images: this.patentImages, currentIndex: index }
+      data: { images: this.generatorService.patentImages, currentIndex: index }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -65,26 +56,25 @@ export class PatentBasicOptionsComponent implements OnInit, OnDestroy {
   }
 
   selectPatent(i: number) {
-    this.tracing.emit();
-    this.traceSubscription = this.apiService.tracePatent(this.patentImages[i], this.posterTrace).subscribe(
+    this.generatorService.tracingSubject.next(true);
+    this.generatorService.mobileOptionsActive = false;
+    this.generatorService.posterSrc = null;
+    this.traceSubscription = this.apiService.tracePatent(this.generatorService.patentImages[i], this.generatorService.traceColor).subscribe(
       result => {
-        this.patentSVG = result.resp;
-        this.svg.emit(this.patentSVG);
+        this.generatorService.posterSrc = this._DomSanitizationService.bypassSecurityTrustUrl(result.resp);
       }
     );
   }
 
   searchPatent(e) {
     e.preventDefault();
-    if (this.patentNumber) {
+    if (this.generatorService.patentNumber) {
       this.loadingPatentImages = true;
-      this.searchResults.emit([]);
-      this.patentSubscription = this.apiService.fetchPatent(this.patentNumber).subscribe(
+      this.generatorService.patentSearchResults = [];
+      this.patentSubscription = this.apiService.fetchPatent(this.generatorService.patentNumber).subscribe(
         result => {
-          this.patentImages = result.resp.images;
-          this.patentName = result.resp.name;
-          this.searchResults.emit(result.resp.images);
-          this.name.emit(this.patentName);
+          this.generatorService.patentImages = result.resp.images;
+          this.generatorService.patentName = result.resp.name;
           this.loadingPatentImages = false;
         }
       );

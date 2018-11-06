@@ -39,6 +39,7 @@
     "hammerjs": "^2.0.8",
     "jwt-decode": "^2.2.0",
     "mapbox-gl": "^0.49.0",
+    "ml5": "^0.1.2",
     "ngx-color-picker": "^6.8.0",
     "ngx-cookie-service": "^1.0.10",
     "ngx-file-drop": "^5.0.0",

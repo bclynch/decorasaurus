@@ -1,13 +1,13 @@
-<div class="optionsContainer" [ngClass]="mobileOptionsActive ? 'active' : ''">
+<div class="optionsContainer" [ngClass]="generatorService.mobileOptionsActive ? 'active' : ''">
   <div class="toggleWrapper">
     <mat-icon 
       class="mobileToggle" 
-      (click)="mobileOptionsActive ? mobileOptionsActive = false : mobileOptionsActive = true
+      (click)="generatorService.mobileOptionsActive ? generatorService.mobileOptionsActive = false : generatorService.mobileOptionsActive = true
     ">arrow_upward</mat-icon>
   </div>
   <div class="productContainer">
-    <div class="productName boldFont">{{product?.name}}</div>
-    <div class="productPrice">{{product?.meta.display_price.with_tax.formatted}}</div>
+    <div class="productName boldFont">{{generatorService.product?.name}}</div>
+    <div class="productPrice">{{generatorService.product?.meta.display_price.with_tax.formatted}}</div>
   </div>
   <div>
     <div class="tabNav">
@@ -15,7 +15,7 @@
         class="tab"
         [ngClass]="i === selectedTab ? 'active' : ''" 
         *ngFor="let tab of navTabs; let i = index;" 
-        (click)="selectTab(i)"
+        (click)="generatorService.optionsTabSubject.next(i)"
       >
         <span>{{i + 1}}.</span>
         <div>{{tab}}</div>
@@ -23,35 +23,15 @@
     </div>
   </div>
   <div class="basicContainer optionsWrapper" *ngIf="selectedTab === 0">
-    <app-patent-basic-options
-      [patentImages]="patentSearchResults" 
-      [patentName]="patentName"
-      [posterBackground]="background"
-      [posterTrace]="trace" 
-      (svg)="cleanSVG($event)" 
-      (name)="patentName = $event" 
-      (searchResults)="patentSearchResults = $event"
-      (background)="backgroundChange($event)"
-      (trace)="trace = $event"
-      (tracing)="beginTracing()"
-      *ngIf="generatorType === 'patent-poster'"
-    ></app-patent-basic-options>
+    <app-patent-basic-options *ngIf="generatorService.generatorType === 'patent-poster'"></app-patent-basic-options>
     <app-map-basic-options
 
-      *ngIf="generatorType === 'map-poster'"
+      *ngIf="generatorService.generatorType === 'map-poster'"
     ></app-map-basic-options>
-    <app-stylized-basic-options
-      [posterBackground]="background"
-      [posterTrace]="trace" 
-      (svg)="cleanSVG($event)"
-      (background)="backgroundChange($event)"
-      (trace)="trace = $event"
-      (tracing)="beginTracing()"
-      *ngIf="generatorType === 'stylized-poster'"
-    ></app-stylized-basic-options>
+    <app-remix-basic-options *ngIf="generatorService.generatorType === 'remix-poster'"></app-remix-basic-options>
   </div>
   <div class="customizeContainer optionsWrapper" *ngIf="selectedTab === 1">
-    <!-- <input [(colorPicker)]="background" [style.background]="background" (colorPickerSelect)="rerunImage()" [cpOKButton]="true"/> -->
+    <app-remix-customize-options *ngIf="generatorService.generatorType === 'remix-poster'"></app-remix-customize-options>
   </div>
   <div class="finishContainer optionsWrapper" *ngIf="selectedTab === 2">
     <div class="optionWrapper">

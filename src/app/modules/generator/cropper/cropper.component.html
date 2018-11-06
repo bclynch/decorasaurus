@@ -1,0 +1,61 @@
+<div class="cropperContainer">
+  <angular-cropper #angularCropper [cropperOptions]="cropperConfig" [imageUrl]="imgUrl"></angular-cropper>
+  <div class="buttonsWrapper">
+    <button 
+      mat-button 
+      color="primary" 
+      matTooltip="Zoom In"
+      (click)="zoom('in')"  
+    >
+      <mat-icon>add</mat-icon>
+    </button>
+    <button 
+      mat-button 
+      color="primary" 
+      matTooltip="Zoom Out"
+      (click)="zoom('out')"  
+    >
+      <mat-icon>remove</mat-icon>
+    </button>
+    <button 
+      mat-button 
+      color="primary" 
+      matTooltip="Vertical Orientation"
+      (click)="flipRatio('vertical')"  
+    >
+      <mat-icon>panorama_vertical</mat-icon>
+    </button>
+    <button 
+      mat-button 
+      color="primary" 
+      matTooltip="Horizontal Orientation"
+      (click)="flipRatio('horizontal')"  
+    >
+      <mat-icon>panorama_horizontal</mat-icon>
+    </button>
+    <button 
+      mat-button 
+      color="primary" 
+      matTooltip="Rotate Forward"
+      (click)="rotate('left')"  
+    >
+      <mat-icon>redo</mat-icon>
+    </button>
+    <button 
+      mat-button 
+      color="primary" 
+      matTooltip="Rotate Backward"
+      (click)="rotate('right')"  
+    >
+      <mat-icon>undo</mat-icon>
+    </button>
+  </div>
+  <div class="contWrapper">
+    <button 
+      class="crop" 
+      mat-flat-button 
+      color="primary" 
+      (click)="processCrop()"
+    >Crop and Continue</button>
+  </div>
+</div>

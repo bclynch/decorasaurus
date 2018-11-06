@@ -30,7 +30,9 @@
               "src/styles.scss",
               "./node_modules/mapbox-gl/dist/mapbox-gl.css"
             ],
-            "scripts": []
+            "scripts": [
+              "./node_modules/ml5/dist/ml5.min.js"
+            ]
           },
           "configurations": {
             "production": {

@@ -6,8 +6,8 @@
       cpOutputFormat="hsla"
       cpAlphaChannel="disabled"
       [cpDisableInput]="true" 
-      [(colorPicker)]="trace" 
-      [style.background]="trace" 
+      [(colorPicker)]="generatorService.traceColor" 
+      [style.background]="generatorService.traceColor" 
       (colorPickerClose)="updateColors()"
     />
   </div>
@@ -18,8 +18,8 @@
       cpOutputFormat="hex"
       cpAlphaChannel="disabled" 
       [cpDisableInput]="true"
-      [(colorPicker)]="background" 
-      [style.background]="background" 
+      [(colorPicker)]="generatorService.backgroundColor" 
+      [style.background]="generatorService.backgroundColor" 
       (colorPickerChange)="updateColors()"
     />
   </div>

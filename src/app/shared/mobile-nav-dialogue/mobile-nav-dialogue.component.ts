@@ -9,7 +9,7 @@ import { MatDialogRef } from '@angular/material';
 export class MobileNavDialogueComponent implements OnInit {
 
   sections = [
-    { label: 'Create', subSections: ['Custom Stylized Posters', 'City Map Posters', 'Patent Posters'] },
+    { label: 'Create', subSections: ['Custom Remix Posters', 'City Map Posters', 'Patent Posters'] },
     { label: 'About', subSections: [] },
     { label: 'Help', subSections: ['FAQs', 'Contact'] }
   ];

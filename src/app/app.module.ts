@@ -23,6 +23,7 @@ import { SettingsService } from './services/settings.service';
 import { CookieService } from 'ngx-cookie-service';
 import { CartService, AddCartNav } from './services/cart.service';
 import { StripeService, AddedSnackbar } from './services/stripe.service';
+import { GeneratorService } from './services/generator.service';
 
 @NgModule({
   entryComponents: [
@@ -56,7 +57,8 @@ import { StripeService, AddedSnackbar } from './services/stripe.service';
     CartService,
     AnalyticsService,
     SettingsService,
-    StripeService
+    StripeService,
+    GeneratorService
   ],
   bootstrap: [AppComponent]
 })

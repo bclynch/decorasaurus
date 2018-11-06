@@ -2,10 +2,10 @@ import { Component, OnInit, OnDestroy, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MoltinProduct } from '../../../providers/moltin/models/product';
 import { Moltin } from '../../../providers/moltin/moltin';
-import { DomSanitizer } from '@angular/platform-browser';
 import { CartService } from 'src/app/services/cart.service';
 import { SubscriptionLike } from 'rxjs';
 import * as domtoimage from 'dom-to-image';
+import { GeneratorService } from 'src/app/services/generator.service';
 // import { saveAs } from 'file-saver';
 
 
@@ -19,16 +19,11 @@ export class GeneratorComponent implements OnInit, OnDestroy {
 
   paramsSubscription: SubscriptionLike;
   productSubscription: SubscriptionLike;
+  tracingSubscription: SubscriptionLike;
 
-  generatorType;
+  tracing: boolean;
   productId: string;
   product: MoltinProduct;
-
-  // // poster props
-  background = 'white';
-  tracing = false;
-  posterWidth = 12; // inches
-  posterHeight = 18; // inches
 
   // patent props
   posterSVG = null;
@@ -36,16 +31,16 @@ export class GeneratorComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private moltin: Moltin,
-    private _DomSanitizationService: DomSanitizer,
     private cartService: CartService,
-    private elRef: ElementRef
+    private elRef: ElementRef,
+    private generatorService: GeneratorService
   ) {
     this.paramsSubscription = this.route.params.subscribe((params) => {
-      this.generatorType = params.type;
+      this.generatorService.generatorType = params.type;
 
       // identify product id
-      switch (this.generatorType) {
-        case 'stylized-poster':
+      switch (this.generatorService.generatorType) {
+        case 'remix-poster':
           this.productId = '43a8b3fb-9da1-40f8-b02b-b508cb633006';
           break;
         case 'patent-poster':
@@ -58,26 +53,24 @@ export class GeneratorComponent implements OnInit, OnDestroy {
 
       // fetch product info
       this.productSubscription = this.moltin.getProductById(this.productId).subscribe(product => {
-        // console.log(product);
-        this.product = product;
+        this.generatorService.product = product;
       });
     });
+
+    this.tracingSubscription = this.generatorService.tracing.subscribe(
+      tracing => this.tracing = tracing
+    );
   }
 
   ngOnInit() {
+    this.generatorService.posterElement = this.elRef.nativeElement.querySelector('#inputImage');
+    console.log(this.generatorService.posterElement);
   }
 
   ngOnDestroy() {
     this.paramsSubscription.unsubscribe();
     this.productSubscription.unsubscribe();
-  }
-
-  cleanSVG(svg: string) {
-    if (svg) {
-      this.posterSVG = this._DomSanitizationService.bypassSecurityTrustUrl(svg);
-    } else {
-      this.posterSVG = null;
-    }
+    this.tracingSubscription.unsubscribe();
   }
 
   addToCart() {
@@ -86,7 +79,7 @@ export class GeneratorComponent implements OnInit, OnDestroy {
     domtoimage.toPng(node)
       .then((png) => {
         // saveAs(blob, 'Student-Talks-poster.png'); -- Must be 'toBLob' not 'toPng
-        this.cartService.addCustomToCart(this.product, png, this.background);
+        this.cartService.addCustomToCart(this.product, png, this.generatorService.backgroundColor);
       })
       .catch(function (error) {
         console.error('oops, something went wrong!', error);

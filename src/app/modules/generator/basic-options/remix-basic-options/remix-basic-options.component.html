@@ -1,0 +1,24 @@
+<div class="basicOptionsContainer">
+  <div class="fileUploadContainer" *ngIf="!imgUrl && !readingFile">
+    <label for="file">
+      <file-drop (onFileDrop)="dropped($event)" customstyle="fileDrop">
+        <div><mat-icon>cloud_upload</mat-icon></div>
+        <div>Drag and drop image here or click to select</div>
+      </file-drop>
+    </label>
+    <input 
+      type="file" 
+      id="file" 
+      name="file" 
+      accept="image/*" 
+      (change)="fileChangeEvent($event)"
+    />
+  </div>
+  <div class="spinnerContainer" *ngIf="readingFile">
+    <mat-spinner></mat-spinner>
+  </div>
+  <app-cropper 
+    *ngIf="imgUrl" 
+    [imgUrl]="imgUrl"
+  ></app-cropper>
+</div>

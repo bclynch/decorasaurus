@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { GeneratorService } from 'src/app/services/generator.service';
 
 @Component({
   selector: 'app-colors-picker',
@@ -6,18 +7,15 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./colors-picker.component.scss']
 })
 export class ColorsPickerComponent implements OnInit {
-  @Input() trace: string;
-  @Input() background: string;
-  @Output() posterBackground: EventEmitter<string> = new EventEmitter<string>();
-  @Output() posterTrace: EventEmitter<string> = new EventEmitter<string>();
 
-  constructor() { }
+  constructor(
+    private generatorService: GeneratorService
+  ) { }
 
   ngOnInit() {
   }
 
   updateColors() {
-    this.posterBackground.emit(this.background);
-    this.posterTrace.emit(this.trace);
+    // if change trace color on patent page need to rerun the thing
   }
 }

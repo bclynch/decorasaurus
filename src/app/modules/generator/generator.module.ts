@@ -10,13 +10,15 @@ import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
 
 import { ENV } from '../../../environments/environment';
 import { MapBasicOptionsComponent } from './basic-options/map-basic-options/map-basic-options.component';
-import { StylizedBasicOptionsComponent } from './basic-options/stylized-basic-options/stylized-basic-options.component';
+import { RemixBasicOptionsComponent } from './basic-options/remix-basic-options/remix-basic-options.component';
 import { PatentBasicOptionsComponent, PatentInfoDialogue } from './basic-options/patent-basic-options/patent-basic-options.component';
 import { ColorsPickerComponent } from './colors-picker/colors-picker.component';
 import { OptionsContainerComponent } from './options-container/options-container.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { FormsModule } from '@angular/forms';
 import { PatentExpandDialogueComponent } from './patent-expand-dialogue/patent-expand-dialogue.component';
+import { CropperComponent } from './cropper/cropper.component';
+import { RemixCustomizeOptionsComponent } from './customize-options/remix-customize-options/remix-customize-options.component';
 
 const routes: Routes = [
   { path: ':type', component: GeneratorComponent }
@@ -42,12 +44,14 @@ const routes: Routes = [
   declarations: [
     GeneratorComponent,
     MapBasicOptionsComponent,
-    StylizedBasicOptionsComponent,
+    RemixBasicOptionsComponent,
     PatentBasicOptionsComponent,
     ColorsPickerComponent,
     OptionsContainerComponent,
     PatentInfoDialogue,
-    PatentExpandDialogueComponent
+    PatentExpandDialogueComponent,
+    CropperComponent,
+    RemixCustomizeOptionsComponent
   ]
 })
 export class GeneratorModule { }

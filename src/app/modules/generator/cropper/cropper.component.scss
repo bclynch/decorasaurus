@@ -1,0 +1,24 @@
+.cropperContainer {
+  margin: 0 auto;
+  position: relative;
+  width: 250px;
+
+  .buttonsWrapper {
+    display: flex;
+    justify-content: center;
+
+    > button {
+      padding: 0 5px;
+      min-width: 0;
+    }
+  }
+  .contWrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    
+    .crop {
+      color: var(--color-white);
+    }
+  }
+}
