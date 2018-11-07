@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { UploadEvent, FileSystemFileEntry, FileSystemDirectoryEntry } from 'ngx-file-drop';
-import { APIService } from '../../../../services/api.service';
-import { DomSanitizer } from '@angular/platform-browser';
 import { GeneratorService } from 'src/app/services/generator.service';
+import { APIService } from 'src/app/services/api.service';
+import { UtilService } from 'src/app/services/util.service';
 
 @Component({
   selector: 'app-remix-basic-options',
@@ -13,13 +13,14 @@ export class RemixBasicOptionsComponent implements OnInit {
 
   displayUpload = true;
   uploadedFile;
-  imgUrl;
   readingFile = false;
+  photoResults = [];
+  searchActive = false;
 
   constructor(
+    private generatorService: GeneratorService,
     private apiService: APIService,
-    private _DomSanitizationService: DomSanitizer,
-    private generatorService: GeneratorService
+    private utilService: UtilService
   ) { }
 
   ngOnInit() {
@@ -59,8 +60,24 @@ export class RemixBasicOptionsComponent implements OnInit {
     const fileReader = new FileReader();
     fileReader.onload = () => {
       this.readingFile = false;
-      this.imgUrl = fileReader.result;
+      this.generatorService.cropperImgUrl = fileReader.result;
     };
     fileReader.readAsDataURL(file);
+  }
+
+  searchPhotos(query: string) {
+    if (query) {
+      this.searchActive = true;
+      this.apiService.searchPhotos(query).subscribe(
+        (photos) => this.photoResults = photos.map((photo) => ({ thumbnail: photo.src.tiny, original: photo.src.original })),
+        (err) => console.log(err)
+      );
+    }
+  }
+
+  selectPhoto(url: string) {
+    this.utilService.convertImageToDataURL(url).then(
+      (result) => this.generatorService.cropperImgUrl = result
+    );
   }
 }

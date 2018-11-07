@@ -1,16 +1,19 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Http, Response, RequestOptions, Headers } from '@angular/http';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { ENV } from '../../environments/environment';
 
 import { Apollo } from 'apollo-angular';
+// import { HttpHeaders } from '@angular/common/http';
+import { HttpErrorResponse, HttpHeaders, HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class APIService {
 
   constructor(
     private http: Http,
+    private httpClient: HttpClient,
     private apollo: Apollo
   ) {}
 
@@ -166,6 +169,22 @@ export class APIService {
       )
     ).pipe(catchError(
         (error: Response) => {
+          return Observable.throw('Something went wrong');
+        }
+    ));
+  }
+
+  searchPhotos(query: string) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': ENV.pexelsKey
+      })
+    };
+    return this.httpClient.get(`https://api.pexels.com/v1/search?query=${query}&per_page=30&page=1`, httpOptions)
+    .pipe(map((response: any) => response.photos))
+    .pipe(catchError(
+        (error: Response) => {
+          console.log(error);
           return Observable.throw('Something went wrong');
         }
     ));

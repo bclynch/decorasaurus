@@ -1,5 +1,35 @@
 <div class="basicOptionsContainer">
-  <div class="fileUploadContainer" *ngIf="!imgUrl && !readingFile">
+  <div class="photoSearchContainer" *ngIf="!generatorService.cropperImgUrl">
+    <form (submit)="searchPhotos(query)">
+      <div class="inputWrapper">
+        <mat-form-field>
+          <input
+            matInput
+            placeholder="Search Photos" 
+            [(ngModel)]="query" 
+            name="query"
+          />
+        </mat-form-field>
+        <button 
+          mat-button 
+          type="submit" 
+          class="boldFont" 
+          color="primary"
+        >Search</button>
+      </div>
+    </form>
+    <div class="resultsContainer">
+      <div class="photoWrapper" *ngFor="let photo of photoResults" (click)="selectPhoto(photo.original)">
+        <img [src]="photo.thumbnail" />
+      </div>
+    </div>
+  </div>
+  <div class="divider" *ngIf="!generatorService.cropperImgUrl && !searchActive">
+    <div class="line"></div>
+    <div class="boldFont">OR</div>
+    <div class="line"></div>
+  </div>
+  <div class="fileUploadContainer" *ngIf="!generatorService.cropperImgUrl && !readingFile && !searchActive">
     <label for="file">
       <file-drop (onFileDrop)="dropped($event)" customstyle="fileDrop">
         <div><mat-icon>cloud_upload</mat-icon></div>
@@ -18,7 +48,7 @@
     <mat-spinner></mat-spinner>
   </div>
   <app-cropper 
-    *ngIf="imgUrl" 
-    [imgUrl]="imgUrl"
+    *ngIf="generatorService.cropperImgUrl" 
+    [imgUrl]="generatorService.cropperImgUrl"
   ></app-cropper>
 </div>

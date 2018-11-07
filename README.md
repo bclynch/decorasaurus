@@ -3,7 +3,9 @@
 
 ## Todos
 - Fusion Remix
-    - Would like to keep the image in the cropper if the user returns to the first tab and have a way to reset it to add a new image
+    - Size as custom field and maybe custom fields for overlay stuff
+- Map Generator
+    - All
 - On add to cart work
     - Custom product thoughts https://forum.moltin.com/t/raise-the-maximum-limit-of-child-products-number/618/5
     - To send back the poster probably need to package it up as a png so we can include custom background and all and send back as a blob. Can use domtoimage to create a blob then send on back. - check
@@ -24,13 +26,8 @@
     - Account page similar to S&C with addresses / customer info / etc
 - Moltin Wiring
     - Need add / save / fetch addresses for signed in users
-    - Stripe integration - check
     - Paypal Integration
         - https://forum.moltin.com/t/can-we-get-demo-app-on-nextjs-with-moltin-if-yes-then-how-can-you-please-help-me/809/7
-    - Can grab a user token for accessing addresses and what not and it correctly locks you out from other user's info
-- Ionic -> Material transformation - 1 day 1/1
-    - Integrate material components for buttons and inputs and use going forward
-    - Fix modals / tooltips / popovers
 - Splash page -1 day
 - Wire in Moltin API and see what's left for needs with our own db - 2 day
 - Cart Reference Id:

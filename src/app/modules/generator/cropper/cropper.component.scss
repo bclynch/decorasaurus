@@ -1,8 +1,12 @@
 .cropperContainer {
   margin: 0 auto;
   position: relative;
-  width: 250px;
+  width: 225px;
 
+  .resetWrapper {
+    display: flex;
+    justify-content: center;
+  }
   .buttonsWrapper {
     display: flex;
     justify-content: center;

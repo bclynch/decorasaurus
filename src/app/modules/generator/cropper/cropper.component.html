@@ -1,4 +1,7 @@
 <div class="cropperContainer">
+  <div class="resetWrapper">
+    <button mat-button color="primary" (click)="generatorService.cropperImgUrl = null">Reset and Upload New Image</button>
+  </div>
   <angular-cropper #angularCropper [cropperOptions]="cropperConfig" [imageUrl]="imgUrl"></angular-cropper>
   <div class="buttonsWrapper">
     <button 

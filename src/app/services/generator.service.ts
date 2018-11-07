@@ -13,6 +13,7 @@ export class GeneratorService {
   product: MoltinProduct;
   posterElement;
   processingFusion = false;
+  cropperImgUrl: string | ArrayBuffer;
 
   // poster props
   backgroundColor = 'white';
