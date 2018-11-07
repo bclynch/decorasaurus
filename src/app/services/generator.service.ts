@@ -8,9 +8,11 @@ declare let ml5: any;
 export class GeneratorService {
 
   generatorType: string;
+  remixType: 'fusion' | 'trace'; // testing
   mobileOptionsActive = false;
   product: MoltinProduct;
   posterElement;
+  processingFusion = false;
 
   // poster props
   backgroundColor = 'white';
@@ -18,7 +20,6 @@ export class GeneratorService {
   posterWidth = 12; // inches
   posterHeight = 18; // inches
   posterBlob: Blob;
-  posterSrc;
   dimensions = {
     Small: {
       width: 8,
@@ -40,7 +41,6 @@ export class GeneratorService {
   orientation: 'Portrait' | 'Landscape' = 'Portrait';
 
   // patent props
-  patentSearchResults: string[];
   patentName: string;
   patentImages: string[];
   patentNumber: string;
@@ -49,6 +49,8 @@ export class GeneratorService {
   public tracingSubject: BehaviorSubject<boolean>;
   public optionsTab: Observable<number>;
   public optionsTabSubject: BehaviorSubject<number>;
+  public posterSrc: Observable<string | SafeUrl>;
+  public posterSrcSubject: BehaviorSubject<string | SafeUrl>;
 
   constructor(
 
@@ -57,20 +59,44 @@ export class GeneratorService {
     this.tracing = this.tracingSubject;
     this.optionsTabSubject = new BehaviorSubject<number>(0);
     this.optionsTab = this.optionsTabSubject;
+    this.posterSrcSubject = new BehaviorSubject<string | SafeUrl>(null);
+    this.posterSrc = this.posterSrcSubject;
   }
 
   fuseImages(model: string) {
     this.tracingSubject.next(true);
-    console.log(this.posterElement);
+    this.processingFusion = true;
+    this.posterSrcSubject.next(null);
     ml5.styleTransfer(`assets/models/${model}`)
     .then(style => {
       // console.log(style.transfer(elem));
       style.transfer(this.posterElement).then((result) => {
         // this.style1RemixSubject.next(result.src);
-        this.posterSrc = result.src;
-        console.log(this.posterSrc);
+        this.processingFusion = false;
+        this.posterSrcSubject.next(result.src);
         this.tracingSubject.next(false);
       });
     });
+  }
+
+  selectSize(i: number) {
+    this.size = i === 0 ? 'Small' : i === 1 ? 'Medium' : 'Large';
+    this.quantifyDimensions();
+  }
+
+  selectOrientation(option: 'Portrait' | 'Landscape') {
+    if (option === 'Portrait') {
+      this.orientationMultiplier = 1;
+      this.orientation = option;
+    } else {
+      this.orientationMultiplier = 1.5;
+      this.orientation = option;
+    }
+    this.quantifyDimensions();
+  }
+
+  quantifyDimensions() {
+    this.posterWidth = this.dimensions[this.size].width * this.orientationMultiplier;
+    this.posterHeight = this.dimensions[this.size].height / this.orientationMultiplier;
   }
 }

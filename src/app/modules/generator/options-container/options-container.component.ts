@@ -28,25 +28,4 @@ export class OptionsContainerComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.tabSubscription.unsubscribe();
   }
-
-  selectSize(i: number) {
-    this.generatorService.size = i === 0 ? 'Small' : i === 1 ? 'Medium' : 'Large';
-    this.quantifyDimensions();
-  }
-
-  selectOrientation(option: number) {
-    if (option === 0) {
-      this.generatorService.orientationMultiplier = 1;
-      this.generatorService.orientation = 'Portrait';
-    } else {
-      this.generatorService.orientationMultiplier = 1.5;
-      this.generatorService.orientation = 'Landscape';
-    }
-    this.quantifyDimensions();
-  }
-
-  quantifyDimensions() {
-    this.generatorService.posterWidth = this.generatorService.dimensions[this.generatorService.size].width * this.generatorService.orientationMultiplier;
-    this.generatorService.posterHeight = this.generatorService.dimensions[this.generatorService.size].height / this.generatorService.orientationMultiplier;
-  }
 }

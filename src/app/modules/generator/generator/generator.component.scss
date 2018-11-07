@@ -14,10 +14,28 @@
 
     .background {
       width: 4000px; // size of svg-- might be modding depending on how big is required for a nice print
-    }
-    img {
-      width: 600px; // testing
-      height: 600px;
+
+      &.fusion {
+        width: auto;
+
+        img {
+
+          // 800px takes way too long
+          // 500px is solid time, but crummy blown up to pdf
+          &.Portrait {
+            width: calc(650px * 2 / 3);
+            height: 650px;
+          }
+          &.Landscape {
+            width: 650px;
+            height: calc(650px * 2 / 3);
+          }
+          &.processing {
+            width: 650px!important;
+            height: 650px!important;
+          }
+        }
+      }
     }
   }
   .posterContainer {
@@ -110,8 +128,33 @@
           bottom: 0;
         }
       }
-      img {
-        width: 300px;
+      &.Portrait {
+        width: 75%;
+
+        &.fusion {
+
+          img {
+            height: 450px;
+          }
+        }
+        img {
+          width: 100%;
+        }
+      }
+      &.Landscape {
+        width: 80%;
+
+        &.fusion {
+          width: 80vw;
+
+          img {
+            width: 100%;
+            height: calc(80vw * 2 / 3);
+          }
+        }
+        img {
+          width: 100%;
+        }
       }
       .background {
         position: relative;
@@ -164,6 +207,25 @@
         
         i {
           display: block;
+        }
+        &.Portrait {
+          width: auto;
+
+          img {
+            width: 300px;
+          }
+        }
+        &.Landscape {
+          max-width: 60%;
+
+          &.fusion {
+            width: 40vw;
+
+            img {
+              width: 100%;
+              height: calc(40vw * 2 /3);
+            }
+          }
         }
       }
     }

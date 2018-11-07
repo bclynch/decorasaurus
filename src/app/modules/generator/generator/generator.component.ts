@@ -1,11 +1,11 @@
 import { Component, OnInit, OnDestroy, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MoltinProduct } from '../../../providers/moltin/models/product';
 import { Moltin } from '../../../providers/moltin/moltin';
 import { CartService } from 'src/app/services/cart.service';
 import { SubscriptionLike } from 'rxjs';
 import * as domtoimage from 'dom-to-image';
 import { GeneratorService } from 'src/app/services/generator.service';
+import { SafeUrl } from '@angular/platform-browser';
 // import { saveAs } from 'file-saver';
 
 
@@ -20,13 +20,12 @@ export class GeneratorComponent implements OnInit, OnDestroy {
   paramsSubscription: SubscriptionLike;
   productSubscription: SubscriptionLike;
   tracingSubscription: SubscriptionLike;
+  posterSourceSubscription: SubscriptionLike;
 
   tracing: boolean;
   productId: string;
-  product: MoltinProduct;
-
-  // patent props
-  posterSVG = null;
+  posterSrc: string | SafeUrl;
+  posterSrcHidden: string | SafeUrl;
 
   constructor(
     private route: ActivatedRoute,
@@ -60,17 +59,27 @@ export class GeneratorComponent implements OnInit, OnDestroy {
     this.tracingSubscription = this.generatorService.tracing.subscribe(
       tracing => this.tracing = tracing
     );
+
+    this.posterSourceSubscription = this.generatorService.posterSrc.subscribe(
+      src => {
+        this.posterSrc = src;
+        if (!this.generatorService.processingFusion) this.posterSrcHidden = src;
+        this.generatorService.posterElement = this.elRef.nativeElement.querySelector('#inputImage');
+      }
+    );
+
+    // resetting this so it doesn't mess with formatting of poster on path change
+    this.generatorService.remixType = null;
   }
 
   ngOnInit() {
-    this.generatorService.posterElement = this.elRef.nativeElement.querySelector('#inputImage');
-    console.log(this.generatorService.posterElement);
   }
 
   ngOnDestroy() {
     this.paramsSubscription.unsubscribe();
     this.productSubscription.unsubscribe();
     this.tracingSubscription.unsubscribe();
+    this.posterSourceSubscription.unsubscribe();
   }
 
   addToCart() {
@@ -79,7 +88,7 @@ export class GeneratorComponent implements OnInit, OnDestroy {
     domtoimage.toPng(node)
       .then((png) => {
         // saveAs(blob, 'Student-Talks-poster.png'); -- Must be 'toBLob' not 'toPng
-        this.cartService.addCustomToCart(this.product, png, this.generatorService.backgroundColor);
+        this.cartService.addCustomToCart(this.generatorService.product, png, this.generatorService.backgroundColor);
       })
       .catch(function (error) {
         console.error('oops, something went wrong!', error);

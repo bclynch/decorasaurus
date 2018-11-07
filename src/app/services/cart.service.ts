@@ -7,6 +7,7 @@ import { MAT_BOTTOM_SHEET_DATA, MatBottomSheet, MatBottomSheetRef } from '@angul
 import { MoltinProduct } from '../providers/moltin/models/product';
 import { BehaviorSubject, Observable, SubscriptionLike} from 'rxjs';
 import { APIService } from './api.service';
+import { GeneratorService } from './generator.service';
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +29,8 @@ export class CartService implements OnDestroy {
     private customerService: CustomerService,
     private router: Router,
     private bottomSheet: MatBottomSheet,
-    private apiService: APIService
+    private apiService: APIService,
+    private generatorService: GeneratorService
   ) {
     this.cartSubject = new BehaviorSubject<MoltinCartItem[]>(null);
     this.cartItems = this.cartSubject;
@@ -72,6 +74,7 @@ export class CartService implements OnDestroy {
     const formData = new FormData();
     formData.append('poster', blob);
     formData.append('background', background);
+    formData.append('orientation', this.generatorService.orientation);
     // Need to create thumbnail for product + pdf to s3 then add to cart
     this.apiService.processPoster(formData).subscribe(
       (result: { type: 'thumbnail' | 'pdf', S3Url: string }[]) => {
@@ -102,18 +105,18 @@ export class CartService implements OnDestroy {
     const formData = new FormData();
     formData.append('poster', blob);
     formData.append('background', background);
+    formData.append('orientation', this.generatorService.orientation);
     // Need to create thumbnail for product + pdf to s3 then add to cart
     this.apiService.processPoster(formData).subscribe(
       (result: { type: 'thumbnail' | 'pdf', S3Url: string }[]) => {
         console.log(result);
-        // product.thumbnail_url = result.filter((link) => link.type === 'thumbnail')[0].S3Url;
-        // product.pdf_url = result.filter((link) => link.type === 'pdf')[0].S3Url;
         console.log(product);
         const item = {
           name: `My ${Date.now().toString()} Item`,
           sku: Date.now().toString(),
           description: 'My first custom item!',
           thumbnail_url: result.filter((link) => link.type === 'thumbnail')[0].S3Url,
+          pdf_url: result.filter((link) => link.type === 'pdf')[0].S3Url,
           quantity: 1,
           price: {
             amount: 10000
@@ -123,9 +126,6 @@ export class CartService implements OnDestroy {
         this.addToCartSubscription = this.moltin.addCustomToCart(this.customerService.customerUuid, item).subscribe(
           (derp) => {
             console.log(derp);
-
-            // append links to cart items
-            // this.moltin.
 
             this.cartSubject.next(derp);
 

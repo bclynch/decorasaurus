@@ -2,15 +2,19 @@
   <div class="generatorContainer" [style.background]="generatorService.backgroundColor">
     <div class="posterContainer">
       <!-- <div class="patentTitle">{{patentName}}</div> -->
-      <div class="posterWrapper" *ngIf="generatorService.posterSrc">
+      <div 
+        class="posterWrapper" 
+        *ngIf="posterSrc" 
+        [ngClass]="[ generatorService.orientation, generatorService.remixType === 'fusion' ? 'fusion' : '' ]"
+      >
         <div class="background" [style.background]="generatorService.backgroundColor">
-          <img [src]="generatorService.posterSrc" />
+          <img [src]="posterSrc" />
         </div>
         <i class="horizontal">{{generatorService.posterWidth}} inch</i>
         <i class="vertical"><i>{{generatorService.posterHeight}} inch</i></i>
       </div>
       <mat-spinner *ngIf="tracing"></mat-spinner>
-      <div *ngIf="!generatorService.posterSrc && !tracing" class="emptyState">
+      <div *ngIf="!posterSrc && !tracing" class="emptyState">
         <div><img class="logoImg" src="../../../assets/dino.svg" /></div>
         <div *ngIf="generatorService.generatorType === 'patent-poster'">Select a patent to display your creation here</div>
         <div *ngIf="generatorService.generatorType === 'remix-poster'">Upload and remix an image to display your creation here</div>
@@ -30,9 +34,18 @@
       (addToCart)="addToCart()"
     ></app-options-container>
     <!-- hidden container to have full size image to use for dom to image -->
-    <div class="hidden">
-      <div class="background" [style.background]="generatorService.backgroundColor" id="poster">
-        <img [src]="generatorService.posterSrc" id="inputImage" />
+    <div class="hidden" *ngIf="posterSrcHidden">
+      <div 
+        class="background" 
+        [style.background]="generatorService.backgroundColor" 
+        id="poster" 
+        [ngClass]="generatorService.remixType === 'fusion' ? 'fusion' : ''"
+      >
+        <img 
+          [src]="posterSrcHidden" 
+          id="inputImage" 
+          [ngClass]="[generatorService.orientation, generatorService.processingFusion ? 'processing' : '']"
+        />
       </div>
     </div>
   </div>

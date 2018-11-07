@@ -58,10 +58,11 @@ export class PatentBasicOptionsComponent implements OnInit, OnDestroy {
   selectPatent(i: number) {
     this.generatorService.tracingSubject.next(true);
     this.generatorService.mobileOptionsActive = false;
-    this.generatorService.posterSrc = null;
+    this.generatorService.posterSrcSubject.next(null);
     this.traceSubscription = this.apiService.tracePatent(this.generatorService.patentImages[i], this.generatorService.traceColor).subscribe(
       result => {
-        this.generatorService.posterSrc = this._DomSanitizationService.bypassSecurityTrustUrl(result.resp);
+        this.generatorService.posterSrcSubject.next(this._DomSanitizationService.bypassSecurityTrustUrl(result.resp));
+        this.generatorService.tracingSubject.next(false);
       }
     );
   }
@@ -70,7 +71,7 @@ export class PatentBasicOptionsComponent implements OnInit, OnDestroy {
     e.preventDefault();
     if (this.generatorService.patentNumber) {
       this.loadingPatentImages = true;
-      this.generatorService.patentSearchResults = [];
+      this.generatorService.patentImages = [];
       this.patentSubscription = this.apiService.fetchPatent(this.generatorService.patentNumber).subscribe(
         result => {
           this.generatorService.patentImages = result.resp.images;

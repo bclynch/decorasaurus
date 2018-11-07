@@ -61,19 +61,19 @@ export class RemixCustomizeOptionsComponent implements OnInit, OnDestroy {
   }
 
   radioChange() {
-    console.log(this.selectedRemix);
+    this.generatorService.remixType = this.selectedRemix;
   }
 
   trace() {
     this.generatorService.tracingSubject.next(true);
-    this.generatorService.posterSrc = null;
+    this.generatorService.posterSrcSubject.next(null);
     const formData = new FormData();
     formData.append('cropped', this.generatorService.posterBlob);
     formData.append('color', this.generatorService.traceColor);
 
     this.traceSubscription = this.apiService.posterizeImage(formData).subscribe(
       result => {
-        this.generatorService.posterSrc = this._DomSanitizationService.bypassSecurityTrustUrl(result.image);
+        this.generatorService.posterSrcSubject.next(this._DomSanitizationService.bypassSecurityTrustUrl(result.image));
         this.generatorService.tracingSubject.next(false);
       }
     );

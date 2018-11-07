@@ -3,11 +3,7 @@
 
 ## Todos
 - Fusion Remix
-    - Seems a bit delayed with populating the poster preview. Maybe try a subscription
-    - Seems like it prefers making a square, but you can stretch it back to its desired orientation and it seems like it doesn't stretch too bad
-    - Keeping it 600px for now, but takes a while. Consider making it work server side for mobile devices? Try smaller and see if it still looks okay
-    - Need to work on getting the dimensions right depending on what orientation we are using
-    - Add to cart was jacked up
+    - Would like to keep the image in the cropper if the user returns to the first tab and have a way to reset it to add a new image
 - On add to cart work
     - Custom product thoughts https://forum.moltin.com/t/raise-the-maximum-limit-of-child-products-number/618/5
     - To send back the poster probably need to package it up as a png so we can include custom background and all and send back as a blob. Can use domtoimage to create a blob then send on back. - check

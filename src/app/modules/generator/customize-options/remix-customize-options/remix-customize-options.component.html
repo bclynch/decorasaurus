@@ -1,5 +1,5 @@
 <div class="customizeOptionsContainer">
-  <mat-radio-group class="choiceContainer" [(ngModel)]="selectedRemix">
+  <mat-radio-group class="choiceContainer" [(ngModel)]="selectedRemix" (change)="radioChange()">
     <mat-radio-button value="fusion">Fusion Remix</mat-radio-button>
     <mat-radio-button value="trace">Trace Remix</mat-radio-button>
   </mat-radio-group>

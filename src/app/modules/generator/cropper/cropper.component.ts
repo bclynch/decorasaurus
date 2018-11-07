@@ -27,6 +27,8 @@ export class CropperComponent implements OnInit {
     toggleDragModeOnDblclick: false
   };
 
+  orientation: 'Portrait' | 'Landscape' = 'Portrait';
+
   constructor(
     private generatorService: GeneratorService
   ) { }
@@ -57,20 +59,24 @@ export class CropperComponent implements OnInit {
       this.angularCropper.cropper.reset();
       this.angularCropper.cropper.setAspectRatio(3 / 2);
       this.cropperConfig.aspectRatio = 3 / 2;
+      this.orientation = 'Landscape';
     } else {
       this.angularCropper.cropper.reset();
       this.angularCropper.cropper.setAspectRatio(2 / 3);
       this.cropperConfig.aspectRatio = 2 / 3;
+      this.orientation = 'Portrait';
     }
   }
 
   processCrop() {
     this.generatorService.tracingSubject.next(true);
+    this.generatorService.posterSrcSubject.next(null);
+    this.generatorService.selectOrientation(this.orientation);
 
     const croppedCanvas = this.angularCropper.cropper.getCroppedCanvas();
     croppedCanvas.toBlob((blob) => {
       this.generatorService.posterBlob = blob;
-      this.generatorService.posterSrc = croppedCanvas.toDataURL();
+      this.generatorService.posterSrcSubject.next(croppedCanvas.toDataURL());
       this.generatorService.tracingSubject.next(false);
       this.generatorService.optionsTabSubject.next(1);
     });
