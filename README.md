@@ -2,8 +2,14 @@
 
 
 ## Todos
+- Work on overlay engine / component
+- Tweaking output for print
+    - CMYK mod -- difficult...
 - Fusion Remix
     - Size as custom field and maybe custom fields for overlay stuff
+    - Need to make this shit 3rd party 
+        - https://docs.floydhub.com/examples/style_transfer/
+        - With the above can probably tweak the endpoint to accept base64 as well
 - Map Generator
     - All
 - On add to cart work
@@ -35,17 +41,10 @@
     - I create a cart with this uuid (via the carts/{uuid}) endpoint or with the Moltin.Cart({uuid}) JS method
     - I use this cart until the user is logged in and I delete the cart on logout with the Moltin.Cart({uuid}).Delete() (or I keep it, depends…)
 - Poster generator for maps + custom trace pics. - 6 days - spent 3/6
-    - Recommended min size requirements from walgreens
-        - 12x18 : 2682x1788
-        - 20x30 : 4470x2980
-        - 11x14 : 1008x792
     - Patent:
         - Create modal to enlarge images / select
             - Bug with closing modal programmatically https://github.com/ionic-team/ionic/issues/15349
         - Decide what if anything on customize page
-        - Make mobile friendly
-            - Touch issues with ionic 4 https://github.com/ionic-team/ionic/issues/14883
-        - Try adding to cart
         - Trigger auto retrace when change trace color
     - Map
     - Remix

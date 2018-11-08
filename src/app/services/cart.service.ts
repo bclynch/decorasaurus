@@ -75,6 +75,7 @@ export class CartService implements OnDestroy {
     formData.append('poster', blob);
     formData.append('background', background);
     formData.append('orientation', this.generatorService.orientation);
+    formData.append('size', this.generatorService.size);
     // Need to create thumbnail for product + pdf to s3 then add to cart
     this.apiService.processPoster(formData).subscribe(
       (result: { type: 'thumbnail' | 'pdf', S3Url: string }[]) => {
@@ -106,6 +107,7 @@ export class CartService implements OnDestroy {
     formData.append('poster', blob);
     formData.append('background', background);
     formData.append('orientation', this.generatorService.orientation);
+    formData.append('size', this.generatorService.size);
     // Need to create thumbnail for product + pdf to s3 then add to cart
     this.apiService.processPoster(formData).subscribe(
       (result: { type: 'thumbnail' | 'pdf', S3Url: string }[]) => {

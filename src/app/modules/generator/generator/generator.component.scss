@@ -12,9 +12,33 @@
     bottom: 0;
     overflow: hidden;
 
+    // setting width here to make sure our image is properly sized at 300DPI
     .background {
-      width: 4000px; // size of svg-- might be modding depending on how big is required for a nice print
 
+      &.Portrait {
+
+        &.Small {
+          width: (8 * 300px);
+        }
+        &.Medium {
+          width: (12 * 300px);
+        }
+        &.Large {
+          width: (18 * 300px);
+        }
+      }
+      &.Landscape {
+
+        &.Small {
+          width: (12 * 300px);
+        }
+        &.Medium {
+          width: (18 * 300px);
+        }
+        &.Large {
+          width: (27 * 300px);
+        }
+      }
       &.fusion {
         width: auto;
 
@@ -35,6 +59,9 @@
             height: 650px!important;
           }
         }
+      }
+      img {
+        max-width: 100%; // set here so it will scale to the size of the background
       }
     }
   }

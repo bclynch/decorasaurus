@@ -8,7 +8,7 @@ declare let ml5: any;
 export class GeneratorService {
 
   generatorType: string;
-  remixType: 'fusion' | 'trace'; // testing
+  remixType: 'fusion' | 'trace';
   mobileOptionsActive = false;
   product: MoltinProduct;
   posterElement;

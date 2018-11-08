@@ -39,7 +39,7 @@
         class="background" 
         [style.background]="generatorService.backgroundColor" 
         id="poster" 
-        [ngClass]="generatorService.remixType === 'fusion' ? 'fusion' : ''"
+        [ngClass]="[generatorService.remixType === 'fusion' ? 'fusion' : '', generatorService.orientation, generatorService.size]"
       >
         <img 
           [src]="posterSrcHidden" 

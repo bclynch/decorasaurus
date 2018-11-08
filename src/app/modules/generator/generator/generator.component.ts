@@ -44,6 +44,8 @@ export class GeneratorComponent implements OnInit, OnDestroy {
           break;
         case 'patent-poster':
           this.productId = '19d80aa5-df4a-441b-939c-165957700240';
+          // reset orientation in case they switched from a landscape remix or something
+          this.generatorService.orientation = 'Portrait';
           break;
         case 'map-poster':
           this.productId = 'c9d1a039-ed04-444d-a248-e213fca3acc0';

@@ -52,7 +52,7 @@
           class="optionBtn"
           *ngFor="let sizeOption of generatorService.sizeOptions; let i = index;" 
           (click)="generatorService.selectSize(i)"
-          [ngClass]="sizeOption === size ? 'selected' : ''"
+          [ngClass]="sizeOption === generatorService.size ? 'selected' : ''"
         >{{sizeOption}}<br>{{generatorService.dimensions[sizeOption].width}} x {{generatorService.dimensions[sizeOption].height}} in.</div>
       </div>
     </div>
