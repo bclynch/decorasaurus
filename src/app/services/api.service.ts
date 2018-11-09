@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Http, Response, RequestOptions, Headers } from '@angular/http';
+import { Http, Response } from '@angular/http';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { ENV } from '../../environments/environment';
 
 import { Apollo } from 'apollo-angular';
-// import { HttpHeaders } from '@angular/common/http';
-import { HttpErrorResponse, HttpHeaders, HttpClient } from '@angular/common/http';
+import { HttpHeaders, HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class APIService {

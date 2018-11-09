@@ -34,14 +34,14 @@
     <app-remix-customize-options *ngIf="generatorService.generatorType === 'remix-poster'"></app-remix-customize-options>
   </div>
   <div class="finishContainer optionsWrapper" *ngIf="selectedTab === 2">
-    <div class="optionWrapper" *ngIf="generatorType === 'map-poster'">
+    <div class="optionWrapper" *ngIf="generatorService.generatorType === 'map-poster'">
       <div class="optionHeader">Orientation</div>
       <div class="choiceArr">
         <div
           class="optionBtn" 
           *ngFor="let orientationOption of generatorService.orientationOptions; let i = index;" 
           (click)="generatorService.selectOrientation(orientationOption)"
-          [ngClass]="orientation === orientationOption ? 'selected' : ''"
+          [ngClass]="generatorService.orientation === orientationOption ? 'selected' : ''"
         >{{orientationOption}}</div>
       </div>
     </div>

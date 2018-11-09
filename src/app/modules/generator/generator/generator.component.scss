@@ -44,19 +44,18 @@
 
         img {
 
-          // 800px takes way too long
-          // 500px is solid time, but crummy blown up to pdf
+          // this will just be for an in browser demo so low res is fine
           &.Portrait {
-            width: calc(650px * 2 / 3);
-            height: 650px;
+            width: calc(350px * 2 / 3);
+            height: 350px;
           }
           &.Landscape {
-            width: 650px;
-            height: calc(650px * 2 / 3);
+            width: 350px;
+            height: calc(350px * 2 / 3);
           }
           &.processing {
-            width: 650px!important;
-            height: 650px!important;
+            width: 350px!important;
+            height: 350px!important;
           }
         }
       }
@@ -167,6 +166,10 @@
         img {
           width: 100%;
         }
+        .mapWrapper {
+          height: 450px;
+          width: 300px;
+        }
       }
       &.Landscape {
         width: 80%;
@@ -181,6 +184,10 @@
         }
         img {
           width: 100%;
+        }
+        .mapWrapper {
+          width: 450px;
+          height: 300px;
         }
       }
       .background {
@@ -203,6 +210,27 @@
             border-width: 0 1px 1px 0;
           }
         }
+      }
+      .mapWrapper {
+        max-width: 100%;
+
+        mgl-map {
+          height: 100%;
+          width: 100%;
+        }
+      }
+    }
+    .mapboxLinks {
+      color: #bbb;
+      position: absolute;
+      bottom: 10%;
+      font-size: 10px;
+
+      a {
+        color: #bbb;
+      }
+      span {
+        margin: 0 5px;
       }
     }
     .mobileOptionsContainer {
@@ -254,6 +282,10 @@
             }
           }
         }
+      }
+      .mapboxLinks {
+        bottom: 1%;
+        font-size: 12px;
       }
     }
     .optionsContainer {

@@ -1,3 +1,24 @@
-<p>
-  map-basic-options works!
-</p>
+<div class="basicOptionsContainer">
+  <div class="optionWrapper">
+    <div class="optionHeader">City Search</div>
+    <form (submit)="searchLocation($event)">
+      <div class="inputWrapper">
+        <mat-form-field>
+          <input
+            matInput
+            placeholder="Search City" 
+            [(ngModel)]="generatorService.cityQuery" 
+            name="city"
+            id="autocompleteInput"
+          />
+        </mat-form-field>
+        <button 
+          mat-button 
+          type="submit" 
+          class="searchBtn boldFont" 
+          color="primary"
+        >Search</button>
+      </div>
+    </form>
+  </div>
+</div>

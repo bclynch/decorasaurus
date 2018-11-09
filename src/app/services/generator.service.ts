@@ -46,6 +46,14 @@ export class GeneratorService {
   patentImages: string[];
   patentNumber: string;
 
+  // map props
+  redStyle = 'mapbox://styles/bclynch/cjnen2de28pey2rrwy4z4ql7t';
+  yellowStyle = 'mapbox://styles/bclynch/cjndjsgnu19kq2so4pwcsvtks';
+  mapStyle = this.yellowStyle;
+  mapCenter = [-74.0059728, 40.7127753];
+  mapBounds;
+  cityQuery: string;
+
   public tracing: Observable<boolean>;
   public tracingSubject: BehaviorSubject<boolean>;
   public optionsTab: Observable<number>;

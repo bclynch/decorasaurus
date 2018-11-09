@@ -3,13 +3,32 @@
 
 ## Todos
 - Work on overlay engine / component
-- Tweaking output for print
-    - CMYK mod -- difficult...
 - Fusion Remix
+    - Psuedo Flow:
+        - User selects / uploads an image and crops it.
+        - User selects that they want to do a fusion and selects a piece to fuse with
+        - This fires JS of a low res version so they can visualize what it'll look like more or less in the browser
+        - If they add to cart we save the cropped base 64 to a custom field on the cart item
+        - On a schedule (once or twice a day) node looks through completed orders and processes raw cropped images by spinning up floydhub API server and sending over the images to be processed with GPU.
+        - Floydhub runs the ML and sends either base64 or actual images back to node
+        - Node finishes up by making PDFs and changing color profile and all that business and patching the order with the correct image for printing
+
     - Size as custom field and maybe custom fields for overlay stuff
+    - For the front end we can use JS to mock it quickly while we use floyd for when user actually orders. Maybe just batch them all and process once a day or something to save $$$.
+        - Node scheduling https://github.com/kelektiv/node-cron or https://www.npmjs.com/package/node-schedule
     - Need to make this shit 3rd party 
         - https://docs.floydhub.com/examples/style_transfer/
         - With the above can probably tweak the endpoint to accept base64 as well
+        - Floyd Serving
+            - https://docs.floydhub.com/guides/serving/
+            - When serving models, you will be charged for the full duration that your serving endpoint is active.
+            - Each serving job has a maximum uptime of 7 days. The 7 day timeout is common across all jobs you run on FloydHub, whether it be workspace, command jobs or serving jobs.
+        - Look at processing an image first before evaluating. We should know what size the user wants if this only is runa fter adding to cart. Perhaps making a png, perhaps making larger for big prints, perhaps stripping a bunch of size. Not sure at this point how much that affects time. Would need to test.
+        - Of note on the one test its almost too sharp and loses some of the artistic flair. Maybe compress it a bit while keeping the same dimensions will let it be a but more artistic with it.
+        - Performance
+            - Input file 4.9 mb 4032 × 3024
+            - Output 3.2 mb 4032 × 3024
+            - Time spent 50 seconds @ $1.20 / h = $.72
 - Map Generator
     - All
 - On add to cart work

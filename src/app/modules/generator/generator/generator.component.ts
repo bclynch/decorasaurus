@@ -36,6 +36,8 @@ export class GeneratorComponent implements OnInit, OnDestroy {
   ) {
     this.paramsSubscription = this.route.params.subscribe((params) => {
       this.generatorService.generatorType = params.type;
+      this.generatorService.mapBounds = null;
+      this.generatorService.posterSrcSubject.next(null);
 
       // identify product id
       switch (this.generatorService.generatorType) {
@@ -49,6 +51,7 @@ export class GeneratorComponent implements OnInit, OnDestroy {
           break;
         case 'map-poster':
           this.productId = 'c9d1a039-ed04-444d-a248-e213fca3acc0';
+          this.generatorService.mapBounds = [[-73.9848829, 40.8235689], [-74.056895, 40.75737]]; // defaulting to NY currently
           break;
       }
 
@@ -95,5 +98,18 @@ export class GeneratorComponent implements OnInit, OnDestroy {
       .catch(function (error) {
         console.error('oops, something went wrong!', error);
       });
+
+    // https://github.com/tsayen/dom-to-image/issues/243
+    // toPng doesn't work with map, but svg does
+    // const node = this.elRef.nativeElement.querySelector('.mapWrapper');
+
+    // domtoimage.toSvg(node)
+    //   .then((svg) => {
+    //     saveAs(svg, 'Student-Talks-poster.svg'); // -- Must be 'toBLob' not 'toPng
+    //     // this.cartService.addCustomToCart(this.generatorService.product, png, this.generatorService.backgroundColor);
+    //   })
+    //   .catch(function (error) {
+    //     console.error('oops, something went wrong!', error);
+    //   });
   }
 }

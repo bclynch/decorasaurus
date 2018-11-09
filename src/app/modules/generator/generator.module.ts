@@ -16,6 +16,7 @@ import { ColorsPickerComponent } from './colors-picker/colors-picker.component';
 import { OptionsContainerComponent } from './options-container/options-container.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { FormsModule } from '@angular/forms';
+import { AgmCoreModule } from '@agm/core';
 import { PatentExpandDialogueComponent } from './patent-expand-dialogue/patent-expand-dialogue.component';
 import { CropperComponent } from './cropper/cropper.component';
 import { RemixCustomizeOptionsComponent } from './customize-options/remix-customize-options/remix-customize-options.component';
@@ -37,6 +38,10 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     NgxMapboxGLModule.withConfig({
       accessToken: ENV.mapboxAPIKey,
+    }),
+    AgmCoreModule.forRoot({
+      apiKey: ENV.googleAPIKey,
+      libraries: ['places']
     }),
     SharedModule,
     FormsModule

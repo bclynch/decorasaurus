@@ -1,0 +1,24 @@
+.basicOptionsContainer {
+
+  .optionHeader {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+
+    mat-icon {
+      margin-left: 5px;
+      cursor: pointer;
+    }
+  }
+  form {
+
+    .inputWrapper {
+      display: flex;
+      width: 100%;
+
+      mat-form-field {
+        flex: 1;
+      }
+    }
+  }
+}
