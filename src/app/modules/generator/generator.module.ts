@@ -20,6 +20,7 @@ import { AgmCoreModule } from '@agm/core';
 import { PatentExpandDialogueComponent } from './patent-expand-dialogue/patent-expand-dialogue.component';
 import { CropperComponent } from './cropper/cropper.component';
 import { RemixCustomizeOptionsComponent } from './customize-options/remix-customize-options/remix-customize-options.component';
+import { PrintMapComponent } from './print-map/print-map.component';
 
 const routes: Routes = [
   { path: ':type', component: GeneratorComponent }
@@ -28,7 +29,8 @@ const routes: Routes = [
 @NgModule({
   entryComponents: [
     PatentInfoDialogue,
-    PatentExpandDialogueComponent
+    PatentExpandDialogueComponent,
+    PrintMapComponent
   ],
   imports: [
     CommonModule,
@@ -56,7 +58,8 @@ const routes: Routes = [
     PatentInfoDialogue,
     PatentExpandDialogueComponent,
     CropperComponent,
-    RemixCustomizeOptionsComponent
+    RemixCustomizeOptionsComponent,
+    PrintMapComponent
   ]
 })
 export class GeneratorModule { }

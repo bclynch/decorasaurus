@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { SafeUrl } from '@angular/platform-browser';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { MoltinProduct } from '../providers/moltin/models/product';
+import { Map } from 'mapbox-gl';
+// import { saveAs } from 'file-saver';
 declare let ml5: any;
 
 @Injectable()
@@ -14,6 +16,7 @@ export class GeneratorService {
   posterElement;
   processingFusion = false;
   cropperImgUrl: string | ArrayBuffer;
+  isAddingToCart = false;
 
   // poster props
   backgroundColor = 'white';
@@ -54,6 +57,16 @@ export class GeneratorService {
   mapBounds;
   cityQuery: string;
 
+  // Print map props
+  hiddenCenter;
+  hiddenZoom;
+  hiddenPitch;
+  hiddenBearing;
+  hiddenWidth;
+  hiddenHeight;
+  actualPixelRatio: number;
+  public mapSubject: BehaviorSubject<string>;
+
   public tracing: Observable<boolean>;
   public tracingSubject: BehaviorSubject<boolean>;
   public optionsTab: Observable<number>;
@@ -70,6 +83,7 @@ export class GeneratorService {
     this.optionsTab = this.optionsTabSubject;
     this.posterSrcSubject = new BehaviorSubject<string | SafeUrl>(null);
     this.posterSrc = this.posterSrcSubject;
+    this.mapSubject = new BehaviorSubject<string>(null);
   }
 
   fuseImages(model: string) {
@@ -107,5 +121,13 @@ export class GeneratorService {
   quantifyDimensions() {
     this.posterWidth = this.dimensions[this.size].width * this.orientationMultiplier;
     this.posterHeight = this.dimensions[this.size].height / this.orientationMultiplier;
+  }
+
+  generateMap(map: Map) {
+    // toBlob method to create file
+    // map.getCanvas().toBlob((blob) => {
+    //   saveAs(blob, 'map.png');
+    // });
+    this.mapSubject.next(map.getCanvas().toDataURL());
   }
 }

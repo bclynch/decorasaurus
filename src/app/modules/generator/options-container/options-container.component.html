@@ -63,5 +63,8 @@
     mat-flat-button 
     (click)="addToCart.emit()"
     color="primary"
-  >Add to Cart</button>
+  >
+    <div>Add to Cart</div>
+    <mat-spinner *ngIf="generatorService.isAddingToCart" color="white" diameter="20"></mat-spinner>
+  </button>
 </div>

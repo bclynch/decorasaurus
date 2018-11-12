@@ -167,8 +167,8 @@
           width: 100%;
         }
         .mapWrapper {
-          height: 450px;
-          width: 300px;
+          // height: 450px;
+          // width: 300px;
         }
       }
       &.Landscape {
@@ -186,8 +186,8 @@
           width: 100%;
         }
         .mapWrapper {
-          width: 450px;
-          height: 300px;
+          // width: 450px;
+          // height: 300px;
         }
       }
       .background {
@@ -211,12 +211,31 @@
           }
         }
       }
-      .mapWrapper {
-        max-width: 100%;
+      .lala {
+        position: relative;
+        background-size: cover;
+        background-repeat: no-repeat;
+        box-sizing: content-box;
+        height: 450px;
+        width: 300px;
 
-        mgl-map {
-          height: 100%;
-          width: 100%;
+        .mapWrapper {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 1200px;
+          height: 1800px;
+          transform: scale(.25);
+          transform-origin: 0 0;
+          background-size: cover;
+          background-repeat: no-repeat;
+          background-position: center;
+          overflow: hidden;
+  
+          mgl-map {
+            height: 100%;
+            width: 100%;
+          }
         }
       }
     }

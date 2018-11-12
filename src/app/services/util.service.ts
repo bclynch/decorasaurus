@@ -38,4 +38,9 @@ export class UtilService {
       reader.readAsDataURL(blob);
     }));
   }
+
+  toPixels(length: number): string {
+    const conversionFactor = 96;
+    return conversionFactor * length + 'px';
+  }
 }

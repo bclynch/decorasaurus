@@ -102,12 +102,12 @@ export class CartService implements OnDestroy {
     );
   }
 
-  addCustomToCart(product: MoltinProduct, blob: Blob, background: string): void {
+  addCustomToCart(product: MoltinProduct, dataUrl: string, type?: string): void {
     const formData = new FormData();
-    formData.append('poster', blob);
-    formData.append('background', background);
+    formData.append('poster', dataUrl);
     formData.append('orientation', this.generatorService.orientation);
     formData.append('size', this.generatorService.size);
+    if (type) formData.append('type', type);
     // Need to create thumbnail for product + pdf to s3 then add to cart
     this.apiService.processPoster(formData).subscribe(
       (result: { type: 'thumbnail' | 'pdf', S3Url: string }[]) => {
@@ -130,6 +130,7 @@ export class CartService implements OnDestroy {
             console.log(derp);
 
             this.cartSubject.next(derp);
+            this.generatorService.isAddingToCart = false;
 
             this.bottomSheet.open(AddCartNav, {
               data: { product },

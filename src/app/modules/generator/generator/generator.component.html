@@ -10,19 +10,23 @@
         <div class="background" [style.background]="generatorService.backgroundColor" *ngIf="posterSrc">
           <img [src]="posterSrc" />
         </div>
-        <div class="mapWrapper" id="abc" *ngIf="generatorService.mapBounds">
-          <mgl-map
-            [style]="generatorService.mapStyle"
-            [zoom]="[9]"
-            [center]="generatorService.mapCenter"
-            [fitBounds]="generatorService.mapBounds"
-            [attributionControl]="false"
-          >
-            <mgl-control
-              mglNavigation
-              [showCompass]="false"
-            ></mgl-control>
-          </mgl-map>
+        <div class="lala" *ngIf="generatorService.mapBounds">
+          <div class="mapWrapper" id="abc">
+            <mgl-map
+              [style]="generatorService.mapStyle"
+              [zoom]="[12]"
+              [center]="generatorService.mapCenter"
+              [fitBounds]="generatorService.mapBounds"
+              [attributionControl]="false"
+              [preserveDrawingBuffer]="true"
+              (load)="map = $event"
+            >
+              <mgl-control
+                mglNavigation
+                [showCompass]="false"
+              ></mgl-control>
+            </mgl-map>
+          </div>
         </div>
         <i class="horizontal">{{generatorService.posterWidth}} inch</i>
         <i class="vertical"><i>{{generatorService.posterHeight}} inch</i></i>
@@ -49,19 +53,23 @@
           class="addToCartBtn boldFont" 
           mat-flat-button color="primary" 
           (click)="addToCart()"
-        >Add to Cart</button>
+        >
+          <div>Add to Cart</div>
+          <mat-spinner *ngIf="generatorService.isAddingToCart" color="white" diameter="20"></mat-spinner>
+        </button>
       </div>
     </div>
     <app-options-container 
       (addToCart)="addToCart()"
     ></app-options-container>
     <!-- hidden container to have full size image to use for dom to image -->
-    <div class="hidden" *ngIf="posterSrcHidden">
+    <div class="hidden">
       <div 
         class="background" 
         [style.background]="generatorService.backgroundColor" 
         id="poster" 
         [ngClass]="[generatorService.remixType === 'fusion' ? 'fusion' : '', generatorService.orientation, generatorService.size]"
+        *ngIf="posterSrcHidden"
       >
         <img 
           [src]="posterSrcHidden" 
@@ -69,6 +77,7 @@
           [ngClass]="[generatorService.orientation, generatorService.processingFusion ? 'processing' : '']"
         />
       </div>
+      <ng-template #hiddenMap class="hiddenMapWrapper"></ng-template>
     </div>
   </div>
 </app-pagewrapper>

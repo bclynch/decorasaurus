@@ -1,0 +1,12 @@
+<div class="mapWrapper" [style.width]="generatorService.hiddenWidth" [style.height]="generatorService.hiddenHeight">
+    <mgl-map
+    [style]="generatorService.mapStyle"
+    [zoom]="generatorService.hiddenZoom"
+    [center]="generatorService.hiddenCenter"
+    [pitch]="generatorService.hiddenPitch"
+    [bearing]="generatorService.hiddenBearing"
+    [attributionControl]="false"
+    [preserveDrawingBuffer]="true"
+    (load)="generatorService.generateMap($event)"
+  ></mgl-map>
+</div>

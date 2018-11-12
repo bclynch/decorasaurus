@@ -109,3 +109,25 @@ mat-radio-button {
 .mapboxgl-ctrl-bottom-left {
   display: none!important;
 }
+.mapboxgl-ctrl-top-right {
+  transform: scale(3);
+  top: 60px!important;
+  right: 30px!important;
+}
+
+.addToCartBtn {
+
+  .mat-button-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    mat-spinner {
+      margin-left: 5px;
+
+      circle {
+        stroke: var(--color-white);
+      }
+    }
+  }
+}

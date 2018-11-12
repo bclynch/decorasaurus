@@ -2,7 +2,9 @@
 
 
 ## Todos
-- Work on overlay engine / component
+- Map Generator
+    - Figure out how to save image - check
+    - Work on overlay engine / component
 - Fusion Remix
     - Psuedo Flow:
         - User selects / uploads an image and crops it.
