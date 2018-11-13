@@ -14,6 +14,7 @@
 
     // setting width here to make sure our image is properly sized at 300DPI
     .background {
+      position: relative;
 
       &.Portrait {
 
@@ -166,9 +167,18 @@
         img {
           width: 100%;
         }
-        .mapWrapper {
-          // height: 450px;
-          // width: 300px;
+        &.map-poster {
+          width: auto;
+
+          .mapContainer {
+            width: 80vw;
+            height: calc(80vw * 1.5);
+  
+            .mapWrapper {
+              width: calc(80vw * 4);
+              height: calc(80vw * 1.5 * 4);
+            }
+          }
         }
       }
       &.Landscape {
@@ -185,9 +195,18 @@
         img {
           width: 100%;
         }
-        .mapWrapper {
-          // width: 450px;
-          // height: 300px;
+        &.map-poster {
+          width: auto;
+          
+          .mapContainer {
+            width: 80vw;
+            height: calc(80vw / 1.5);
+  
+            .mapWrapper {
+              width: calc(80vw * 4);
+              height: calc(80vw / 1.5 * 4);
+            }
+          }
         }
       }
       .background {
@@ -211,20 +230,16 @@
           }
         }
       }
-      .lala {
+      .mapContainer {
         position: relative;
         background-size: cover;
         background-repeat: no-repeat;
         box-sizing: content-box;
-        height: 450px;
-        width: 300px;
 
         .mapWrapper {
           position: absolute;
           top: 0;
           left: 0;
-          width: 1200px;
-          height: 1800px;
           transform: scale(.25);
           transform-origin: 0 0;
           background-size: cover;
@@ -288,16 +303,50 @@
           img {
             width: 300px;
           }
+          &.map-poster {
+            width: auto;
+            
+            .mapContainer {
+              width: 30vw;
+              height: calc(30vw * 1.5);
+              max-width: 300px;
+              max-height: 450px;
+    
+              .mapWrapper {
+                width: calc(30vw * 4);
+                height: calc(30vw * 1.5 * 4);
+                max-width: 1200px;
+                max-height: 1800px;
+              }
+            }
+          }
         }
         &.Landscape {
-          max-width: 60%;
 
           &.fusion {
             width: 40vw;
+            max-width: 60%;
 
             img {
               width: 100%;
               height: calc(40vw * 2 /3);
+            }
+          }
+          &.map-poster {
+            width: auto;
+            
+            .mapContainer {
+              width: 35vw;
+              height: calc(35vw / 1.5);
+              max-height: 300px;
+              max-width: 450px;
+    
+              .mapWrapper {
+                width: calc(35vw * 4);
+                height: calc(35vw / 1.5 * 4);
+                max-height: 1200px;
+                max-width: 1800px;
+              }
             }
           }
         }

@@ -21,6 +21,7 @@ import { PatentExpandDialogueComponent } from './patent-expand-dialogue/patent-e
 import { CropperComponent } from './cropper/cropper.component';
 import { RemixCustomizeOptionsComponent } from './customize-options/remix-customize-options/remix-customize-options.component';
 import { PrintMapComponent } from './print-map/print-map.component';
+import { PosterOverlayComponent } from './poster-overlay/poster-overlay.component';
 
 const routes: Routes = [
   { path: ':type', component: GeneratorComponent }
@@ -59,7 +60,8 @@ const routes: Routes = [
     PatentExpandDialogueComponent,
     CropperComponent,
     RemixCustomizeOptionsComponent,
-    PrintMapComponent
+    PrintMapComponent,
+    PosterOverlayComponent
   ]
 })
 export class GeneratorModule { }

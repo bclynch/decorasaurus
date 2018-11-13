@@ -13,7 +13,7 @@
     </div>
   </div>
   <div class="traceContainer" *ngIf="selectedRemix === 'trace'">
-    <app-colors-picker></app-colors-picker>
+    <app-colors-picker type="trace" [colorValue]="generatorService.traceColor" [backgroundValue]="generatorService.backgroundColor"></app-colors-picker>
     <button mat-button color="primary" (click)="trace()">Trace</button>
   </div>
 </div>

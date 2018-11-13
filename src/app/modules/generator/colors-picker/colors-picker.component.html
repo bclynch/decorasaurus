@@ -1,14 +1,14 @@
 <div class="colorsWrapper">
   <div class="optionWrapper">
-    <div class="optionHeader">Trace Color</div>
+    <div class="optionHeader">{{type === 'trace' ? 'Trace' : 'Font'}} Color</div>
     <input 
       cpPosition="left" 
       cpOutputFormat="hex"
       cpAlphaChannel="disabled"
       [cpDisableInput]="true" 
-      [(colorPicker)]="generatorService.traceColor" 
-      [style.background]="generatorService.traceColor" 
-      (colorPickerClose)="updateColors()"
+      [(colorPicker)]="colorValue" 
+      [style.background]="colorValue" 
+      (colorPickerClose)="updateColors($event, 'color')"
     />
   </div>
   <div class="optionWrapper">
@@ -18,9 +18,9 @@
       cpOutputFormat="hex"
       cpAlphaChannel="disabled" 
       [cpDisableInput]="true"
-      [(colorPicker)]="generatorService.backgroundColor" 
-      [style.background]="generatorService.backgroundColor" 
-      (colorPickerChange)="updateColors()"
+      [(colorPicker)]="backgroundValue" 
+      [style.background]="backgroundValue" 
+      (colorPickerChange)="updateColors($event, 'background')"
     />
   </div>
 </div>

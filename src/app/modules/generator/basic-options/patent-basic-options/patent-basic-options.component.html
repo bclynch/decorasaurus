@@ -1,5 +1,5 @@
 <div class="basicOptionsContainer">
-  <app-colors-picker></app-colors-picker>
+  <app-colors-picker type="trace" [colorValue]="generatorService.traceColor" [backgroundValue]="generatorService.backgroundColor"></app-colors-picker>
   <div class="optionWrapper">
     <div class="optionHeader">Patent Search <mat-icon (click)="openDialog()">info</mat-icon></div>
     <form (submit)="searchPatent($event)">

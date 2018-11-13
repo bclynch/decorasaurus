@@ -5,13 +5,13 @@
       <div 
         class="posterWrapper" 
         *ngIf="posterSrc || generatorService.mapBounds" 
-        [ngClass]="[ generatorService.orientation, generatorService.remixType === 'fusion' ? 'fusion' : '' ]"
+        [ngClass]="[ generatorService.orientation, generatorService.remixType === 'fusion' ? 'fusion' : '', generatorService.generatorType ]"
       >
         <div class="background" [style.background]="generatorService.backgroundColor" *ngIf="posterSrc">
           <img [src]="posterSrc" />
         </div>
-        <div class="lala" *ngIf="generatorService.mapBounds">
-          <div class="mapWrapper" id="abc">
+        <div class="mapContainer" *ngIf="generatorService.mapBounds">
+          <div class="mapWrapper">
             <mgl-map
               [style]="generatorService.mapStyle"
               [zoom]="[12]"
@@ -28,6 +28,7 @@
             </mgl-map>
           </div>
         </div>
+        <app-poster-overlay></app-poster-overlay>
         <i class="horizontal">{{generatorService.posterWidth}} inch</i>
         <i class="vertical"><i>{{generatorService.posterHeight}} inch</i></i>
       </div>
@@ -76,6 +77,7 @@
           id="inputImage" 
           [ngClass]="[generatorService.orientation, generatorService.processingFusion ? 'processing' : '']"
         />
+        <app-poster-overlay [hiRes]="true"></app-poster-overlay>
       </div>
       <ng-template #hiddenMap class="hiddenMapWrapper"></ng-template>
     </div>

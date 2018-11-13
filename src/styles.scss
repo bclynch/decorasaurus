@@ -90,6 +90,44 @@ button:focus {
   }
 }
 
+.mat-button-toggle {
+
+}
+
+.mat-button-toggle-checked {
+  background-color: var(--color-primary);
+  color: var(--color-white)!important;
+}
+
+.sizeButtonToggle {
+  padding: 7px 5px;
+
+  .mat-button-toggle-label-content>* {
+    line-height: 20px;
+  }
+}
+
+.optionsWrapper {
+
+  mat-button-toggle-group {
+    width: 100%;
+
+    mat-button-toggle {
+      flex: 1;
+    }
+  }
+}
+
+.customizeContainer {
+
+  mat-form-field {
+
+    .mat-form-field-wrapper {
+      padding-bottom: 5px;
+    }
+  }
+}
+
 .snackbar-theme {
   background: var(--color-primary);
   font-weight: bold;

@@ -2,9 +2,21 @@
 
 
 ## Todos
-- Map Generator
-    - Figure out how to save image - check
-    - Work on overlay engine / component
+- Splash Page
+    - Carousel Top like https://www.thecriticalslidesociety.com/
+    - Small divider section like 49th coffee https://49thcoffee.com/
+        - Create Exceptional Decor
+        - Cute little dinosaur logo with poster
+    - Nice grid like the modern shop https://themodernshop.com/
+    - Divider of icons like https://www.studioproper.com/
+    - IG row like studio proper
+    - Use images from Pexels to add posters
+        - https://www.pexels.com/search/living%20room/
+        - https://www.pexels.com/search/bedroom/
+- Perhaps look at splitting trace and fusion...
+- Map Posters
+    - Add new map styles
+    - Figure out rerender on orientation change
 - Fusion Remix
     - Psuedo Flow:
         - User selects / uploads an image and crops it.
@@ -31,8 +43,6 @@
             - Input file 4.9 mb 4032 × 3024
             - Output 3.2 mb 4032 × 3024
             - Time spent 50 seconds @ $1.20 / h = $.72
-- Map Generator
-    - All
 - On add to cart work
     - Custom product thoughts https://forum.moltin.com/t/raise-the-maximum-limit-of-child-products-number/618/5
     - To send back the poster probably need to package it up as a png so we can include custom background and all and send back as a blob. Can use domtoimage to create a blob then send on back. - check
@@ -71,8 +81,6 @@
     - Remix
         - Bug when uploading an image with two iterations of file input on the dom. Doesn't fire change event
         - Trigger auto retrace when change trace color
-        - Style up the crop buttons
-        - Look at tensorflor styling https://reiinakano.github.io/fast-style-transfer-deeplearnjs/
 - Patents after launch - 2 days
 - Find a poster producer... - ???
 - Cart + checkout page - 2 days

@@ -54,8 +54,11 @@ export class GeneratorComponent implements OnInit, OnDestroy {
   ) {
     this.paramsSubscription = this.route.params.subscribe((params) => {
       this.generatorService.generatorType = params.type;
+
+      // resetting some props
       this.generatorService.mapBounds = null;
       this.generatorService.posterSrcSubject.next(null);
+      this.generatorService.displayOverlay = this.generatorService.generatorType === 'map-poster';
 
       // identify product id
       switch (this.generatorService.generatorType) {
@@ -110,19 +113,13 @@ export class GeneratorComponent implements OnInit, OnDestroy {
     this.generatorService.isAddingToCart = true;
     if (this.generatorService.generatorType === 'map-poster') {
       this.createPrintMap().then(
-        (dataUrl) => this.cartService.addCustomToCart(this.generatorService.product, dataUrl, 'map')
+        (dataUrl) => {
+          this.posterSrcHidden = dataUrl;
+          setTimeout(() => this.captureImage(), 50); // timeout so the dom element can populate correctly
+        }
       );
     } else {
-      const node = this.elRef.nativeElement.querySelector('#poster');
-
-      domtoimage.toPng(node)
-        .then((png) => {
-          // saveAs(blob, 'Student-Talks-poster.png'); -- Must be 'toBLob' not 'toPng
-          this.cartService.addCustomToCart(this.generatorService.product, png);
-        })
-        .catch(function (error) {
-          console.error('oops, something went wrong!', error);
-        });
+      this.captureImage();
     }
   }
 
@@ -159,5 +156,19 @@ export class GeneratorComponent implements OnInit, OnDestroy {
         }
       );
     });
+  }
+
+  captureImage(type?: string) {
+    const node = this.elRef.nativeElement.querySelector('#poster');
+    console.log(node);
+
+    domtoimage.toPng(node)
+      .then((png) => {
+        // saveAs(blob, 'Student-Talks-poster.png'); -- Must be 'toBLob' not 'toPng
+        this.cartService.addCustomToCart(this.generatorService.product, png, type ? type : null);
+      })
+      .catch(function (error) {
+        console.error('oops, something went wrong!', error);
+      });
   }
 }

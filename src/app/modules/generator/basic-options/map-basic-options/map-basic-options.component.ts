@@ -27,12 +27,17 @@ export class MapBasicOptionsComponent implements OnInit {
     this.mapsAPILoader.load().then(() => {
       this.autocomplete = new google.maps.places.Autocomplete(document.getElementById('autocompleteInput'), {types: ['(cities)']});
       google.maps.event.addListener(this.autocomplete, 'place_changed', () => {
-          const place = this.autocomplete.getPlace();
-          this.hasDownBeenPressed = false;
-          this.ngZone.run(() => {
-            this.generatorService.mapBounds = [[place.geometry.viewport.b.f, place.geometry.viewport.f.f], [place.geometry.viewport.b.b, place.geometry.viewport.f.b]];
-            console.log(this.generatorService.mapBounds);
-          });
+        const place = this.autocomplete.getPlace();
+        this.generatorService.overlayTitle = place.name;
+        this.generatorService.overlaySubtitle = place.address_components[place.address_components.length - 1].long_name;
+        this.generatorService.overlayTag = `${Math.abs(place.geometry.location.lat().toFixed(3))}° ${place.geometry.location.lat() >= 0 ? 'N' : 'S'} / ${Math.abs(place.geometry.location.lng().toFixed(3))}° ${place.geometry.location.lng() >= 0 ? 'E' : 'W'}`;
+        this.hasDownBeenPressed = false;
+        this.ngZone.run(() => {
+          // results come back with different variables for viewport each time which is annoying...
+          const key1 = Object.keys(place.geometry.viewport)[0];
+          const key2 = Object.keys(place.geometry.viewport)[1];
+          this.generatorService.mapBounds = [[place.geometry.viewport[key2][key1], place.geometry.viewport[key1][key1]], [place.geometry.viewport[key2][key2], place.geometry.viewport[key1][key2]]];
+        });
       });
       google.maps.event.addDomListener(document.getElementById('autocompleteInput'), 'keydown', e => {
         // Maps API e.stopPropagation();

@@ -1,0 +1,43 @@
+<div 
+  class="overlayContainer" 
+  *ngIf="generatorService.displayOverlay" 
+  [ngClass]="hiRes ? 'hiRes' : ''"
+>
+  <div 
+    class="borderOverlay" 
+    *ngIf="generatorService.overlayType === 'Border'" 
+    [style.border]="'solid .5em ' + generatorService.overlayBackground"
+  >
+    <div 
+      class="contentWrapper" 
+      [style.color]="generatorService.overlayColor" 
+      [style.background]="generatorService.overlayBackground"
+    >
+      <div class="boldFont title">{{generatorService.overlayTitle}}</div>
+      <div class="subtitle">{{generatorService.overlaySubtitle}}</div>
+      <div class="content">{{generatorService.overlayTag}}</div>
+    </div>
+  </div>
+  <div class="blockOverlay" *ngIf="generatorService.overlayType === 'Block'">
+    <div 
+      class="contentWrapper" 
+      [style.color]="generatorService.overlayColor" 
+      [style.background]="generatorService.overlayBackground"
+    >
+      <div class="boldFont title">{{generatorService.overlayTitle}}</div>
+      <div class="subtitle">{{generatorService.overlaySubtitle}}</div>
+      <div class="content">{{generatorService.overlayTag}}</div>
+    </div>
+  </div>
+  <div class="floatingOverlay" *ngIf="generatorService.overlayType === 'Floating'">
+    <div 
+      class="contentWrapper" 
+      [style.color]="generatorService.overlayColor" 
+      [style.background]="generatorService.overlayBackground"
+    >
+      <div class="boldFont title">{{generatorService.overlayTitle}}</div>
+      <div class="subtitle">{{generatorService.overlaySubtitle}}</div>
+      <div class="content">{{generatorService.overlayTag}}</div>
+    </div>
+  </div>
+</div>

@@ -10,7 +10,7 @@ declare let ml5: any;
 export class GeneratorService {
 
   generatorType: string;
-  remixType: 'fusion' | 'trace';
+  remixType: 'fusion' | 'trace' = null;
   mobileOptionsActive = false;
   product: MoltinProduct;
   posterElement;
@@ -44,6 +44,15 @@ export class GeneratorService {
   orientationOptions = ['Portrait', 'Landscape'];
   orientation: 'Portrait' | 'Landscape' = 'Portrait';
 
+  // overlay props
+  overlayTitle = 'New York';
+  overlaySubtitle = 'United States';
+  overlayTag = '40.713° N / 74.006° W';
+  overlayColor = 'black';
+  overlayBackground = 'white';
+  overlayType: 'Border' | 'Floating' | 'Block' = 'Block';
+  displayOverlay = true;
+
   // patent props
   patentName: string;
   patentImages: string[];
@@ -52,7 +61,7 @@ export class GeneratorService {
   // map props
   redStyle = 'mapbox://styles/bclynch/cjnen2de28pey2rrwy4z4ql7t';
   yellowStyle = 'mapbox://styles/bclynch/cjndjsgnu19kq2so4pwcsvtks';
-  mapStyle = this.yellowStyle;
+  mapStyle = this.redStyle;
   mapCenter = [-74.0059728, 40.7127753];
   mapBounds;
   cityQuery: string;
@@ -102,8 +111,8 @@ export class GeneratorService {
     });
   }
 
-  selectSize(i: number) {
-    this.size = i === 0 ? 'Small' : i === 1 ? 'Medium' : 'Large';
+  selectSize(option: 'Small' | 'Medium' | 'Large') {
+    this.size = option;
     this.quantifyDimensions();
   }
 

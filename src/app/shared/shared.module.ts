@@ -23,7 +23,8 @@ import {
   MatSnackBarModule,
   MatSelectModule,
   MatCheckboxModule,
-  MatRadioModule
+  MatRadioModule,
+  MatButtonToggleModule
 } from '@angular/material';
 import { PaymentCardsComponent } from './payment-cards/payment-cards.component';
 import { CustomerAddressesComponent } from './customer-addresses/customer-addresses.component';
@@ -50,7 +51,8 @@ import { CustomerAddressesComponent } from './customer-addresses/customer-addres
     MatSelectModule,
     MatCheckboxModule,
     ReactiveFormsModule,
-    MatRadioModule
+    MatRadioModule,
+    MatButtonToggleModule
   ],
   declarations: [
     PagewrapperComponent,
@@ -85,7 +87,8 @@ import { CustomerAddressesComponent } from './customer-addresses/customer-addres
     CartTotalsComponent,
     MatRadioModule,
     PaymentCardsComponent,
-    CustomerAddressesComponent
+    CustomerAddressesComponent,
+    MatButtonToggleModule
   ]
 })
 export class SharedModule { }

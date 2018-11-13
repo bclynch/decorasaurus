@@ -32,29 +32,65 @@
   </div>
   <div class="customizeContainer optionsWrapper" *ngIf="selectedTab === 1">
     <app-remix-customize-options *ngIf="generatorService.generatorType === 'remix-poster'"></app-remix-customize-options>
+    <div class="optionHeader">Overlay Type</div>
+    <mat-button-toggle-group (change)="generatorService.overlayType = $event.value" [value]="generatorService.overlayType">
+      <mat-button-toggle value="Border">Border</mat-button-toggle>
+      <mat-button-toggle value="Block">Block</mat-button-toggle>
+      <mat-button-toggle value="Floating">Floating</mat-button-toggle>
+    </mat-button-toggle-group>
+    <app-colors-picker [colorValue]="generatorService.overlayColor" [backgroundValue]="generatorService.overlayBackground"></app-colors-picker>
+    <mat-form-field appearance="outline">
+      <mat-label>Title</mat-label>
+      <input 
+        [(ngModel)]="generatorService.overlayTitle" 
+        placeholder="Title" 
+        matInput 
+      />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Subtitle</mat-label>
+      <input 
+        [(ngModel)]="generatorService.overlaySubtitle" 
+        placeholder="Subtitle" 
+        matInput 
+      />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Tag</mat-label>
+      <input 
+        [(ngModel)]="generatorService.overlayTag" 
+        placeholder="Tag" 
+        matInput 
+      />
+    </mat-form-field>
+    <div class="optionHeader">Poster Labels</div>
+    <mat-button-toggle-group (change)="generatorService.displayOverlay = $event.value" [value]="generatorService.displayOverlay">
+      <mat-button-toggle [value]="true">On</mat-button-toggle>
+      <mat-button-toggle [value]="false">Off</mat-button-toggle>
+    </mat-button-toggle-group>
   </div>
   <div class="finishContainer optionsWrapper" *ngIf="selectedTab === 2">
     <div class="optionWrapper" *ngIf="generatorService.generatorType === 'map-poster'">
       <div class="optionHeader">Orientation</div>
-      <div class="choiceArr">
-        <div
-          class="optionBtn" 
-          *ngFor="let orientationOption of generatorService.orientationOptions; let i = index;" 
-          (click)="generatorService.selectOrientation(orientationOption)"
-          [ngClass]="generatorService.orientation === orientationOption ? 'selected' : ''"
-        >{{orientationOption}}</div>
-      </div>
+      <mat-button-toggle-group (change)="generatorService.selectOrientation($event.value)" [value]="generatorService.orientation">
+        <mat-button-toggle 
+          [value]="orientationOption" 
+          *ngFor="let orientationOption of generatorService.orientationOptions"
+        >{{orientationOption}}</mat-button-toggle>
+      </mat-button-toggle-group>
     </div>
     <div class="optionWrapper">
       <div class="optionHeader">Sizing</div>
-      <div class="choiceArr">
-        <div 
-          class="optionBtn"
-          *ngFor="let sizeOption of generatorService.sizeOptions; let i = index;" 
-          (click)="generatorService.selectSize(i)"
-          [ngClass]="sizeOption === generatorService.size ? 'selected' : ''"
-        >{{sizeOption}}<br>{{generatorService.dimensions[sizeOption].width}} x {{generatorService.dimensions[sizeOption].height}} in.</div>
-      </div>
+      <mat-button-toggle-group (change)="generatorService.selectSize($event.value)" [value]="generatorService.size">
+        <mat-button-toggle 
+          [value]="sizeOption" 
+          *ngFor="let sizeOption of generatorService.sizeOptions"
+          class="sizeButtonToggle" 
+        >
+          <div>{{sizeOption}}</div>
+          <div>{{generatorService.dimensions[sizeOption].width}} x {{generatorService.dimensions[sizeOption].height}}</div>
+        </mat-button-toggle>
+      </mat-button-toggle-group>
     </div>
   </div>
   <!-- <div class="help">Need Help? Contact Us</div> -->

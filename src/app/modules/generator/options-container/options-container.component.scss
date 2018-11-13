@@ -55,33 +55,14 @@
   }
   .optionsWrapper {
     padding: 10px;
-    height: calc(75vh - 39px - 51px); // height of container - add cart btn - tab nav height to allow scroll
+    height: calc(75vh - 51px - 20px - 53px); // height of container - add cart btn - tab nav height to allow scroll
     overflow: scroll;
 
     .optionWrapper {
       margin-bottom: 15px;
-
-      .choiceArr {
-        display: flex;
-
-        .optionBtn {
-          color: var(--color-black);
-          padding: 10px 12px;
-          width: 30%;
-          text-align: center;
-          margin-right: 10px;
-          border: solid 2px var(--color-black);
-          cursor: pointer;
-
-          &.selected {
-            background: var(--color-primary);
-            color: var(--color-white);
-          }
-        }
-        .optionBtn:last-child {
-          margin-right: 0;
-        }
-      }
+    }
+    .optionHeader {
+      margin-bottom: 10px;
     }
   }
   .addToCartBtn {
@@ -109,6 +90,19 @@
       border-left: solid 1px var(--color-border);
       border-top: solid 1px var(--color-border);
       background: var(--color-white);
+    }
+  }
+  .customizeContainer {
+
+    mat-form-field {
+      width: 100%;
+
+      .mat-form-field-wrapper {
+        padding-bottom: 5px;
+      }
+    }
+    mat-button-toggle-group {
+      margin-bottom: 5px;
     }
   }
 }
