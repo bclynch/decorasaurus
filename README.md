@@ -13,6 +13,7 @@
     - Use images from Pexels to add posters
         - https://www.pexels.com/search/living%20room/
         - https://www.pexels.com/search/bedroom/
+        - Add a 'frame' with Gimp with filters -> decor -> add border
 - Perhaps look at splitting trace and fusion...
 - Map Posters
     - Add new map styles

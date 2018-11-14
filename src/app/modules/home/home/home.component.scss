@@ -1,0 +1,139 @@
+.homeContainer {
+  max-width: 1560px;
+  margin: 0 10px;
+
+  .carousel {
+    height: 80vh;
+    width: 100%;
+    position: relative;
+
+    .slide {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      .slideImg {
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: 50% 50%;
+        transition: .5s ease-in;
+        flex: 6;
+      }
+      .slideCallout {
+        flex: 4;
+        justify-content: center;
+        align-items: center;
+        display: none;
+
+        .calloutWrapper {
+          position: relative;
+          font-size: 32px;
+          width: 315px;
+
+          span {
+            transition: top .5s ease-in;
+            position: absolute;
+            opacity: 0;
+            top: -25px;
+            color: var(--color-primary);
+
+            &.active {
+              opacity: 1;
+              top: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+  .grid {
+    height: 125vh;
+    display: flex;
+    flex-wrap: wrap;
+    margin: 10px 0;
+
+    .gridTile {
+      width: 100%;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: 50% 50%;
+      margin-bottom: 10px;
+
+      .overlay {
+        margin: 15px 0 0 15px;
+        max-width: 75%;
+
+        .name {
+          font-size: 28px;
+        }
+        button {
+          color: var(--color-white);
+          margin-top: 30px;
+        }
+      }
+    }
+  }
+  .features {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    align-items: center;
+
+    .feature {
+      width: 25%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin-bottom: 25px;
+
+      mat-icon {
+        font-size: 48px;
+        height: 48px;
+        width: 48px;
+      }
+    }
+  }
+  @media (min-width: 768px) {
+    .carousel {
+  
+      .slide {
+
+        .slideCallout {
+          display: flex;
+        }
+      }
+    }
+    .grid {
+      height: 100vh;
+  
+      .gridTile {
+        width: 40%;
+
+        .overlay {
+          margin: 25px 0 0 25px;
+          max-width: 50%;
+        }
+      }
+      .gridTile:first-child {
+        margin-right: 10px;
+        width: calc(60% - 10px);
+      }
+      .gridTile:last-child {
+        margin-left: 10px;
+        width: calc(60% - 10px);
+      }
+    }
+    .features {
+      flex-direction: row;
+  
+      .feature {
+        width: 100%;
+        margin-bottom: 0;
+      }
+    }
+  }
+}

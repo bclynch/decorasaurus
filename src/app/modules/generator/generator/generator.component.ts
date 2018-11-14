@@ -158,14 +158,13 @@ export class GeneratorComponent implements OnInit, OnDestroy {
     });
   }
 
-  captureImage(type?: string) {
+  captureImage() {
     const node = this.elRef.nativeElement.querySelector('#poster');
-    console.log(node);
 
     domtoimage.toPng(node)
       .then((png) => {
         // saveAs(blob, 'Student-Talks-poster.png'); -- Must be 'toBLob' not 'toPng
-        this.cartService.addCustomToCart(this.generatorService.product, png, type ? type : null);
+        this.cartService.addCustomToCart(this.generatorService.product, png);
       })
       .catch(function (error) {
         console.error('oops, something went wrong!', error);

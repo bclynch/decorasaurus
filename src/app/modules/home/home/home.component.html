@@ -1,21 +1,39 @@
 <app-pagewrapper>
-  <div class="boldFont">Hello dipshits</div>
-  <!-- <h1>Style Transfer Image Example using p5.js</h1>
-  <p id="statusMsg">Loading Models...</p>
-  <button id="transferBtn" (click)="transferImages()">Transfer!</button>
-  <p>Input Image:</p>
-  <img [src]="inputImg" alt="input img" id="inputImg">
-
-  <div id="styleA">
-    <p>Style A: <a href="https://en.wikipedia.org/wiki/The_Great_Wave_off_Kanagawa">The Great Wave off Kanagawa, 1829 - Katsushika Hokusai</a></p>
-    <img src="https://raw.githubusercontent.com/ml5js/ml5-website/source/docs/assets/img/udnie.jpg" alt="style one">
-    <img src="styledA" />
+  <div class="homeContainer">
+    <div class="carousel">
+      <div 
+        class="slide" 
+        *ngFor="let slide of carouselSlides; let i = index;" 
+      >
+        <div 
+          class="slideImg" 
+          [ngStyle]="{ 'background-image': 'url(' + slide.image + ')'}"
+          [style.opacity]="activeSlide === i ? 1 : 0"
+        ></div>
+        <div class="slideCallout">
+          <div class="calloutWrapper">Create <span [ngClass]="activeSlide === i ? 'active' : ''" class="boldFont">{{slide.tagline}}</span><br>Art</div>
+        </div>
+      </div>
+    </div>
+    <div class="grid">
+      <div 
+        class="gridTile" 
+        [ngStyle]="{ 'background-image': 'url(' + tile.image + ')'}" 
+        *ngFor="let tile of gridTiles; let i = index;"
+      >
+        <div class="overlay">
+          <div class="name boldFont">{{tile.name}}</div>
+          <div>{{tile.description}}</div>
+          <button mat-raised-button color="primary">Create {{tile.name}} Decor</button>
+        </div>
+      </div>
+    </div>
+    <div class="features">
+      <div class="feature" *ngFor="let feature of features;">
+        <mat-icon>{{feature.icon}}</mat-icon>
+        <div>{{feature.label}}</div>
+      </div>
+    </div>
   </div>
-
-  <div id="styleB">
-    <p>Style B: <a href="https://en.wikipedia.org/wiki/The_Great_Wave_off_Kanagawa">Udnie (Young American Girl, The Dance), 1913 - Francis Picabia</a></p>
-    <img src="https://raw.githubusercontent.com/ml5js/ml5-website/source/docs/assets/img/wave.jpg" alt="style two">
-    <img src="styledB" />
-  </div> -->
 
 </app-pagewrapper>

@@ -102,12 +102,11 @@ export class CartService implements OnDestroy {
     );
   }
 
-  addCustomToCart(product: MoltinProduct, dataUrl: string, type?: string): void {
+  addCustomToCart(product: MoltinProduct, dataUrl: string): void {
     const formData = new FormData();
     formData.append('poster', dataUrl);
     formData.append('orientation', this.generatorService.orientation);
     formData.append('size', this.generatorService.size);
-    if (type) formData.append('type', type);
     // Need to create thumbnail for product + pdf to s3 then add to cart
     this.apiService.processPoster(formData).subscribe(
       (result: { type: 'thumbnail' | 'pdf', S3Url: string }[]) => {
