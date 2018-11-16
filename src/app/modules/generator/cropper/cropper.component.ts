@@ -78,7 +78,13 @@ export class CropperComponent implements OnInit {
       this.generatorService.posterBlob = blob;
       this.generatorService.posterSrcSubject.next(croppedCanvas.toDataURL());
       this.generatorService.tracingSubject.next(false);
-      this.generatorService.optionsTabSubject.next(1);
+      // this.generatorService.optionsTabSubject.next(1);
+      this.generatorService.croppingComplete.next(true);
     });
+  }
+
+  reset() {
+    this.generatorService.cropperImgUrl = null;
+    this.generatorService.croppingComplete.next(false);
   }
 }

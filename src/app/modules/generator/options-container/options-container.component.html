@@ -24,14 +24,11 @@
   </div>
   <div class="basicContainer optionsWrapper" *ngIf="selectedTab === 0">
     <app-patent-basic-options *ngIf="generatorService.generatorType === 'patent-poster'"></app-patent-basic-options>
-    <app-map-basic-options
-
-      *ngIf="generatorService.generatorType === 'map-poster'"
-    ></app-map-basic-options>
-    <app-remix-basic-options *ngIf="generatorService.generatorType === 'remix-poster'"></app-remix-basic-options>
+    <app-map-basic-options *ngIf="generatorService.generatorType === 'map-poster'"></app-map-basic-options>
+    <app-fusion-basic-options *ngIf="generatorService.generatorType === 'fusion-poster'"></app-fusion-basic-options>
+    <app-trace-basic-options *ngIf="generatorService.generatorType === 'trace-poster'"></app-trace-basic-options>
   </div>
   <div class="customizeContainer optionsWrapper" *ngIf="selectedTab === 1">
-    <app-remix-customize-options *ngIf="generatorService.generatorType === 'remix-poster'"></app-remix-customize-options>
     <div class="optionHeader">Overlay Type</div>
     <mat-button-toggle-group (change)="generatorService.overlayType = $event.value" [value]="generatorService.overlayType">
       <mat-button-toggle value="Border">Border</mat-button-toggle>

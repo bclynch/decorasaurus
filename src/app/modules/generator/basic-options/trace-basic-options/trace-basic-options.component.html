@@ -1,0 +1,7 @@
+<div class="basicOptionsContainer">
+  <app-upload-crop></app-upload-crop>
+  <div class="traceContainer" *ngIf="showTrace">
+    <app-colors-picker type="trace" [colorValue]="generatorService.traceColor" [backgroundValue]="generatorService.backgroundColor"></app-colors-picker>
+    <button mat-button color="primary" (click)="trace()">Trace</button>
+  </div>
+</div>

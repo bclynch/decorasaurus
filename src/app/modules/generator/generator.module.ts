@@ -10,7 +10,7 @@ import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
 
 import { ENV } from '../../../environments/environment';
 import { MapBasicOptionsComponent } from './basic-options/map-basic-options/map-basic-options.component';
-import { RemixBasicOptionsComponent } from './basic-options/remix-basic-options/remix-basic-options.component';
+import { UploadCropComponent } from './upload-crop/upload-crop.component';
 import { PatentBasicOptionsComponent, PatentInfoDialogue } from './basic-options/patent-basic-options/patent-basic-options.component';
 import { ColorsPickerComponent } from './colors-picker/colors-picker.component';
 import { OptionsContainerComponent } from './options-container/options-container.component';
@@ -19,9 +19,10 @@ import { FormsModule } from '@angular/forms';
 import { AgmCoreModule } from '@agm/core';
 import { PatentExpandDialogueComponent } from './patent-expand-dialogue/patent-expand-dialogue.component';
 import { CropperComponent } from './cropper/cropper.component';
-import { RemixCustomizeOptionsComponent } from './customize-options/remix-customize-options/remix-customize-options.component';
 import { PrintMapComponent } from './print-map/print-map.component';
 import { PosterOverlayComponent } from './poster-overlay/poster-overlay.component';
+import { FusionBasicOptionsComponent } from './basic-options/fusion-basic-options/fusion-basic-options.component';
+import { TraceBasicOptionsComponent } from './basic-options/trace-basic-options/trace-basic-options.component';
 
 const routes: Routes = [
   { path: ':type', component: GeneratorComponent }
@@ -52,16 +53,17 @@ const routes: Routes = [
   declarations: [
     GeneratorComponent,
     MapBasicOptionsComponent,
-    RemixBasicOptionsComponent,
+    UploadCropComponent,
     PatentBasicOptionsComponent,
     ColorsPickerComponent,
     OptionsContainerComponent,
     PatentInfoDialogue,
     PatentExpandDialogueComponent,
     CropperComponent,
-    RemixCustomizeOptionsComponent,
     PrintMapComponent,
-    PosterOverlayComponent
+    PosterOverlayComponent,
+    FusionBasicOptionsComponent,
+    TraceBasicOptionsComponent
   ]
 })
 export class GeneratorModule { }

@@ -65,7 +65,7 @@ export class HomeComponent implements OnInit {
 
   ) {
     // queue up carousel
-    setInterval(() => this.activeSlide = this.activeSlide === this.carouselSlides.length - 1 ? 0 : this.activeSlide += 1, 5000 );
+    setInterval(() => this.activeSlide = this.activeSlide === this.carouselSlides.length - 1 ? 0 : this.activeSlide += 1, 10000 );
   }
 
   ngOnInit() {

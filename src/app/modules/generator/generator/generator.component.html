@@ -5,13 +5,13 @@
       <div 
         class="posterWrapper" 
         *ngIf="posterSrc || generatorService.mapBounds" 
-        [ngClass]="[ generatorService.orientation, generatorService.remixType === 'fusion' ? 'fusion' : '', generatorService.generatorType ]"
+        [ngClass]="[ generatorService.orientation, generatorService.generatorType ]"
       >
         <div class="background" [style.background]="generatorService.backgroundColor" *ngIf="posterSrc">
           <img [src]="posterSrc" />
         </div>
         <div class="mapContainer" *ngIf="generatorService.mapBounds">
-          <div class="mapWrapper">
+          <div class="mapWrapper" [ngClass]="generatorService.size">
             <mgl-map
               [style]="generatorService.mapStyle"
               [zoom]="[12]"
@@ -43,7 +43,8 @@
       <div *ngIf="!posterSrc && !tracing && !generatorService.mapBounds" class="emptyState">
         <div><img class="logoImg" src="../../../assets/dino.svg" /></div>
         <div *ngIf="generatorService.generatorType === 'patent-poster'">Select a patent to display your creation here</div>
-        <div *ngIf="generatorService.generatorType === 'remix-poster'">Upload and remix an image to display your creation here</div>
+        <div *ngIf="generatorService.generatorType === 'fusion-poster'">Upload and fuse an image to display your creation here</div>
+        <div *ngIf="generatorService.generatorType === 'trace-poster'">Upload and style an image to display your creation here</div>
         <div *ngIf="generatorService.generatorType === 'map-poster'">Select a location to display your map</div>
       </div>
       <div class="mobileOptionsContainer">
@@ -69,7 +70,7 @@
         class="background" 
         [style.background]="generatorService.backgroundColor" 
         id="poster" 
-        [ngClass]="[generatorService.remixType === 'fusion' ? 'fusion' : '', generatorService.orientation, generatorService.size]"
+        [ngClass]="[generatorService.orientation, generatorService.size, generatorService.generatorType]"
         *ngIf="posterSrcHidden"
       >
         <img 

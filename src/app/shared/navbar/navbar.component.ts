@@ -38,9 +38,9 @@ export class NavbarComponent implements OnDestroy {
       value: 'create',
       subSections: [
         {
-          label: 'Remix Posters',
-          value: 'remix',
-          path: 'create/poster-generator/remix-poster'
+          label: 'Fusion Posters',
+          value: 'fusion',
+          path: 'create/poster-generator/fusion-poster'
         },
         {
           label: 'City Map Posters',
@@ -51,6 +51,11 @@ export class NavbarComponent implements OnDestroy {
           label: 'Patent Posters',
           value: 'patent',
           path: 'create/poster-generator/patent-poster'
+        },
+        {
+          label: 'Trace Posters',
+          value: 'trace',
+          path: 'create/poster-generator/trace-poster'
         }
       ]
     },
@@ -128,14 +133,17 @@ export class NavbarComponent implements OnDestroy {
           case 'About':
             this.routerService.navigateToPage('/about');
             break;
-          case 'Custom Remix Posters':
-            this.routerService.navigateToPage('/create/poster-generator/remix-poster');
+          case 'Custom Fusion Posters':
+            this.routerService.navigateToPage('/create/poster-generator/fusion-poster');
             break;
           case 'City Map Posters':
             this.routerService.navigateToPage('/create/poster-generator/map-poster');
             break;
           case 'Patent Posters':
             this.routerService.navigateToPage('/create/poster-generator/patent-poster');
+            break;
+          case 'Custom Trace Posters':
+            this.routerService.navigateToPage('/create/poster-generator/trace-poster');
             break;
         }
       }

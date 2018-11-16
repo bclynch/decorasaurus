@@ -1,0 +1,30 @@
+.basicOptionsContainer {
+  height: 100%;
+
+  .fusionContainer {
+
+    .paintingsContainer {
+      display: flex;
+      flex-wrap: wrap;
+  
+      .paintingWrapper {
+        width: calc(50% - 10px);
+        margin: 5px;
+        border: solid 1px var(--color-border);
+        box-sizing: border-box;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+  
+        img {
+          height: 200px;
+          max-width: 100%;
+        }
+        .paintingInfo {
+          padding: 5px;
+          text-align: center;
+        }
+      }
+    }
+  }
+}

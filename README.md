@@ -17,8 +17,10 @@
 - Perhaps look at splitting trace and fusion...
 - Map Posters
     - Add new map styles
-    - Figure out rerender on orientation change
-- Fusion Remix
+    - Figure out rerender on orientation change - check
+    - There are size differences between small, medium, and large with how much map is depicted so on size change we need to reformat size of the depicted map too for the user - getting there, but computer locking up too much....
+    - Overlay still wonky size-wise between small / m / large
+- Fusion
     - Psuedo Flow:
         - User selects / uploads an image and crops it.
         - User selects that they want to do a fusion and selects a piece to fuse with
@@ -44,16 +46,8 @@
             - Input file 4.9 mb 4032 × 3024
             - Output 3.2 mb 4032 × 3024
             - Time spent 50 seconds @ $1.20 / h = $.72
-- On add to cart work
-    - Custom product thoughts https://forum.moltin.com/t/raise-the-maximum-limit-of-child-products-number/618/5
-    - To send back the poster probably need to package it up as a png so we can include custom background and all and send back as a blob. Can use domtoimage to create a blob then send on back. - check
-        - Need to make sure the size is okay. Maybe need to blow up size of svg in a hidden way then run the domtoimg. Should scale okay - check
-    - Create thumbnails
-        - Moltin uses 220 x 330 jpg (depends orientation)
-        - Should hopefully be able to create file and overwrite main_image
-    - Create pdf of print, upload to s3, and add to custom field / flow on product
 - Finish order flow
-    - Payment id didn't work
+    - Payment id didn't work - https://forum.moltin.com/t/saving-customer-card-information/1233/6
     - Need to grab customer email at some point to refer to them on stripe
     - Adding a card on checkout does not save it to the Stripe account
     - Tweak validation for submission
@@ -79,7 +73,7 @@
         - Decide what if anything on customize page
         - Trigger auto retrace when change trace color
     - Map
-    - Remix
+    - Trace / Fusion
         - Bug when uploading an image with two iterations of file input on the dom. Doesn't fire change event
         - Trigger auto retrace when change trace color
 - Patents after launch - 2 days

@@ -1,0 +1,12 @@
+<div class="igContainer">
+  <div>Follow @Decorasaurus on Instagram</div>
+  <div class="gridContainer">
+    <div class="gridTile" *ngFor="let photo of photos" [ngStyle]="{ 'background-image': 'url(' + photo.image + ')'}">
+      <a target="_blank" [href]="photo.href">
+        <div class="overlay">
+          <div class="description">{{photo.description}}</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>

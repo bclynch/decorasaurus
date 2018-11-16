@@ -26,6 +26,8 @@ export class GeneratorComponent implements OnInit, OnDestroy {
   tracingSubscription: SubscriptionLike;
   posterSourceSubscription: SubscriptionLike;
   mapSubscription: SubscriptionLike;
+  orientationSubscription: SubscriptionLike;
+  sizeSubscription: SubscriptionLike;
 
   tracing: boolean;
   productId: string;
@@ -59,20 +61,25 @@ export class GeneratorComponent implements OnInit, OnDestroy {
       this.generatorService.mapBounds = null;
       this.generatorService.posterSrcSubject.next(null);
       this.generatorService.displayOverlay = this.generatorService.generatorType === 'map-poster';
+      this.generatorService.croppingComplete.next(false);
+      this.generatorService.cropperImgUrl = null;
 
       // identify product id
       switch (this.generatorService.generatorType) {
-        case 'remix-poster':
-          this.productId = '43a8b3fb-9da1-40f8-b02b-b508cb633006';
+        case 'fusion-poster':
+          this.productId = '34c1696a-6834-44f8-81a6-22922e6d9418';
           break;
         case 'patent-poster':
           this.productId = '19d80aa5-df4a-441b-939c-165957700240';
-          // reset orientation in case they switched from a landscape remix or something
+          // reset orientation in case they switched from a landscape fusion or something
           this.generatorService.orientation = 'Portrait';
           break;
         case 'map-poster':
           this.productId = 'c9d1a039-ed04-444d-a248-e213fca3acc0';
           this.generatorService.mapBounds = [[-73.9848829, 40.8235689], [-74.056895, 40.75737]]; // defaulting to NY currently
+          break;
+        case 'trace-poster':
+          this.productId = '36aca78d-cdc5-46b2-96ff-1f6624f8eef6';
           break;
       }
 
@@ -94,8 +101,17 @@ export class GeneratorComponent implements OnInit, OnDestroy {
       }
     );
 
-    // resetting this so it doesn't mess with formatting of poster on path change
-    this.generatorService.remixType = null;
+    // if orientation of poster changes rerender map
+    this.orientationSubscription = this.generatorService.orientationSubject.subscribe(
+      // needs a timeout or it doesn't rerender
+      () => { if (this.map) setTimeout(() => this.map.resize(), 50); }
+    );
+
+    // if size of poster changes rerender map
+    this.sizeSubscription = this.generatorService.sizeSubject.subscribe(
+      // needs a timeout or it doesn't rerender
+      () => { if (this.map) setTimeout(() => this.map.resize(), 50); }
+    );
   }
 
   ngOnInit() {
@@ -106,6 +122,8 @@ export class GeneratorComponent implements OnInit, OnDestroy {
     this.productSubscription.unsubscribe();
     this.tracingSubscription.unsubscribe();
     this.posterSourceSubscription.unsubscribe();
+    this.orientationSubscription.unsubscribe();
+    this.sizeSubscription.unsubscribe();
   }
 
   addToCart() {

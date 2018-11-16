@@ -1,0 +1,62 @@
+.igContainer {
+
+  .title {
+    text-align: center;
+  }
+  .gridContainer {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 100vw;
+
+    a:nth-child(n+6) {
+      display: none;
+    }
+    .gridTile {
+      background-size: contain;
+      background-repeat: no-repeat;
+      width: calc(40vw - 10px);
+      height: calc(40vw - 10px);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      margin: 0 10px 10px 10px;
+
+      .overlay {
+        opacity: 0;
+        width: 100%;
+        transition: opacity .5s ease-in;
+        position: absolute;
+        bottom: 0;
+        background: rgba(45, 45, 45, .8);
+        color: var(--color-white);
+        padding: 10%;
+      }
+    }
+    .gridTile:hover {
+
+      .overlay {
+        opacity: 1;
+      }
+    }
+  }
+  @media (min-width: 768px) {
+    .gridContainer {
+      flex-direction: row;
+  
+      .gridTile {
+        width: calc(100vw / 4);
+        height: calc(100vw / 4);
+      }
+    }
+  }
+  @media (min-width: 1024px) {
+    .gridContainer {
+  
+      .gridTile {
+        width: calc(100vw / 6);
+        height: calc(100vw / 6);
+      }
+    }
+  }
+}

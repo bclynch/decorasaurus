@@ -10,7 +10,6 @@ declare let ml5: any;
 export class GeneratorService {
 
   generatorType: string;
-  remixType: 'fusion' | 'trace' = null;
   mobileOptionsActive = false;
   product: MoltinProduct;
   posterElement;
@@ -40,9 +39,11 @@ export class GeneratorService {
   };
   size: 'Small' | 'Medium' | 'Large' = 'Medium';
   sizeOptions = ['Small', 'Medium', 'Large'];
+  public sizeSubject: BehaviorSubject<void>; // using to tell map to resize
   orientationMultiplier = 1;
   orientationOptions = ['Portrait', 'Landscape'];
   orientation: 'Portrait' | 'Landscape' = 'Portrait';
+  public orientationSubject: BehaviorSubject<void>; // using to tell map to resize
 
   // overlay props
   overlayTitle = 'New York';
@@ -82,6 +83,7 @@ export class GeneratorService {
   public optionsTabSubject: BehaviorSubject<number>;
   public posterSrc: Observable<string | SafeUrl>;
   public posterSrcSubject: BehaviorSubject<string | SafeUrl>;
+  public croppingComplete: BehaviorSubject<boolean>;
 
   constructor(
 
@@ -93,6 +95,9 @@ export class GeneratorService {
     this.posterSrcSubject = new BehaviorSubject<string | SafeUrl>(null);
     this.posterSrc = this.posterSrcSubject;
     this.mapSubject = new BehaviorSubject<string>(null);
+    this.orientationSubject = new BehaviorSubject<void>(null);
+    this.sizeSubject = new BehaviorSubject<void>(null);
+    this.croppingComplete = new BehaviorSubject<boolean>(false);
   }
 
   fuseImages(model: string) {
@@ -103,7 +108,6 @@ export class GeneratorService {
     .then(style => {
       // console.log(style.transfer(elem));
       style.transfer(this.posterElement).then((result) => {
-        // this.style1RemixSubject.next(result.src);
         this.processingFusion = false;
         this.posterSrcSubject.next(result.src);
         this.tracingSubject.next(false);
@@ -114,6 +118,7 @@ export class GeneratorService {
   selectSize(option: 'Small' | 'Medium' | 'Large') {
     this.size = option;
     this.quantifyDimensions();
+    this.sizeSubject.next(null);
   }
 
   selectOrientation(option: 'Portrait' | 'Landscape') {
@@ -125,6 +130,7 @@ export class GeneratorService {
       this.orientation = option;
     }
     this.quantifyDimensions();
+    this.orientationSubject.next(null);
   }
 
   quantifyDimensions() {
