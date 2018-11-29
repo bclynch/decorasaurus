@@ -24,7 +24,10 @@ export class AccountComponent implements OnInit {
     // needs to be fetched for payment cards if not there
     if (!this.stripeService.sources) this.stripeService.fetchCustomer('abc@aol.com');
     this.moltin.getCustomerOrders(this.customerService.customerId).then(
-      (orders) => this.orders = orders.data
+      (orders) => { this.orders = orders.data; console.log(this.orders); }
+    );
+    return this.moltin.getOrderItems().subscribe(
+      (orders) => console.log(orders)
     );
   }
 

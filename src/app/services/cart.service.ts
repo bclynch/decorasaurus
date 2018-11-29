@@ -118,6 +118,7 @@ export class CartService implements OnDestroy {
           description: 'My first custom item!',
           thumbnail_url: result.filter((link) => link.type === 'thumbnail')[0].S3Url,
           pdf_url: result.filter((link) => link.type === 'pdf')[0].S3Url,
+          crop_url: '',
           quantity: 1,
           price: {
             amount: 10000

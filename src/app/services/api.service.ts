@@ -7,6 +7,17 @@ import { ENV } from '../../environments/environment';
 import { Apollo } from 'apollo-angular';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 
+// mutations
+import {
+  registerUserCustomerMutation,
+  authUserCustomerMutation,
+  resetPasswordMutation,
+  updatePasswordMutation,
+  deleteAccountByIdMutation,
+} from '../api/mutations/customer.mutation';
+
+import { currentCustomerQuery } from '../api/queries/account.query';
+
 @Injectable()
 export class APIService {
 
@@ -16,38 +27,71 @@ export class APIService {
     private apollo: Apollo
   ) {}
 
-  // Create Customer
-  createCustomer(name: string, email: string, password: string) {
-    return this.http.post(`${ENV.apiBaseURL}/moltin/create-customer`, { name, email, password })
-    .pipe(map(
-        (response: Response) => {
-          const data = response.json();
-          return data;
-        }
-      )
-    ).pipe(catchError(
-        (error: Response) => {
-          console.log(error);
-          return throwError('Something went wrong');
-        }
-    ));
+  // *******************************************************************
+  // ************************* Queries *********************************
+  // *******************************************************************
+
+  getCurrentCustomer(): any {
+    return this.apollo.watchQuery<any>({
+      query: currentCustomerQuery
+    });
   }
 
-  // Login Customer
-  loginCustomer(email: string, password: string) {
-    return this.http.post(`${ENV.apiBaseURL}/moltin/login-customer`, { email, password })
-    .pipe(map(
-        (response: Response) => {
-          const data = response.json();
-          return data;
-        }
-      )
-    ).pipe(catchError(
-        (error: Response) => {
-          console.log(error);
-          return throwError('Something went wrong');
-        }
-    ));
+  // *******************************************************************
+  // ************************* Mutations *********************************
+  // *******************************************************************
+
+  // Create Customer
+  registerCustomer(firstName: string, lastName: string, email: string, password: string) {
+    return this.apollo.mutate({
+      mutation: registerUserCustomerMutation,
+      variables: {
+        firstName,
+        lastName,
+        email,
+        password
+      }
+    });
+  }
+
+  // Auth Customer
+  authCustomer(email: string, password: string): Observable<any> {
+    return this.apollo.mutate({
+      mutation: authUserCustomerMutation,
+      variables: {
+        email,
+        password
+      }
+    });
+  }
+
+  resetPassword(email: string) {
+    return this.apollo.mutate({
+      mutation: resetPasswordMutation,
+      variables: {
+        email
+      }
+    });
+  }
+
+  updatePassword(userId: number, password: string, newPassword: string) {
+    return this.apollo.mutate({
+      mutation: updatePasswordMutation,
+      variables: {
+        userId,
+        password,
+        newPassword
+      }
+    });
+  }
+
+  deleteAccountById(userId: number) {
+    return this.apollo.mutate({
+      mutation: deleteAccountByIdMutation,
+      variables: {
+        userId
+      }
+    });
   }
 
   // Posterize Uploads
@@ -97,7 +141,9 @@ export class APIService {
     ));
   }
 
-  // Stripe routes
+  // *******************************************************************
+  // ************************* Stripe Routes *********************************
+  // *******************************************************************
   createStripeCustomer(email: string, token: string) {
     return this.http.post(`${ENV.apiBaseURL}/stripe/create-customer`, { email, token })
     .pipe(map(

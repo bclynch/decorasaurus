@@ -14,7 +14,6 @@
         - https://www.pexels.com/search/living%20room/
         - https://www.pexels.com/search/bedroom/
         - Add a 'frame' with Gimp with filters -> decor -> add border
-- Perhaps look at splitting trace and fusion...
 - Map Posters
     - Add new map styles
     - Figure out rerender on orientation change - check
@@ -31,21 +30,6 @@
         - Node finishes up by making PDFs and changing color profile and all that business and patching the order with the correct image for printing
 
     - Size as custom field and maybe custom fields for overlay stuff
-    - For the front end we can use JS to mock it quickly while we use floyd for when user actually orders. Maybe just batch them all and process once a day or something to save $$$.
-        - Node scheduling https://github.com/kelektiv/node-cron or https://www.npmjs.com/package/node-schedule
-    - Need to make this shit 3rd party 
-        - https://docs.floydhub.com/examples/style_transfer/
-        - With the above can probably tweak the endpoint to accept base64 as well
-        - Floyd Serving
-            - https://docs.floydhub.com/guides/serving/
-            - When serving models, you will be charged for the full duration that your serving endpoint is active.
-            - Each serving job has a maximum uptime of 7 days. The 7 day timeout is common across all jobs you run on FloydHub, whether it be workspace, command jobs or serving jobs.
-        - Look at processing an image first before evaluating. We should know what size the user wants if this only is runa fter adding to cart. Perhaps making a png, perhaps making larger for big prints, perhaps stripping a bunch of size. Not sure at this point how much that affects time. Would need to test.
-        - Of note on the one test its almost too sharp and loses some of the artistic flair. Maybe compress it a bit while keeping the same dimensions will let it be a but more artistic with it.
-        - Performance
-            - Input file 4.9 mb 4032 × 3024
-            - Output 3.2 mb 4032 × 3024
-            - Time spent 50 seconds @ $1.20 / h = $.72
 - Finish order flow
     - Payment id didn't work - https://forum.moltin.com/t/saving-customer-card-information/1233/6
     - Need to grab customer email at some point to refer to them on stripe
@@ -134,6 +118,12 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 - Web app uses a service worked so we need to break the cache when we update. Change the cache version in service-worker.js to do this and prompt users to do the same.
 - Run `$ ionic build --prod` to run an AoT build
 - Use SFTP (cyber duck) to replace the www folder in /var/www/packonmyback.com/html on the server
+
+### Cookie Info
+-Using three cookies to track user logged in or not
+    - decorasaurus-user is given to users without a token (or expired). They are anonymous users. Used to keep track of their cart
+    - decorasaurus-customer-id is the id of the logged in user
+    - decorasaurus-token is token of the user
 
 #### Analytics
 

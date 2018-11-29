@@ -21,6 +21,18 @@ export class Moltin {
 
 	}
 
+	getOrderItems() {
+		return new Observable<MoltinAddress[]>(observer => {
+			this.moltin.Orders.With('items').All().then(data => {
+				observer.next(data);
+				observer.complete();
+			}).catch(error => {
+				observer.error(error);
+				observer.complete();
+			});
+		});
+	}
+
 	getAddresses(customerId: string, customerToken: string): Observable<MoltinAddress[]> {
 		return new Observable<MoltinAddress[]>(observer => {
 			this.moltin.Addresses.All({

@@ -8,6 +8,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { MoltinCustomer } from '../providers/moltin/models/customer';
 import { MatSnackBar, MAT_SNACK_BAR_DATA } from '@angular/material';
 import { Router } from '@angular/router';
+import { Apollo } from 'apollo-angular';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +27,8 @@ export class CustomerService implements OnDestroy {
     private apiService: APIService,
     private cookieService: CookieService,
     public snackBar: MatSnackBar,
-    private router: Router
+    private router: Router,
+    private apollo: Apollo
   ) {
     // this._subject = new BehaviorSubject<string>(null);
     this.customerToken = new BehaviorSubject<string>(null);
@@ -37,22 +39,25 @@ export class CustomerService implements OnDestroy {
   }
 
   fetchUser(): void {
-    // create uuid and put in cookie if doesn't exist or ref the existing one
-    // uuid is generated for all users logged in or not
-    const cookieUuid = this.cookieService.get('decorasaurus-user');
-    if (cookieUuid) {
-      this.customerUuid = cookieUuid;
+    // uses token to check if logged in / expired
+    this.apiService.getCurrentCustomer().valueChanges.subscribe(({ data }) => {
+      console.log(data);
+      // if logged in set our customer id and set the token
+      if (data.currentCustomer) {
+        this.customerId = data.currentCustomer.id;
+        const cookieToken = this.cookieService.get('decorasaurus-token');
+        if (cookieToken) this.customerToken.next(cookieToken);
+      } else {
+        // if it doesnt exist dump the token
+        this.cookieService.delete('decorasaurus-token');
+        this.cookieService.delete('decorasaurus-customer-id');
 
-      // check and see if there's logged in info like an id or token
-      const cookieId = this.cookieService.get('decorasaurus-customer-id');
-      if (cookieId) this.customerId = cookieId;
-      const cookieToken = this.cookieService.get('decorasaurus-token');
-      if (cookieToken) this.customerToken.next(cookieToken);
-    } else {
-      const userUuid = uuid();
-      this.cookieService.set( 'decorasaurus-user', userUuid );
-      this.customerUuid = userUuid;
-    }
+        // create uuid and put in cookie if doesn't exist
+        const userUuid = uuid();
+        this.cookieService.set( 'decorasaurus-user', userUuid );
+        this.customerUuid = userUuid;
+      }
+    });
   }
 
   signin(type: 'login' | 'signup', path?: string): void {
@@ -63,27 +68,36 @@ export class CustomerService implements OnDestroy {
     this.dialogueSubscription = dialogRef.afterClosed().subscribe(result => {
       if (result) {
         if (result.type === 'signup') this.createCustomer(result.data);
-        if (result.type === 'login') this.loginCustomer(result.data).then(() => { if (path) this.router.navigateByUrl(`/${path}`); });
+        if (result.type === 'login') this.loginCustomer(result.data.email, result.data.password).then(() => { if (path) this.router.navigateByUrl(`/${path}`); });
       }
     });
   }
 
   createCustomer(data): void {
     console.log(data);
-    this.apiService.createCustomer(`${data.firstName} ${data.lastName}`, data.email, data.matchingPassword.password).subscribe(
-      resp => console.log(resp),
+    this.apiService.registerCustomer(data.firstName, data.lastName, data.email, data.matchingPassword.password).subscribe(
+      () =>  {
+        this.loginCustomer(data.email, data.matchingPassword.password).then(
+          (result) => console.log(result)
+        );
+      },
       err => console.log(err)
     );
   }
 
-  loginCustomer(data): Promise<void> {
+  loginCustomer(email: string, password: string): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.apiService.loginCustomer(data.email, data.password).subscribe(
-        (resp: { token: MoltinCustomer }) => {
-          this.customerId = resp.token.customer_id;
-          this.customerToken.next(resp.token.token);
-          this.cookieService.set( 'decorasaurus-token', resp.token.token, resp.token.expires );
-          this.cookieService.set( 'decorasaurus-customer-id', resp.token.customer_id );
+      console.log(email, password);
+      this.apiService.authCustomer(email, password).subscribe(({data}) => {
+        console.log('got data', data);
+        if (data.authenticateUserCustomer.jwtToken) {
+          // reset apollo cache and refetch queries
+          this.apollo.getClient().resetStore();
+
+          // this.customerId = resp.token.customer_id;
+          this.customerToken.next(data.authenticateUserCustomer.jwtToken);
+          this.cookieService.set( 'decorasaurus-token', data.authenticateUserCustomer.jwtToken );
+          // this.cookieService.set( 'decorasaurus-customer-id', resp.token.customer_id );
 
           this.snackBar.openFromComponent(CustomerStateSnackbar, {
             duration: 3000,
@@ -92,9 +106,19 @@ export class CustomerService implements OnDestroy {
             panelClass: ['snackbar-theme']
           });
           resolve();
-        },
-        (err) => reject(err)
-      );
+        } else {
+          // incorrect login warning
+          this.snackBar.openFromComponent(CustomerStateSnackbar, {
+            duration: 3000,
+            verticalPosition: 'top',
+            data: { message: `Incorrect login credentials, try again.` },
+            panelClass: ['snackbar-theme']
+          });
+        }
+      }, (error) => {
+        console.log('there was an error sending the query', error);
+        reject(error);
+      });
     });
   }
 
@@ -104,6 +128,9 @@ export class CustomerService implements OnDestroy {
       this.cookieService.delete('decorasaurus-customer-id');
       this.customerToken.next(null);
       this.customerId = null;
+
+      // reset apollo cache and refetch queries
+      this.apollo.getClient().resetStore();
 
       this.snackBar.openFromComponent(CustomerStateSnackbar, {
         duration: 3000,
