@@ -9,13 +9,14 @@ import { BehaviorSubject, Observable, SubscriptionLike} from 'rxjs';
 import { APIService } from './api.service';
 import { GeneratorService } from './generator.service';
 
+import { LinkType } from '../api/mutations/cart.mutation';
+
 @Injectable({
   providedIn: 'root'
 })
 export class CartService implements OnDestroy {
 
   getCartSubscription: SubscriptionLike;
-  cartItemsSubscription: SubscriptionLike;
   addToCartSubscription: SubscriptionLike;
   removeFromCartSubscription: SubscriptionLike;
   updateCartSubscription: SubscriptionLike;
@@ -38,7 +39,6 @@ export class CartService implements OnDestroy {
 
   ngOnDestroy() {
     this.getCartSubscription.unsubscribe();
-    this.cartItemsSubscription.unsubscribe();
     this.addToCartSubscription.unsubscribe();
     this.removeFromCartSubscription.unsubscribe();
     this.updateCartSubscription.unsubscribe();
@@ -46,63 +46,14 @@ export class CartService implements OnDestroy {
 
   getCart(): Promise<void> {
     return new Promise((resolve) => {
-      this.getCartSubscription = this.moltin.getCart(this.customerService.customerUuid).subscribe(
-        (data => {
-          const anyData: any = data;
-          this.cart = anyData.data;
-
-          this.getCartItems().then(
-            () => resolve()
-          );
-        })
-      );
+      this.getCartSubscription = this.apiService.getCartById(this.customerService.customerUuid).valueChanges.subscribe(({ data }) => {
+        console.log(data);
+        this.cartSubject.next(data.cartById);
+      });
     });
   }
 
-  getCartItems(): Promise<void> {
-    return new Promise((resolve) => {
-      this.cartItemsSubscription = this.moltin.getCartItems(this.customerService.customerUuid).subscribe(
-        (data => {
-          this.cartSubject.next(data);
-          resolve();
-        })
-      );
-    });
-  }
-
-  addToCart(product: MoltinProduct, blob: Blob, background: string): void {
-    const formData = new FormData();
-    formData.append('poster', blob);
-    formData.append('background', background);
-    formData.append('orientation', this.generatorService.orientation);
-    formData.append('size', this.generatorService.size);
-    // Need to create thumbnail for product + pdf to s3 then add to cart
-    this.apiService.processPoster(formData).subscribe(
-      (result: { type: 'thumbnail' | 'pdf', S3Url: string }[]) => {
-        console.log(result);
-        // product.thumbnail_url = result.filter((link) => link.type === 'thumbnail')[0].S3Url;
-        // product.pdf_url = result.filter((link) => link.type === 'pdf')[0].S3Url;
-        console.log(product);
-        this.addToCartSubscription = this.moltin.addToCart(this.customerService.customerUuid, product).subscribe(
-          (data => {
-            console.log(data);
-
-            // append links to cart items
-            // this.moltin.
-
-            this.cartSubject.next(data);
-
-            this.bottomSheet.open(AddCartNav, {
-              data: { product },
-              hasBackdrop: false
-            });
-          })
-        );
-      }
-    );
-  }
-
-  addCustomToCart(product: MoltinProduct, dataUrl: string): void {
+  addToCart(sku: string, quantity: number, dataUrl: string): void {
     const formData = new FormData();
     formData.append('poster', dataUrl);
     formData.append('orientation', this.generatorService.orientation);
@@ -111,31 +62,34 @@ export class CartService implements OnDestroy {
     this.apiService.processPoster(formData).subscribe(
       (result: { type: 'thumbnail' | 'pdf', S3Url: string }[]) => {
         console.log(result);
-        console.log(product);
-        const item = {
-          name: `My ${Date.now().toString()} Item`,
-          sku: Date.now().toString(),
-          description: 'My first custom item!',
-          thumbnail_url: result.filter((link) => link.type === 'thumbnail')[0].S3Url,
-          pdf_url: result.filter((link) => link.type === 'pdf')[0].S3Url,
-          crop_url: '',
-          quantity: 1,
-          price: {
-            amount: 10000
-          }
-        };
-        console.log(item);
-        this.addToCartSubscription = this.moltin.addCustomToCart(this.customerService.customerUuid, item).subscribe(
-          (derp) => {
-            console.log(derp);
+        // console.log(product);
+        // const item = {
+        //   name: `My ${Date.now().toString()} Item`,
+        //   sku: Date.now().toString(),
+        //   description: 'My first custom item!',
+        //   thumbnail_url: result.filter((link) => link.type === 'thumbnail')[0].S3Url,
+        //   pdf_url: result.filter((link) => link.type === 'pdf')[0].S3Url,
+        //   crop_url: '',
+        //   quantity: 1,
+        //   price: {
+        //     amount: 10000
+        //   }
+        // };
+        this.apiService.createCartItem(this.customerService.customerUuid, sku, quantity).subscribe(
+          ({ data }) => {
+            console.log(data);
+            this.cartSubject.next(data.createCartItem.cartByCartId);
 
-            this.cartSubject.next(derp);
-            this.generatorService.isAddingToCart = false;
+            this.apiService.createProductLink(data.createCartItem.cartItem.id, null, LinkType.PDF, result.filter((link) => link.type === 'pdf')[0].S3Url).subscribe(
+              () => {
+                this.generatorService.isAddingToCart = false;
 
-            this.bottomSheet.open(AddCartNav, {
-              data: { product },
-              hasBackdrop: false
-            });
+                this.bottomSheet.open(AddCartNav, {
+                  data: this.generatorService.product.name,
+                  hasBackdrop: false
+                });
+              }
+            );
           }
         );
       }
@@ -152,9 +106,7 @@ export class CartService implements OnDestroy {
 
   updateCartItem(product: MoltinCartItem, quantity: number) {
     this.updateCartSubscription = this.moltin.updateCartItem(this.customerService.customerUuid, product.id, quantity).subscribe(
-      (data) => {
-        this.cartSubject.next(data);
-      }
+      (data) => this.cartSubject.next(data)
     );
   }
 
@@ -169,7 +121,7 @@ export class CartService implements OnDestroy {
   selector: 'app-add-cart-nav',
   template: `
     <div class="wrapper">
-      <div>"{{data.product.name}}" was added to your cart.</div>
+      <div>"{{data}}" was added to your cart.</div>
       <div class="btnRow">
         <button mat-button (click)="navigate('/cart')" color="primary">View Cart</button>
         <button mat-button (click)="navigate('/checkout')" color="primary">Go To Checkout</button>
@@ -197,7 +149,7 @@ export class CartService implements OnDestroy {
 })
 export class AddCartNav {
   constructor(
-    @Inject(MAT_BOTTOM_SHEET_DATA) public data: any,
+    @Inject(MAT_BOTTOM_SHEET_DATA) public data: string,
     public matBottomSheetRef: MatBottomSheetRef<AddCartNav>,
     private router: Router
   ) {

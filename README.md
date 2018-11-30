@@ -2,6 +2,28 @@
 
 
 ## Todos
+- Wire in New API
+    - Customer Endpoints
+        - ~~Register~~
+        - ~~Login~~
+        - ~~Logout~~
+        - Delete Account
+    - Cart Endpoints
+        - ~~Create Cart~~
+        - ~~Fetch Cart~~
+        - ~~Add Item to Cart~~
+            - Append links
+            - ~~Endpoint working~~
+            - Custom gql to append multiple links at a time i.e both a thumbnail and pdf in one trip. Did similar with images in blog creator on pomb
+        - Remove item from cart
+        - Update item in cart
+        - Add customer id to cart when logged in and logic to fetch from any device
+    - Order Endpoints
+        - Create order
+        - Delete Order
+        - Convert cart items to order items
+    - Stripe Endpoints
+        - lalala
 - Splash Page
     - Carousel Top like https://www.thecriticalslidesociety.com/
     - Small divider section like 49th coffee https://49thcoffee.com/

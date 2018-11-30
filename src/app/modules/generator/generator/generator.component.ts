@@ -10,6 +10,7 @@ import { Map } from 'mapbox-gl';
 
 import { PrintMapComponent } from '../print-map/print-map.component';
 import { UtilService } from 'src/app/services/util.service';
+import { APIService } from 'src/app/services/api.service';
 
 
 @Component({
@@ -30,7 +31,7 @@ export class GeneratorComponent implements OnInit, OnDestroy {
   sizeSubscription: SubscriptionLike;
 
   tracing: boolean;
-  productId: string;
+  productSku: string;
   posterSrc: string | SafeUrl;
   posterSrcHidden: string | SafeUrl;
 
@@ -52,7 +53,8 @@ export class GeneratorComponent implements OnInit, OnDestroy {
     private elRef: ElementRef,
     private generatorService: GeneratorService,
     private componentFactoryResolver: ComponentFactoryResolver,
-    private utilService: UtilService
+    private utilService: UtilService,
+    private apiService: APIService
   ) {
     this.paramsSubscription = this.route.params.subscribe((params) => {
       this.generatorService.generatorType = params.type;
@@ -67,25 +69,26 @@ export class GeneratorComponent implements OnInit, OnDestroy {
       // identify product id
       switch (this.generatorService.generatorType) {
         case 'fusion-poster':
-          this.productId = '34c1696a-6834-44f8-81a6-22922e6d9418';
+          this.productSku = 'fusion';
           break;
         case 'patent-poster':
-          this.productId = '19d80aa5-df4a-441b-939c-165957700240';
+          this.productSku = 'patent';
           // reset orientation in case they switched from a landscape fusion or something
           this.generatorService.orientation = 'Portrait';
           break;
         case 'map-poster':
-          this.productId = 'c9d1a039-ed04-444d-a248-e213fca3acc0';
+          this.productSku = 'map';
           this.generatorService.mapBounds = [[-73.9848829, 40.8235689], [-74.056895, 40.75737]]; // defaulting to NY currently
           break;
         case 'trace-poster':
-          this.productId = '36aca78d-cdc5-46b2-96ff-1f6624f8eef6';
+          this.productSku = 'trace';
           break;
       }
 
       // fetch product info
-      this.productSubscription = this.moltin.getProductById(this.productId).subscribe(product => {
-        this.generatorService.product = product;
+      this.productSubscription = this.apiService.getProductBySku(this.productSku).valueChanges.subscribe(({data}) => {
+        console.log(data);
+        this.generatorService.product = data.productBySku;
       });
     });
 
@@ -127,17 +130,18 @@ export class GeneratorComponent implements OnInit, OnDestroy {
   }
 
   addToCart() {
-    // need spinner on add to cart btn
     this.generatorService.isAddingToCart = true;
     if (this.generatorService.generatorType === 'map-poster') {
       this.createPrintMap().then(
         (dataUrl) => {
           this.posterSrcHidden = dataUrl;
-          setTimeout(() => this.captureImage(), 50); // timeout so the dom element can populate correctly
+          setTimeout(() => {
+            this.captureImage().then((png) => this.cartService.addToCart(this.productSku, 1, png));
+          }, 50); // timeout so the dom element can populate correctly
         }
       );
     } else {
-      this.captureImage();
+      this.captureImage().then((png) => this.cartService.addToCart(this.productSku, 1, png));
     }
   }
 
@@ -176,16 +180,18 @@ export class GeneratorComponent implements OnInit, OnDestroy {
     });
   }
 
-  captureImage() {
-    const node = this.elRef.nativeElement.querySelector('#poster');
+  captureImage(): Promise<string> {
+    return new Promise((resolve) => {
+      const node = this.elRef.nativeElement.querySelector('#poster');
 
-    domtoimage.toPng(node)
-      .then((png) => {
-        // saveAs(blob, 'Student-Talks-poster.png'); -- Must be 'toBLob' not 'toPng
-        this.cartService.addCustomToCart(this.generatorService.product, png);
-      })
-      .catch(function (error) {
-        console.error('oops, something went wrong!', error);
-      });
+      domtoimage.toPng(node)
+        .then((png) => {
+          // saveAs(blob, 'Student-Talks-poster.png'); -- Must be 'toBLob' not 'toPng
+          resolve(png);
+        })
+        .catch(function (error) {
+          console.error('oops, something went wrong!', error);
+        });
+    });
   }
 }

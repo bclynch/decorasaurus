@@ -7,7 +7,7 @@
   </div>
   <div class="productContainer">
     <div class="productName boldFont">{{generatorService.product?.name}}</div>
-    <div class="productPrice">{{generatorService.product?.meta.display_price.with_tax.formatted}}</div>
+    <div class="productPrice">{{utilService.displayPrice(generatorService.product) | currency: customerService.currency}}</div>
   </div>
   <div>
     <div class="tabNav">

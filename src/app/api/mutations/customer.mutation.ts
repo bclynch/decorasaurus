@@ -78,7 +78,7 @@ export const updatePasswordMutation: DocumentNode = gql`
 `;
 
 export const deleteAccountByIdMutation: DocumentNode = gql`
-  mutation($userId: Int!) {
+  mutation($userId: UUID!) {
     deleteAccountById(input: {
       id: $userId
     }) {

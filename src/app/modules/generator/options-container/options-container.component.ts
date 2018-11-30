@@ -1,6 +1,8 @@
 import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { GeneratorService } from 'src/app/services/generator.service';
 import { SubscriptionLike } from 'rxjs';
+import { UtilService } from 'src/app/services/util.service';
+import { CustomerService } from 'src/app/services/customer.service';
 
 @Component({
   selector: 'app-options-container',
@@ -15,7 +17,9 @@ export class OptionsContainerComponent implements OnInit, OnDestroy {
   tabSubscription: SubscriptionLike;
 
   constructor(
-    private generatorService: GeneratorService
+    private generatorService: GeneratorService,
+    private utilService: UtilService,
+    private customerService: CustomerService
   ) {
     this.tabSubscription = this.generatorService.optionsTab.subscribe(
       (tab) => this.selectedTab = tab

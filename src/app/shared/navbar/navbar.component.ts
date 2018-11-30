@@ -96,12 +96,9 @@ export class NavbarComponent implements OnDestroy {
     private customerService: CustomerService
   ) {
     this.cartSubscription = this.cartService.cartItems.subscribe(
-      (items) => {
-        if (items) {
-          let cart = 0;
-          items.data.forEach((item) => cart += item.quantity);
-          this.cartNumber = cart;
-        }
+      (items: any) => {
+        console.log(items);
+        if (items) this.cartNumber = items.cartItemsByCartId.nodes.length ? items.cartItemsByCartId.nodes.map((item) => item.quantity).reduce((x, y) => x + y) : 0;
       }
     );
   }

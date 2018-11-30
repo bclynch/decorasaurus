@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SafeUrl } from '@angular/platform-browser';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { MoltinProduct } from '../providers/moltin/models/product';
 import { Map } from 'mapbox-gl';
 // import { saveAs } from 'file-saver';
 declare let ml5: any;
@@ -11,7 +10,7 @@ export class GeneratorService {
 
   generatorType: string;
   mobileOptionsActive = false;
-  product: MoltinProduct;
+  product;
   posterElement;
   processingFusion = false;
   cropperImgUrl: string | ArrayBuffer;

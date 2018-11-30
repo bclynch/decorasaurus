@@ -19,8 +19,8 @@ export class SettingsService {
   }
 
   appInit() {
-    this.customerService.fetchUser();
-
-    this.cartService.getCart().then(() => this._subject.next(true));
+    this.customerService.fetchUser().then(
+      () => this.cartService.getCart().then(() => this._subject.next(true))
+    );
   }
 }

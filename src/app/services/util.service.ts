@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Observable } from 'rxjs';
 import { Http } from '@angular/http';
 import { map } from 'rxjs/operators';
+import { CustomerService } from './customer.service';
 
 @Injectable()
 export class UtilService {
@@ -17,7 +18,8 @@ export class UtilService {
   public infiniteActive: boolean;
 
   constructor(
-    private http: Http
+    private http: Http,
+    private customerService: CustomerService
   ) {
     this.infiniteActiveSubject = new BehaviorSubject(null);
     this.infiniteActive$ = this.infiniteActiveSubject.asObservable();
@@ -42,5 +44,12 @@ export class UtilService {
   toPixels(length: number): string {
     const conversionFactor = 96;
     return conversionFactor * length + 'px';
+  }
+
+  displayPrice(product) {
+    if (product) {
+      return product.productPricesByProductSku.nodes.filter((price) => price.currency === this.customerService.currency)[0].amount / 100;
+    }
+    return '';
   }
 }

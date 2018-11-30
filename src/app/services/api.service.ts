@@ -16,6 +16,17 @@ import {
   deleteAccountByIdMutation,
 } from '../api/mutations/customer.mutation';
 
+import {
+  createCartMutation,
+  deleteCartMutation,
+  createCartItemMutation,
+  createProductLinkMutation,
+  LinkType
+} from '../api/mutations/cart.mutation';
+
+// queries
+import { cartByIdQuery } from '../api/queries/cart.query';
+import { productBySkuQuery } from '../api/queries/product.query';
 import { currentCustomerQuery } from '../api/queries/account.query';
 
 @Injectable()
@@ -34,6 +45,24 @@ export class APIService {
   getCurrentCustomer(): any {
     return this.apollo.watchQuery<any>({
       query: currentCustomerQuery
+    });
+  }
+
+  getCartById(cartId: string): any {
+    return this.apollo.watchQuery<any>({
+      query: cartByIdQuery,
+      variables: {
+        cartId
+    }
+    });
+  }
+
+  getProductBySku(sku: string): any {
+    return this.apollo.watchQuery<any>({
+      query: productBySkuQuery,
+      variables: {
+        sku
+    }
     });
   }
 
@@ -74,7 +103,7 @@ export class APIService {
     });
   }
 
-  updatePassword(userId: number, password: string, newPassword: string) {
+  updatePassword(userId: string, password: string, newPassword: string) {
     return this.apollo.mutate({
       mutation: updatePasswordMutation,
       variables: {
@@ -85,11 +114,53 @@ export class APIService {
     });
   }
 
-  deleteAccountById(userId: number) {
+  deleteAccountById(userId: string) {
     return this.apollo.mutate({
       mutation: deleteAccountByIdMutation,
       variables: {
         userId
+      }
+    });
+  }
+
+  createCart(cartId: string) {
+    console.log(cartId);
+    return this.apollo.mutate({
+      mutation: createCartMutation,
+      variables: {
+        cartId
+      }
+    });
+  }
+
+  deleteCart(cartId: string) {
+    return this.apollo.mutate({
+      mutation: deleteCartMutation,
+      variables: {
+        cartId
+      }
+    });
+  }
+
+  createCartItem(cartId: string, productSku: string, quantity: number) {
+    return this.apollo.mutate({
+      mutation: createCartItemMutation,
+      variables: {
+        cartId,
+        productSku,
+        quantity
+      }
+    });
+  }
+
+  createProductLink(cartItemId: string, orderItemId: string, type: LinkType, url: string) {
+    return this.apollo.mutate({
+      mutation: createProductLinkMutation,
+      variables: {
+        cartItemId,
+        orderItemId,
+        type,
+        url
       }
     });
   }

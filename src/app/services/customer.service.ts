@@ -18,6 +18,7 @@ export class CustomerService implements OnDestroy {
   dialogueSubscription: SubscriptionLike;
   customerUuid: string;
   customerId: string;
+  currency: 'USD' | 'EUR' = 'EUR';
 
   public customerToken: BehaviorSubject<string>;
   // private _subject: BehaviorSubject<string>;
@@ -38,24 +39,51 @@ export class CustomerService implements OnDestroy {
     this.dialogueSubscription.unsubscribe();
   }
 
-  fetchUser(): void {
-    // uses token to check if logged in / expired
-    this.apiService.getCurrentCustomer().valueChanges.subscribe(({ data }) => {
-      console.log(data);
-      // if logged in set our customer id and set the token
-      if (data.currentCustomer) {
-        this.customerId = data.currentCustomer.id;
-        const cookieToken = this.cookieService.get('decorasaurus-token');
-        if (cookieToken) this.customerToken.next(cookieToken);
-      } else {
-        // if it doesnt exist dump the token
-        this.cookieService.delete('decorasaurus-token');
-        this.cookieService.delete('decorasaurus-customer-id');
+  fetchUser(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.checkNewUser().then(
+        (isNew) => {
+          if (isNew) {
+            resolve();
+          } else {
+            // uses token to check if logged in / expired
+            this.apiService.getCurrentCustomer().valueChanges.subscribe(({ data }) => {
+              console.log(data);
 
-        // create uuid and put in cookie if doesn't exist
+              // if logged in set our customer id and set the token
+              if (data.currentCustomer) {
+                this.customerId = data.currentCustomer.id;
+                const cookieToken = this.cookieService.get('decorasaurus-token');
+                if (cookieToken) this.customerToken.next(cookieToken);
+              } else {
+                // if it doesnt exist dump the token
+                this.cookieService.delete('decorasaurus-token');
+                this.cookieService.delete('decorasaurus-customer-id');
+              }
+              resolve();
+            });
+          }
+        }
+      );
+    });
+  }
+
+  private checkNewUser(): Promise<boolean> {
+    // check if cookie identifying user exists
+    // If it does not we have a new user and need to create an ID for them + cart
+    return new Promise((resolve, reject) => {
+      if (this.cookieService.get('decorasaurus-user')) {
+        this.customerUuid = this.cookieService.get('decorasaurus-user');
+        resolve(false);
+      } else {
         const userUuid = uuid();
         this.cookieService.set( 'decorasaurus-user', userUuid );
         this.customerUuid = userUuid;
+
+        // need to create cart for new user as well
+        this.apiService.createCart(this.customerUuid).subscribe(
+          () => resolve(true)
+        );
       }
     });
   }
