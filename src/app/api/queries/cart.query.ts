@@ -18,6 +18,16 @@ export const cartByIdQuery: DocumentNode = gql`
               type,
               url
             }
+          },
+          productByProductSku {
+            name,
+            description,
+            productPricesByProductSku {
+              nodes {
+                amount,
+                currency
+              }
+            }
           }
         }
       }

@@ -1,17 +1,27 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { MoltinCartResp } from 'src/app/providers/moltin/models/cart';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { CartService } from 'src/app/services/cart.service';
+import { CustomerService } from 'src/app/services/customer.service';
 
 @Component({
   selector: 'app-cart-totals',
   templateUrl: './cart-totals.component.html',
   styleUrls: ['./cart-totals.component.scss']
 })
-export class CartTotalsComponent implements OnInit {
-  @Input() cart: MoltinCartResp;
+export class CartTotalsComponent implements OnInit, OnChanges {
+  @Input() cart;
 
-  constructor() { }
+  subTotal: number;
+
+  constructor(
+    private cartService: CartService,
+    private customerService: CustomerService
+  ) { }
 
   ngOnInit() {
+
   }
 
+  ngOnChanges() {
+    this.subTotal = this.cartService.quantifyCartTotal(this.cart);
+  }
 }

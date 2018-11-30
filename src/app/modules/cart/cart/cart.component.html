@@ -13,7 +13,7 @@
         <div>({{tab.number}})</div>
       </div>
     </div>
-    <div *ngIf="(activeTab === 0 && cart?.data.length) || (activeTab === 1 && wishlistProducts.length)" class="generalWrapper">
+    <div *ngIf="(activeTab === 0 && cart?.length) || (activeTab === 1 && wishlistProducts.length)" class="generalWrapper">
       <div class="headerContainer">
         <div>Item Description</div>
         <div class="perEa">Each</div>
@@ -21,7 +21,7 @@
         <div>Total</div>
       </div>
       <div class="productContainer" *ngIf="activeTab === 0">
-        <div class="cartItemWrapper" *ngFor="let product of cart?.data; let i = index;">
+        <div class="cartItemWrapper" *ngFor="let product of cart; let i = index;">
           <app-cart-item-card [product]="product"></app-cart-item-card>
         </div>
         <div class="infoWrapper">
@@ -57,7 +57,7 @@
         </div>
       </div>
     </div>
-    <div *ngIf="activeTab === 0 && !cart?.data.length" class="emptyState">
+    <div *ngIf="activeTab === 0 && !cart?.length" class="emptyState">
       <div><img class="logoImg" src="../../../assets/dino.svg" /></div>
       <div>Your cart is empty. Add some products to see them here!</div>
     </div>

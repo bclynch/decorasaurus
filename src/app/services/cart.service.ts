@@ -10,6 +10,7 @@ import { APIService } from './api.service';
 import { GeneratorService } from './generator.service';
 
 import { LinkType } from '../api/mutations/cart.mutation';
+import { UtilService } from './util.service';
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +32,8 @@ export class CartService implements OnDestroy {
     private router: Router,
     private bottomSheet: MatBottomSheet,
     private apiService: APIService,
-    private generatorService: GeneratorService
+    private generatorService: GeneratorService,
+    private utilService: UtilService
   ) {
     this.cartSubject = new BehaviorSubject<MoltinCartItem[]>(null);
     this.cartItems = this.cartSubject;
@@ -49,6 +51,7 @@ export class CartService implements OnDestroy {
       this.getCartSubscription = this.apiService.getCartById(this.customerService.customerUuid).valueChanges.subscribe(({ data }) => {
         console.log(data);
         this.cartSubject.next(data.cartById);
+        resolve();
       });
     });
   }
@@ -104,9 +107,11 @@ export class CartService implements OnDestroy {
     );
   }
 
-  updateCartItem(product: MoltinCartItem, quantity: number) {
-    this.updateCartSubscription = this.moltin.updateCartItem(this.customerService.customerUuid, product.id, quantity).subscribe(
-      (data) => this.cartSubject.next(data)
+  updateCartItem(product, quantity: number) {
+    this.apiService.updateCartItem(product.id, quantity).subscribe(
+      ({ data }) => {
+        this.cartSubject.next(data.updateCartItemById.cartByCartId);
+      }
     );
   }
 
@@ -114,6 +119,12 @@ export class CartService implements OnDestroy {
     this.moltin.applyPromoCode(this.customerService.customerUuid, code).subscribe(
       (data) => this.cartSubject.next(data)
     );
+  }
+
+  quantifyCartTotal(cart): number {
+    let total = 0;
+    cart.forEach((item) => total += this.utilService.displayPrice(item.productByProductSku) * item.quantity);
+    return total;
   }
 }
 

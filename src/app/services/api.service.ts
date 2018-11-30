@@ -21,7 +21,8 @@ import {
   deleteCartMutation,
   createCartItemMutation,
   createProductLinkMutation,
-  LinkType
+  LinkType,
+  updateCartItemMutation
 } from '../api/mutations/cart.mutation';
 
 // queries
@@ -148,6 +149,16 @@ export class APIService {
       variables: {
         cartId,
         productSku,
+        quantity
+      }
+    });
+  }
+
+  updateCartItem(cartItemId: string, quantity: number) {
+    return this.apollo.mutate({
+      mutation: updateCartItemMutation,
+      variables: {
+        cartItemId,
         quantity
       }
     });

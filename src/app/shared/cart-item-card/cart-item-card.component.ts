@@ -1,26 +1,35 @@
-import { Component, OnInit, Input, Inject } from '@angular/core';
-import { MoltinCartItem } from 'src/app/providers/moltin/models/cart';
+import { Component, OnInit, Input, Inject, OnChanges } from '@angular/core';
 import { MatSnackBar, MAT_SNACK_BAR_DATA } from '@angular/material';
 import { CartService } from 'src/app/services/cart.service';
+import { UtilService } from 'src/app/services/util.service';
+import { CustomerService } from 'src/app/services/customer.service';
 
 @Component({
   selector: 'app-cart-item-card',
   templateUrl: './cart-item-card.component.html',
   styleUrls: ['./cart-item-card.component.scss']
 })
-export class CartItemCardComponent implements OnInit {
-  @Input() product: MoltinCartItem;
+export class CartItemCardComponent implements OnInit, OnChanges {
+  @Input() product;
   @Input() isCheckout = false;
+
+  perEach: number;
 
   constructor(
     public snackBar: MatSnackBar,
-    private cartService: CartService
+    private cartService: CartService,
+    private utilService: UtilService,
+    private customerService: CustomerService
   ) { }
 
   ngOnInit() {
   }
 
-  remove(product: MoltinCartItem): void {
+  ngOnChanges() {
+    this.perEach = this.utilService.displayPrice(this.product.productByProductSku);
+  }
+
+  remove(product): void {
     this.cartService.removeFromCart(product);
     this.snackBar.openFromComponent(RemoveSnackbar, {
       duration: 3000,
@@ -30,7 +39,7 @@ export class CartItemCardComponent implements OnInit {
     });
   }
 
-  recalcQuant(e: Event, product: MoltinCartItem, index: number) {
+  recalcQuant(e: Event, product, index: number) {
     e.preventDefault();
     if (product.quantity > 0) this.cartService.updateCartItem(product, this.product.quantity);
   }

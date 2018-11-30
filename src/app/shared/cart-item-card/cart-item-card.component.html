@@ -5,9 +5,9 @@
     </div>
     <div class="descWrapper">
       <div class="productDescriptionContainer">
-        <div class="productName">{{product.name}}</div>
-        <div class="productDescription">{{product.description}}</div>
-        <div class="productId">{{product.product_id}}</div>
+        <div class="productName">{{product.productByProductSku.name}}</div>
+        <div class="productDescription">{{product.productByProductSku.description}}</div>
+        <div class="productId">SKU: {{product.productSku}}</div>
       </div>
       <div class="optionsContainer" *ngIf="!isCheckout">
         <div *ngIf="product.type === 'custom_item'">Move To Wishlist</div>
@@ -15,10 +15,10 @@
       </div>
     </div>
   </div>
-  <div class="perEa">{{product.meta.display_price.without_tax.unit.formatted}}</div>
+  <div class="perEa">{{perEach | currency: customerService.currency}}</div>
   <div class="rightWrapper">
     <div class="quantityContainer">
-      <form (submit)="recalcQuant($event, product, i)" *ngIf="!isCheckout && product.type === 'custom_item'">
+      <form (submit)="recalcQuant($event, product, i)" *ngIf="!isCheckout">
         <input 
           matInput 
           [(ngModel)]="product.quantity" 
@@ -30,8 +30,6 @@
       </form>
       <div *ngIf="isCheckout">{{product.quantity}}</div>
     </div>
-    <div>
-      {{product.meta.display_price.without_tax.value.formatted}}
-    </div>
+    <div>{{(perEach * product.quantity) | currency: customerService.currency}}</div>
   </div>
 </div>

@@ -1,7 +1,7 @@
 <div class="totalsContainer">
   <div class="subtotal">
     <div>Subtotal</div>
-    <div>{{cart?.meta.display_price.without_tax.formatted}}</div>
+    <div>{{subTotal | currency: customerService.currency}}</div>
   </div>
   <div class="shipping">
     <div>Shipping</div>
@@ -13,6 +13,6 @@
   </div>
   <div class="total boldFont">
     <div>Total</div>
-    <div>{{cart?.meta.display_price.without_tax.formatted}}</div>
+    <div>{{subTotal | currency: customerService.currency}}</div>
   </div>
 </div>

@@ -16,7 +16,7 @@
             - ~~Endpoint working~~
             - Custom gql to append multiple links at a time i.e both a thumbnail and pdf in one trip. Did similar with images in blog creator on pomb
         - Remove item from cart
-        - Update item in cart
+        - ~~Update item in cart~~
         - Add customer id to cart when logged in and logic to fetch from any device
     - Order Endpoints
         - Create order

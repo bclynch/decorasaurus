@@ -2,7 +2,6 @@ import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { CartService } from 'src/app/services/cart.service';
 import { SettingsService } from 'src/app/services/settings.service';
 
-import { MoltinCartItem, MoltinCartResp } from 'src/app/providers/moltin/models/cart';
 import { Router } from '@angular/router';
 import { SubscriptionLike } from 'rxjs';
 
@@ -26,8 +25,10 @@ export class CartComponent implements OnInit, OnDestroy {
     }
   ];
   activeTab = 0;
-  cart: MoltinCartResp;
+  cart;
   wishlistProducts = [];
+
+  initSubscription: SubscriptionLike;
   cartSubscription: SubscriptionLike;
 
   constructor(
@@ -35,7 +36,7 @@ export class CartComponent implements OnInit, OnDestroy {
     private settingsService: SettingsService,
     private router: Router
   ) {
-    this.settingsService.appInited.subscribe((inited) =>  { if (inited) this.init(); });
+    this.initSubscription = this.settingsService.appInited.subscribe((inited) =>  { if (inited) this.init(); });
   }
 
   ngOnInit() {
@@ -43,17 +44,16 @@ export class CartComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.cartSubscription.unsubscribe();
+    this.initSubscription.unsubscribe();
   }
 
   init(): void {
     this.cartSubscription = this.cartService.cartItems.subscribe(
-      items => {
+      (items: any) => {
         console.log(items);
-        this.cart = items;
-        // this.products = items.data;
-        let quant = 0;
-        this.cart.data.forEach((product) => quant += product.quantity);
-        this.tabs[0].number = quant;
+        this.cart = items.cartItemsByCartId.nodes;
+        console.log(this.cart);
+        if (items) this.tabs[0].number = items.cartItemsByCartId.nodes.length ? items.cartItemsByCartId.nodes.map((item) => item.quantity).reduce((x, y) => x + y) : 0;
       }
     );
   }

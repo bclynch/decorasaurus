@@ -50,6 +50,6 @@ export class UtilService {
     if (product) {
       return product.productPricesByProductSku.nodes.filter((price) => price.currency === this.customerService.currency)[0].amount / 100;
     }
-    return '';
+    return null;
   }
 }

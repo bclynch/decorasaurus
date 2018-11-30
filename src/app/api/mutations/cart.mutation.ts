@@ -75,3 +75,40 @@ export const createProductLinkMutation: DocumentNode = gql`
     }
   }
 `;
+
+export const updateCartItemMutation: DocumentNode = gql`
+  mutation updateCartItemById($cartItemId: UUID!, $quantity: Int) {
+    updateCartItemById(input: {
+      id: $cartItemId,
+      cartItemPatch: {
+        quantity: $quantity
+      }
+    }) {
+      cartByCartId {
+        cartItemsByCartId {
+          nodes {
+            id,
+            productSku,
+            quantity,
+            productLinksByCartItemId {
+              nodes {
+                type,
+                url
+              }
+            },
+            productByProductSku {
+              name,
+              description,
+              productPricesByProductSku {
+                nodes {
+                  amount,
+                  currency
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
