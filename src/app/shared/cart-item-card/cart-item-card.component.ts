@@ -49,7 +49,7 @@ export class CartItemCardComponent implements OnInit, OnChanges {
   selector: 'app-remove-snackbar',
   template: `
     <div>
-      Succesfully removed "{{data.product.name}}"
+      Succesfully removed "{{data.product.productByProductSku.name}}"
     </div>
   `,
   styles: [

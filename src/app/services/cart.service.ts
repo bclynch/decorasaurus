@@ -1,10 +1,8 @@
 import { Injectable, Component, Inject, OnDestroy } from '@angular/core';
 import { Moltin } from '../providers/moltin/moltin';
 import { CustomerService } from './customer.service';
-import { MoltinCart, MoltinCartItem, MoltinCartMeta, MoltinCartResp } from '../providers/moltin/models/cart';
 import { Router } from '@angular/router';
 import { MAT_BOTTOM_SHEET_DATA, MatBottomSheet, MatBottomSheetRef } from '@angular/material';
-import { MoltinProduct } from '../providers/moltin/models/product';
 import { BehaviorSubject, Observable, SubscriptionLike} from 'rxjs';
 import { APIService } from './api.service';
 import { GeneratorService } from './generator.service';
@@ -22,8 +20,8 @@ export class CartService implements OnDestroy {
   removeFromCartSubscription: SubscriptionLike;
   updateCartSubscription: SubscriptionLike;
 
-  cart: MoltinCart;
-  public cartItems: Observable<MoltinCartResp>;
+  cart;
+  public cartItems: Observable<any>;
   private cartSubject: BehaviorSubject<any>;
 
   constructor(
@@ -35,7 +33,7 @@ export class CartService implements OnDestroy {
     private generatorService: GeneratorService,
     private utilService: UtilService
   ) {
-    this.cartSubject = new BehaviorSubject<MoltinCartItem[]>(null);
+    this.cartSubject = new BehaviorSubject<any[]>(null);
     this.cartItems = this.cartSubject;
   }
 
@@ -48,10 +46,21 @@ export class CartService implements OnDestroy {
 
   getCart(): Promise<void> {
     return new Promise((resolve) => {
+      console.log(this.customerService.customerUuid);
       this.getCartSubscription = this.apiService.getCartById(this.customerService.customerUuid).valueChanges.subscribe(({ data }) => {
-        console.log(data);
-        this.cartSubject.next(data.cartById);
-        resolve();
+        console.log(data.cartById);
+        if (data.cartById) {
+          this.cartSubject.next(data.cartById);
+          resolve();
+        } else {
+          this.apiService.createCart(this.customerService.customerUuid).subscribe(
+            (cart) => {
+              console.log(cart);
+              this.cartSubject.next(cart.data.createCart.cart);
+              resolve();
+            }
+          );
+        }
       });
     });
   }
@@ -99,10 +108,10 @@ export class CartService implements OnDestroy {
     );
   }
 
-  removeFromCart(product: MoltinCartItem): void {
-    this.removeFromCartSubscription = this.moltin.deleteCartItem(this.customerService.customerUuid, product.id).subscribe(
-      (data) => {
-        this.cartSubject.next(data);
+  removeFromCart(product): void {
+    this.removeFromCartSubscription = this.apiService.removeCartItem(product.id, this.customerService.customerUuid).subscribe(
+      ({ data }) => {
+        this.cartSubject.next(data.updateCartItemById.query.cartById);
       }
     );
   }
@@ -122,9 +131,12 @@ export class CartService implements OnDestroy {
   }
 
   quantifyCartTotal(cart): number {
-    let total = 0;
-    cart.forEach((item) => total += this.utilService.displayPrice(item.productByProductSku) * item.quantity);
-    return total;
+    console.log(cart);
+    if (cart) {
+      let total = 0;
+      cart.forEach((item) => total += this.utilService.displayPrice(item.productByProductSku) * item.quantity);
+      return total;
+    }
   }
 }
 

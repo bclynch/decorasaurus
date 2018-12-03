@@ -6,7 +6,8 @@ export const currentCustomerQuery: DocumentNode = gql`
     currentCustomer {
       id,
       firstName,
-      lastName
+      lastName,
+      email
     }
   }
 `;

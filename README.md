@@ -15,7 +15,7 @@
             - Append links
             - ~~Endpoint working~~
             - Custom gql to append multiple links at a time i.e both a thumbnail and pdf in one trip. Did similar with images in blog creator on pomb
-        - Remove item from cart
+        - ~~Remove item from cart~~
         - ~~Update item in cart~~
         - Add customer id to cart when logged in and logic to fetch from any device
     - Order Endpoints
@@ -24,6 +24,12 @@
         - Convert cart items to order items
     - Stripe Endpoints
         - lalala
+- Dashboard for orders
+    - http://help.wanelo.com/customer/portal/articles/1790355-how-do-i-fulfill-an-order-
+    - Shopify has solid responsive dash too
+    - Moltin
+    - Nice to export to csv
+    - Filters of orders by date, fulfilled etc
 - Splash Page
     - Carousel Top like https://www.thecriticalslidesociety.com/
     - Small divider section like 49th coffee https://49thcoffee.com/
@@ -103,6 +109,9 @@
   - LLC
   - w/e
 - Setup language selection .5 day
+
+- General
+    - There are a bunch of cart subscriptons scattered around services/ components and it would be nice to consolidate all into a service for like optimization
 
 ### Name Ideas
 - ornat.us (purchased -- because cheap. Ornatus in Latin means furnish / adorn. Bit tough to remember. No SEO competition. No trademarks)

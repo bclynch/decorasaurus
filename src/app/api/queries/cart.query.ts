@@ -10,27 +10,11 @@ export const cartByIdQuery: DocumentNode = gql`
       customerId,
       cartItemsByCartId {
         nodes {
-          id,
-          productSku,
-          quantity,
-          productLinksByCartItemId {
-            nodes {
-              type,
-              url
-            }
-          },
-          productByProductSku {
-            name,
-            description,
-            productPricesByProductSku {
-              nodes {
-                amount,
-                currency
-              }
-            }
-          }
+          ...CartItemsByCartId
         }
       }
     }
   }
+
+  ${CartFragments['cartItemsByCartId']}
 `;

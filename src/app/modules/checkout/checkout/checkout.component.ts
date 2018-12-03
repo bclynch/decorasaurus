@@ -12,6 +12,9 @@ import { Moltin } from 'src/app/providers/moltin/moltin';
 import { MoltinAddress } from 'src/app/providers/moltin/models/customer';
 import { StripeService } from 'src/app/services/stripe.service';
 import { MatDialog, MatDialogRef } from '@angular/material';
+import { APIService } from 'src/app/services/api.service';
+import { AddressService } from 'src/app/services/address.service';
+import { OrderService } from 'src/app/services/order.service';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -31,11 +34,10 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   settingsSubscription: SubscriptionLike;
   cartSubscription: SubscriptionLike;
   paySubscription: SubscriptionLike;
-  formSubscription: SubscriptionLike;
   checkoutSubscription: SubscriptionLike;
   tokenSubscription: SubscriptionLike;
 
-  cart: MoltinCartResp;
+  cart;
   cardForm: any;
   formIsValid = false;
 
@@ -133,7 +135,10 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     private customerService: CustomerService,
     private moltin: Moltin,
     private stripeService: StripeService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private apiService: APIService,
+    private addressService: AddressService,
+    private orderService: OrderService
   ) {
     this.settingsSubscription = this.settingsService.appInited.subscribe((inited) =>  { if (inited) this.init(); });
     this.tokenSubscription = this.customerService.customerToken.subscribe(
@@ -148,46 +153,13 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.constructPaymentForm();
-    this.formSubscription = this.isSameAddressControl
-      .valueChanges
-      .pipe(
-        distinctUntilChanged(),
-        switchMap(isSameAddress => {
-          if (isSameAddress) {
-            this.formsSame = true;
-            return this.checkoutForm
-              .get('billingAddress')
-              .valueChanges
-              .pipe(
-                // at the beginning fill the form with the current values
-                startWith(this.checkoutForm.get('billingAddress').value),
-                tap(value =>
-                  // every time the sending address changes, update the billing address
-                  this.checkoutForm
-                    .get('shippingAddress')
-                    .setValue(value)
-                )
-              );
-          } else {
-            this.formsSame = false;
-            this.checkoutForm
-              .get('shippingAddress')
-              .reset();
-
-            return EMPTY;
-          }
-        })
-      )
-      .subscribe();
-
-      this.isCardSelected$ = this.stripeService.isCardSelected;
+    this.isCardSelected$ = this.stripeService.isCardSelected;
   }
 
   ngOnDestroy() {
     this.settingsSubscription.unsubscribe();
     this.cartSubscription.unsubscribe();
     if (this.paySubscription) this.paySubscription.unsubscribe();
-    this.formSubscription.unsubscribe();
     if (this.checkoutSubscription) this.checkoutSubscription.unsubscribe();
     this.tokenSubscription.unsubscribe();
   }
@@ -195,9 +167,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   init(): void {
     // grab cart
     this.cartSubscription = this.cartService.cartItems.subscribe(
-      items => {
-        this.cart = items;
-      }
+      items => this.cart = items.cartItemsByCartId.nodes
     );
     this.getAddresses();
   }
@@ -205,11 +175,10 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   getAddresses(): void {
     // Check if customer logged in. If so grab address
     if (this.customerService.customerToken.getValue()) {
-      this.moltin.getAddresses(this.customerService.customerId, this.customerService.customerToken.getValue()).subscribe(
-        (addresses: MoltinAddress[]) => {
+      this.addressService.getAddressesByCustomer(this.customerService.customerId).then(
+        (addresses) => {
           if (addresses.length) this.populateAddress(addresses[0], 'billingAddress');
-        },
-        (err) => console.log(err)
+        }
       );
     }
   }
@@ -218,7 +187,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     // Check if customer logged in
     if (this.customerService.customerToken.getValue()) {
       // check stripe to see if they have an account
-      this.stripeService.fetchCustomer('abc@aol.com');
+      // race condition happening and this is a lame hack, but so be it for now
+      setTimeout(() => this.stripeService.fetchCustomer(this.customerService.customerObject.email), 50);
     }
   }
 
@@ -244,27 +214,18 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   submitOrder() {
     // need more validation for this
     if (this.stripeService.selectedCard.id && this.checkoutForm.valid) {
-      this.checkoutSubscription = this.moltin.checkoutCart(
-        this.customerService.customerUuid,
-        this.customerService.customerId,
-        this.checkoutForm.value.billingAddress,
-        this.checkoutForm.value.shippingAddress
-      ).subscribe(data => this.payForOrder(data));
+
+      this.orderService.createOrder(this.checkoutForm.value.billingAddress, this.checkoutForm.value.shippingAddress, this.stripeService.selectedCard.id).then(
+        () => {
+          console.log('neat');
+          // this.router.navigateByUrl(`account/order/${order.id}`);
+          // this.moltin.deleteCart(this.customerService.customerUuid);
+        }
+      );
     }
   }
 
-  payForOrder(order) {
-    console.log('Order: ', order);
-    this.paySubscription = this.moltin.payForOrder(order, this.stripeService.selectedCard.id).subscribe(
-        () => {
-          this.router.navigateByUrl(`account/order/${order.id}`);
-          this.moltin.deleteCart(this.customerService.customerUuid);
-        },
-        error => console.error(error)
-    );
-  }
-
-  populateAddress(address: MoltinAddress, form: 'billingAddress' | 'shippingAddress') {
+  populateAddress(address, form: 'billingAddress' | 'shippingAddress') {
     // eventually would be nice to have a naming scheme to identify a default
     // perhaps could look at most recent order to see what address they used
     const createObject = (formName: string, key: string, value: any) => {

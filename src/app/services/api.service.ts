@@ -22,13 +22,23 @@ import {
   createCartItemMutation,
   createProductLinkMutation,
   LinkType,
-  updateCartItemMutation
+  updateCartItemMutation,
+  deleteCartItemMutation,
+  removeCartItemMutation
 } from '../api/mutations/cart.mutation';
+
+import {
+  createOrderMutation,
+  OrderPayment,
+  OrderShipping,
+  OrderStatus
+} from '../api/mutations/order.mutation';
 
 // queries
 import { cartByIdQuery } from '../api/queries/cart.query';
 import { productBySkuQuery } from '../api/queries/product.query';
 import { currentCustomerQuery } from '../api/queries/account.query';
+import { userAddressesQuery } from '../api/queries/address.query';
 
 @Injectable()
 export class APIService {
@@ -63,6 +73,15 @@ export class APIService {
       query: productBySkuQuery,
       variables: {
         sku
+    }
+    });
+  }
+
+  getAddressesByCustomer(customerId: string): any {
+    return this.apollo.watchQuery<any>({
+      query: userAddressesQuery,
+      variables: {
+        customerId
     }
     });
   }
@@ -125,7 +144,6 @@ export class APIService {
   }
 
   createCart(cartId: string) {
-    console.log(cartId);
     return this.apollo.mutate({
       mutation: createCartMutation,
       variables: {
@@ -160,6 +178,41 @@ export class APIService {
       variables: {
         cartItemId,
         quantity
+      }
+    });
+  }
+
+  // deletes the record
+  deleteCartItem(cartItemId: string) {
+    return this.apollo.mutate({
+      mutation: deleteCartItemMutation,
+      variables: {
+        cartItemId
+      }
+    });
+  }
+
+  // removes cart ref from cart item
+  removeCartItem(cartItemId: string, cartId: string) {
+    return this.apollo.mutate({
+      mutation: removeCartItemMutation,
+      variables: {
+        cartItemId,
+        cartId
+      }
+    });
+  }
+
+  createOrder(status: OrderStatus, payment: OrderPayment, shipping: OrderShipping, customerId: string, billingAddressId: string, shippingAddressId: string) {
+    return this.apollo.mutate({
+      mutation: createOrderMutation,
+      variables: {
+        status,
+        payment,
+        shipping,
+        customerId,
+        billingAddressId,
+        shippingAddressId
       }
     });
   }

@@ -20,10 +20,18 @@ export const createCartMutation: DocumentNode = gql`
       }
     }) {
       cart {
-        id
+        id,
+        customerId,
+        cartItemsByCartId {
+          nodes {
+            ...CartItemsByCartId
+          }
+        }
       }
     }
   }
+
+  ${CartFragments['cartItemsByCartId']}
 `;
 
 export const deleteCartMutation: DocumentNode = gql`
@@ -51,14 +59,14 @@ export const createCartItemMutation: DocumentNode = gql`
       cartByCartId {
         cartItemsByCartId {
           nodes {
-            id,
-            productSku,
-            quantity
+            ...CartItemsByCartId
           }
         }
       }
     }
   }
+
+  ${CartFragments['cartItemsByCartId']}
 `;
 
 export const createProductLinkMutation: DocumentNode = gql`
@@ -87,28 +95,53 @@ export const updateCartItemMutation: DocumentNode = gql`
       cartByCartId {
         cartItemsByCartId {
           nodes {
-            id,
-            productSku,
-            quantity,
-            productLinksByCartItemId {
-              nodes {
-                type,
-                url
-              }
-            },
-            productByProductSku {
-              name,
-              description,
-              productPricesByProductSku {
-                nodes {
-                  amount,
-                  currency
-                }
-              }
+            ...CartItemsByCartId
+          }
+        }
+      }
+    }
+  }
+
+  ${CartFragments['cartItemsByCartId']}
+`;
+
+export const deleteCartItemMutation: DocumentNode = gql`
+  mutation deleteCartItemById($cartItemId: UUID!) {
+    deleteCartItemById(input: {
+      id: $cartItemId
+    }) {
+      cartByCartId {
+        cartItemsByCartId {
+          nodes {
+            ...CartItemsByCartId
+          }
+        }
+      }
+    }
+  }
+
+  ${CartFragments['cartItemsByCartId']}
+`;
+
+export const removeCartItemMutation: DocumentNode = gql`
+  mutation removeCartItemById($cartItemId: UUID!, $cartId: UUID!) {
+    updateCartItemById(input: {
+      id: $cartItemId,
+      cartItemPatch: {
+        cartId: null
+      }
+    }) {
+      query {
+        cartById(id: $cartId) {
+          cartItemsByCartId {
+            nodes {
+              ...CartItemsByCartId
             }
           }
         }
       }
     }
   }
+
+  ${CartFragments['cartItemsByCartId']}
 `;

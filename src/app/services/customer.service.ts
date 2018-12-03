@@ -19,6 +19,8 @@ export class CustomerService implements OnDestroy {
   customerUuid: string;
   customerId: string;
   currency: 'USD' | 'EUR' = 'EUR';
+  isReloading = false;
+  customerObject;
 
   public customerToken: BehaviorSubject<string>;
   // private _subject: BehaviorSubject<string>;
@@ -43,6 +45,7 @@ export class CustomerService implements OnDestroy {
     return new Promise((resolve, reject) => {
       this.checkNewUser().then(
         (isNew) => {
+          console.log('FETCH USER RESULT: ', isNew);
           if (isNew) {
             resolve();
           } else {
@@ -50,15 +53,19 @@ export class CustomerService implements OnDestroy {
             this.apiService.getCurrentCustomer().valueChanges.subscribe(({ data }) => {
               console.log(data);
 
-              // if logged in set our customer id and set the token
-              if (data.currentCustomer) {
-                this.customerId = data.currentCustomer.id;
-                const cookieToken = this.cookieService.get('decorasaurus-token');
-                if (cookieToken) this.customerToken.next(cookieToken);
-              } else {
-                // if it doesnt exist dump the token
-                this.cookieService.delete('decorasaurus-token');
-                this.cookieService.delete('decorasaurus-customer-id');
+              if (!this.isReloading) {
+                // if logged in set our customer id and set the token
+                if (data.currentCustomer) {
+                  this.customerId = data.currentCustomer.id;
+                  const cookieToken = this.cookieService.get('decorasaurus-token');
+                  if (cookieToken) this.customerToken.next(cookieToken);
+                  this.customerObject = data.currentCustomer;
+                  console.log(this.customerObject);
+                } else {
+                  // if it doesnt exist dump the token
+                  this.cookieService.delete('decorasaurus-token');
+                  this.cookieService.delete('decorasaurus-customer-id');
+                }
               }
               resolve();
             });
@@ -115,24 +122,27 @@ export class CustomerService implements OnDestroy {
 
   loginCustomer(email: string, password: string): Promise<void> {
     return new Promise((resolve, reject) => {
-      console.log(email, password);
       this.apiService.authCustomer(email, password).subscribe(({data}) => {
-        console.log('got data', data);
+        console.log(data);
         if (data.authenticateUserCustomer.jwtToken) {
           // reset apollo cache and refetch queries
           this.apollo.getClient().resetStore();
 
           // this.customerId = resp.token.customer_id;
+          this.cookieService.set('decorasaurus-token', data.authenticateUserCustomer.jwtToken);
           this.customerToken.next(data.authenticateUserCustomer.jwtToken);
-          this.cookieService.set( 'decorasaurus-token', data.authenticateUserCustomer.jwtToken );
           // this.cookieService.set( 'decorasaurus-customer-id', resp.token.customer_id );
 
-          this.snackBar.openFromComponent(CustomerStateSnackbar, {
-            duration: 3000,
-            verticalPosition: 'top',
-            data: { message: `Successfully logged in!` },
-            panelClass: ['snackbar-theme']
-          });
+          // reload window to update db role
+          this.isReloading = true;
+          window.location.reload();
+
+          // this.snackBar.openFromComponent(CustomerStateSnackbar, {
+          //   duration: 3000,
+          //   verticalPosition: 'top',
+          //   data: { message: `Successfully logged in!` },
+          //   panelClass: ['snackbar-theme']
+          // });
           resolve();
         } else {
           // incorrect login warning

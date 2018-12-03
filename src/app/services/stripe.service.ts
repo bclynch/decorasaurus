@@ -51,15 +51,17 @@ export class StripeService {
 
   fetchCustomer(email: string) {
     this.apiService.fetchStripeCustomer(email).subscribe(
-      (customer) => {
-        if (customer.data.data.length) this.stripeCustomer = customer.data.data[0];
+      ({ data }) => {
+        if (data.data.length) {
+          this.stripeCustomer = data.data[0];
 
-        // check if there are already sources and populate
-        this.sources = this.stripeCustomer.sources.data;
-        if (this.stripeCustomer.default_source) {
-          this.cardFromDefault(this.stripeCustomer.default_source);
+          // check if there are already sources and populate
+          this.sources = this.stripeCustomer.sources.data;
+          if (this.stripeCustomer.default_source) {
+            this.cardFromDefault(this.stripeCustomer.default_source);
+          }
+          console.log(this.sources);
         }
-        console.log(this.sources);
       },
       (err) => console.log(err),
     );
