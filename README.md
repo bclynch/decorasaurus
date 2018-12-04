@@ -12,18 +12,27 @@
         - ~~Create Cart~~
         - ~~Fetch Cart~~
         - ~~Add Item to Cart~~
-            - Append links
+            - ~~Append links~~
             - ~~Endpoint working~~
-            - Custom gql to append multiple links at a time i.e both a thumbnail and pdf in one trip. Did similar with images in blog creator on pomb
+            - ~~Custom gql to append multiple links at a time i.e both a thumbnail and pdf in one trip. Did similar with images in blog creator on pomb~~
         - ~~Remove item from cart~~
         - ~~Update item in cart~~
         - Add customer id to cart when logged in and logic to fetch from any device
     - Order Endpoints
-        - Create order
+        - ~~Create order~~
+            - Remove endpoint on creation
         - Delete Order
-        - Convert cart items to order items
+        - Update order
+        - ~~Convert cart items to order items~~
+        - Order page
     - Stripe Endpoints
-        - lalala
+        - ~~Create customer~~
+        - Append card sources
+    - Address endpoints
+        - ~~Create address~~
+        - Delete address
+        - Update Address
+            - Managing defaults
 - Dashboard for orders
     - http://help.wanelo.com/customer/portal/articles/1790355-how-do-i-fulfill-an-order-
     - Shopify has solid responsive dash too

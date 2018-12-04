@@ -7,7 +7,8 @@ export const currentCustomerQuery: DocumentNode = gql`
       id,
       firstName,
       lastName,
-      email
+      email,
+      stripeId
     }
   }
 `;

@@ -120,6 +120,18 @@ export class CustomerService implements OnDestroy {
     );
   }
 
+  updateCustomer(customerId: string, firstName: string, lastName: string, stripeId: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.apiService.updateCustomer(customerId, firstName, lastName, stripeId).subscribe(
+        ({ data }) =>  {
+          console.log(data);
+          resolve();
+        },
+        err => console.log(err)
+      );
+    });
+  }
+
   loginCustomer(email: string, password: string): Promise<void> {
     return new Promise((resolve, reject) => {
       this.apiService.authCustomer(email, password).subscribe(({data}) => {
@@ -136,13 +148,6 @@ export class CustomerService implements OnDestroy {
           // reload window to update db role
           this.isReloading = true;
           window.location.reload();
-
-          // this.snackBar.openFromComponent(CustomerStateSnackbar, {
-          //   duration: 3000,
-          //   verticalPosition: 'top',
-          //   data: { message: `Successfully logged in!` },
-          //   panelClass: ['snackbar-theme']
-          // });
           resolve();
         } else {
           // incorrect login warning

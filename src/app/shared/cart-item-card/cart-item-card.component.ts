@@ -14,6 +14,7 @@ export class CartItemCardComponent implements OnInit, OnChanges {
   @Input() isCheckout = false;
 
   perEach: number;
+  thumbnail: string;
 
   constructor(
     public snackBar: MatSnackBar,
@@ -23,6 +24,9 @@ export class CartItemCardComponent implements OnInit, OnChanges {
   ) { }
 
   ngOnInit() {
+    this.product.productLinksByCartItemId.nodes.forEach((productLink) => {
+      if (productLink.type === 'THUMBNAIL') this.thumbnail = productLink.url;
+    });
   }
 
   ngOnChanges() {

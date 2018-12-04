@@ -10,7 +10,19 @@ export const userAddressesQuery: DocumentNode = gql`
     }) {
       totalCount,
       nodes {
-        name
+        id,
+        type,
+        name,
+        firstName,
+        lastName,
+        company
+        line1,
+        line2,
+        city,
+        postcode,
+        country,
+        instructions,
+        defaultAddress
       }
     }
   }

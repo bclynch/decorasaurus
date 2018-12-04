@@ -22,7 +22,7 @@ export class AccountComponent implements OnInit {
 
   ngOnInit() {
     // needs to be fetched for payment cards if not there
-    if (!this.stripeService.sources) this.stripeService.fetchCustomer('abc@aol.com');
+    if (!this.stripeService.sources) this.stripeService.fetchStripeCustomer('abc@aol.com');
     this.moltin.getCustomerOrders(this.customerService.customerId).then(
       (orders) => { this.orders = orders.data; console.log(this.orders); }
     );

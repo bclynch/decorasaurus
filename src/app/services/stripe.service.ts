@@ -3,6 +3,7 @@ import { ENV } from '../../environments/environment';
 import { APIService } from './api.service';
 import { BehaviorSubject } from 'rxjs';
 import { MatSnackBar, MAT_SNACK_BAR_DATA } from '@angular/material';
+import { CustomerService } from './customer.service';
 
 declare const Stripe: any;
 
@@ -32,6 +33,7 @@ export class StripeService {
   constructor(
     private apiService: APIService,
     public snackBar: MatSnackBar,
+    private customerService: CustomerService
   ) {
     this.cardIsSelected = new BehaviorSubject<boolean>(false);
   }
@@ -42,44 +44,84 @@ export class StripeService {
     });
   }
 
-  createCustomer(email: string, token: string) {
-    this.apiService.createStripeCustomer(email, token).subscribe(
-      (customer) => console.log(customer),
-      (err) => console.log(err),
-    );
+  checkCustomerState(token: string): Promise<string> {
+    // checks to see if the customer has a Stripe ID or not
+    return new Promise((resolve, reject) => {
+      if (this.customerService.customerObject.stripeId) {
+        resolve(this.customerService.customerObject.stripeId);
+        return;
+      }
+
+      this.createStripeCustomer(this.customerService.customerObject.email, token).subscribe(
+        ({ data }) => {
+          console.log(data);
+          // update customer object
+          this.customerService.updateCustomer(this.customerService.customerObject.id, this.customerService.customerObject.firstName, this.customerService.customerObject.lastName, data.id).then(
+            () => resolve()
+          );
+        }
+      );
+    });
   }
 
-  fetchCustomer(email: string) {
-    this.apiService.fetchStripeCustomer(email).subscribe(
-      ({ data }) => {
-        if (data.data.length) {
-          this.stripeCustomer = data.data[0];
+  private createStripeCustomer(email: string, token: string) {
+    return this.apiService.createStripeCustomer(email, token);
+  }
 
-          // check if there are already sources and populate
-          this.sources = this.stripeCustomer.sources.data;
-          if (this.stripeCustomer.default_source) {
-            this.cardFromDefault(this.stripeCustomer.default_source);
+  fetchStripeCustomer(email: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.apiService.fetchStripeCustomer(email).subscribe(
+        ({ data }) => {
+          if (data.data.length) {
+            this.stripeCustomer = data.data[0];
+            console.log(this.stripeCustomer);
+
+            // check if there are already sources and populate
+            this.sources = this.stripeCustomer.sources.data;
+            if (this.stripeCustomer.default_source) {
+              this.cardFromDefault(this.stripeCustomer.default_source);
+              this.cardIsSelected.next(true);
+            }
+
+            // populate stripeId on customer if required
+            if (!this.customerService.customerObject.stripeId) {
+              this.customerService.updateCustomer(this.customerService.customerObject.id, this.customerService.customerObject.firstName, this.customerService.customerObject.lastName, this.stripeCustomer.id).then(
+                () => resolve()
+              );
+            } else {
+              resolve();
+            }
           }
-          console.log(this.sources);
-        }
-      },
-      (err) => console.log(err),
-    );
+        },
+        (err) => console.log(err),
+      );
+    });
   }
 
   createPaymentSource(card): Promise<void> {
     return new Promise((resolve, reject) => {
       this.stripe.createToken(card).then(
         (resp) => {
-          console.log(resp.token);
-          this.selectedCard = resp.token.card;
-          this.cardIsSelected.next(true);
-          this.snackBar.openFromComponent(AddedSnackbar, {
-            duration: 3000,
-            verticalPosition: 'top',
-            data: { message: 'Card successfully Added' },
-            panelClass: ['snackbar-theme']
-          });
+          if (resp.error) {
+            this.snackBar.openFromComponent(AddedSnackbar, {
+              duration: 3000,
+              verticalPosition: 'top',
+              data: { message: resp.error.message },
+              panelClass: ['snackbar-theme']
+            });
+          }
+          if (resp.token) {
+            console.log(resp);
+            this.selectedCard = resp.token.card;
+            this.stripeCustomer = resp.token;
+            this.cardIsSelected.next(true);
+            this.snackBar.openFromComponent(AddedSnackbar, {
+              duration: 3000,
+              verticalPosition: 'top',
+              data: { message: 'Card successfully Added' },
+              panelClass: ['snackbar-theme']
+            });
+          }
           resolve();
         },
         (err) => {

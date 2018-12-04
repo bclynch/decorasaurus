@@ -10,7 +10,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CartItemCardComponent, RemoveSnackbar } from './cart-item-card/cart-item-card.component';
 import { CartTotalsComponent } from './cart-totals/cart-totals.component';
 import { SigninDialogueComponent } from './signin-dialogue/signin-dialogue.component';
-
 import {
   MatButtonModule,
   MatProgressSpinnerModule,
@@ -28,6 +27,7 @@ import {
 } from '@angular/material';
 import { PaymentCardsComponent } from './payment-cards/payment-cards.component';
 import { CustomerAddressesComponent } from './customer-addresses/customer-addresses.component';
+import { AddressGridComponent } from './address-grid/address-grid.component';
 
 @NgModule({
   entryComponents: [
@@ -65,7 +65,8 @@ import { CustomerAddressesComponent } from './customer-addresses/customer-addres
     CartTotalsComponent,
     SigninDialogueComponent,
     PaymentCardsComponent,
-    CustomerAddressesComponent
+    CustomerAddressesComponent,
+    AddressGridComponent
   ],
   exports: [
     PagewrapperComponent,
@@ -88,7 +89,8 @@ import { CustomerAddressesComponent } from './customer-addresses/customer-addres
     MatRadioModule,
     PaymentCardsComponent,
     CustomerAddressesComponent,
-    MatButtonToggleModule
+    MatButtonToggleModule,
+    AddressGridComponent
   ]
 })
 export class SharedModule { }

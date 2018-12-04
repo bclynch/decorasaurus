@@ -13,7 +13,8 @@ export const fragments: {
       productLinksByCartItemId {
         nodes {
           type,
-          url
+          url,
+          id
         }
       },
       productByProductSku {

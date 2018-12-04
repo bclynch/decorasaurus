@@ -5,10 +5,13 @@
       <div class="boldFont">Express Checkout</div>
       <button mat-flat-button color="primary" (click)="customerService.signin('login')">Sign In</button>
     </div>
-    <form [formGroup]="checkoutForm" (submit)="submitOrder()">
+    <form [formGroup]="checkoutForm" (submit)="submitOrder($event)">
       <div class="sectionWrapper">
         <div class="sectionHeader">1. Enter Your Billing Address</div>
         <div class="sectionContent">
+          <div class="addressesContainer">
+            <app-address-grid [addresses]="addresses"></app-address-grid>
+          </div>
           <ng-container formGroupName="billingAddress">
             <div>Please enter the billing information associated with your credit card.</div>
             <div class="required">* Required Fields</div>
@@ -112,7 +115,11 @@
       <div class="sectionWrapper">
         <div class="sectionHeader">2. Choose a Shipping Address</div>
         <div class="sectionContent">
-          <mat-checkbox [formControl]="isSameAddressControl" color="primary">Ship to same address as billing</mat-checkbox>
+          <mat-checkbox 
+            [(ngModel)]="formsSame" 
+            [ngModelOptions]="{standalone: true}" 
+            color="primary"
+          >Ship to same address as billing</mat-checkbox>
           <ng-container formGroupName="shippingAddress" *ngIf="!formsSame">
             <div class="shippingHeader">Enter a new shipping address below</div>
             <mat-form-field>

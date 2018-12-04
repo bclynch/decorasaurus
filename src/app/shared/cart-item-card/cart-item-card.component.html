@@ -1,7 +1,7 @@
 <div class="productWrapper">
   <div class="descriptionContainer">
     <div class="imgContainer">
-      <img [src]="product.thumbnail_url" />
+      <img *ngIf="thumbnail" [src]="thumbnail" />
     </div>
     <div class="descWrapper">
       <div class="productDescriptionContainer">

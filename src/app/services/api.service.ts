@@ -3,7 +3,7 @@ import { Http, Response } from '@angular/http';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { ENV } from '../../environments/environment';
-
+import gql from 'graphql-tag';
 import { Apollo } from 'apollo-angular';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 
@@ -14,6 +14,7 @@ import {
   resetPasswordMutation,
   updatePasswordMutation,
   deleteAccountByIdMutation,
+  updateCustomerByIdMutation
 } from '../api/mutations/customer.mutation';
 
 import {
@@ -33,6 +34,11 @@ import {
   OrderShipping,
   OrderStatus
 } from '../api/mutations/order.mutation';
+
+import {
+  AddressType,
+  createAddressMutation
+} from '../api/mutations/address.mutation';
 
 // queries
 import { cartByIdQuery } from '../api/queries/cart.query';
@@ -90,6 +96,12 @@ export class APIService {
   // ************************* Mutations *********************************
   // *******************************************************************
 
+  genericCall(mutation: string) {
+    return this.apollo.mutate({
+      mutation: gql`${mutation}`
+    });
+  }
+
   // Create Customer
   registerCustomer(firstName: string, lastName: string, email: string, password: string) {
     return this.apollo.mutate({
@@ -110,6 +122,18 @@ export class APIService {
       variables: {
         email,
         password
+      }
+    });
+  }
+
+  updateCustomer(customerId: string, firstName: string, lastName: string, stripeId: string): Observable<any> {
+    return this.apollo.mutate({
+      mutation: updateCustomerByIdMutation,
+      variables: {
+        customerId,
+        firstName,
+        lastName,
+        stripeId
       }
     });
   }
@@ -225,6 +249,27 @@ export class APIService {
         orderItemId,
         type,
         url
+      }
+    });
+  }
+
+  createAddress(customerId: string, type: AddressType, name: string, firstName: string, lastName: string, company: string, line1: string, line2: string, city: string, postcode: string, country: string, instructions: string, defaultAddress: boolean) {
+    return this.apollo.mutate({
+      mutation: createAddressMutation,
+      variables: {
+        customerId,
+        type,
+        name,
+        firstName,
+        lastName,
+        company,
+        line1,
+        line2,
+        city,
+        postcode,
+        country,
+        instructions,
+        defaultAddress
       }
     });
   }

@@ -86,3 +86,23 @@ export const deleteAccountByIdMutation: DocumentNode = gql`
     }
   }
 `;
+
+export const updateCustomerByIdMutation: DocumentNode = gql`
+  mutation($customerId: UUID!, $firstName: String!, $lastName: String!, $stripeId: String!) {
+    updateCustomerById(input: {
+      id: $customerId,
+      customerPatch:{
+        firstName: $firstName,
+        lastName: $lastName,
+        stripeId: $stripeId,
+      }
+    }) {
+      customer {
+        firstName,
+        lastName,
+        id,
+        stripeId
+      }
+    }
+  }
+`;

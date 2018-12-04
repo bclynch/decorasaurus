@@ -72,35 +72,65 @@ export class CartService implements OnDestroy {
     formData.append('size', this.generatorService.size);
     // Need to create thumbnail for product + pdf to s3 then add to cart
     this.apiService.processPoster(formData).subscribe(
-      (result: { type: 'thumbnail' | 'pdf', S3Url: string }[]) => {
-        console.log(result);
-        // console.log(product);
-        // const item = {
-        //   name: `My ${Date.now().toString()} Item`,
-        //   sku: Date.now().toString(),
-        //   description: 'My first custom item!',
-        //   thumbnail_url: result.filter((link) => link.type === 'thumbnail')[0].S3Url,
-        //   pdf_url: result.filter((link) => link.type === 'pdf')[0].S3Url,
-        //   crop_url: '',
-        //   quantity: 1,
-        //   price: {
-        //     amount: 10000
-        //   }
-        // };
+      (links: { type: 'thumbnail' | 'pdf', S3Url: string }[]) => {
+        console.log(links);
         this.apiService.createCartItem(this.customerService.customerUuid, sku, quantity).subscribe(
           ({ data }) => {
-            console.log(data);
-            this.cartSubject.next(data.createCartItem.cartByCartId);
+            // bulk add links to post
+            let query = `mutation {`;
+            links.forEach((link, i) => {
+                query += `a${i}: createProductLink(input: {
+                  productLink: {
+                    cartItemId: "${data.createCartItem.cartItem.id}",
+                    orderItemId: null,
+                    type: ${link.type === 'thumbnail' ? LinkType.THUMBNAIL : link.type === 'pdf' ? LinkType.PDF : LinkType.CROP},
+                    url: "${link.S3Url}"
+                  }
+                }) {
+                  query {
+                    cartById(id: "${this.customerService.customerUuid}") {
+                      cartItemsByCartId {
+                        nodes {
+                          id,
+                          productSku,
+                          quantity,
+                          productLinksByCartItemId {
+                            nodes {
+                              type,
+                              url,
+                              id
+                            }
+                          },
+                          productByProductSku {
+                            name,
+                            description,
+                            productPricesByProductSku {
+                              nodes {
+                                amount,
+                                currency
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }`;
+            });
+            query += `}`;
 
-            this.apiService.createProductLink(data.createCartItem.cartItem.id, null, LinkType.PDF, result.filter((link) => link.type === 'pdf')[0].S3Url).subscribe(
-              () => {
+            this.apiService.genericCall(query).subscribe(
+              (resp) => {
+                console.log(resp);
+                this.cartSubject.next(resp.data['a1'].query.cartById);
                 this.generatorService.isAddingToCart = false;
 
                 this.bottomSheet.open(AddCartNav, {
                   data: this.generatorService.product.name,
                   hasBackdrop: false
                 });
-              }
+              },
+              err => console.log(err)
             );
           }
         );

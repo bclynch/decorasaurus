@@ -42,3 +42,18 @@ export const createOrderMutation: DocumentNode = gql`
     }
   }
 `;
+
+export const createOrderItemMutation: DocumentNode = gql`
+  mutation createOrderItem($orderId: UUID!, $productSku: String!) {
+    createOrderItem(input: {
+      orderItem: {
+        orderId: $orderId,
+        productSku: $productSku
+      }
+    }) {
+      orderItem {
+        id
+      }
+    }
+  }
+`;

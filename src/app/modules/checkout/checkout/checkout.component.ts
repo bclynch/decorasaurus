@@ -1,20 +1,17 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { FormControl, FormGroupDirective, NgForm, Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { EMPTY, SubscriptionLike, Observable } from 'rxjs';
-import { tap, distinctUntilChanged, switchMap, startWith } from 'rxjs/operators';
+import { SubscriptionLike, Observable } from 'rxjs';
 import { CartService } from 'src/app/services/cart.service';
 import { SettingsService } from 'src/app/services/settings.service';
-import { MoltinCartResp } from 'src/app/providers/moltin/models/cart';
 import { Router } from '@angular/router';
 import { CustomerService } from 'src/app/services/customer.service';
-import { Moltin } from 'src/app/providers/moltin/moltin';
-import { MoltinAddress } from 'src/app/providers/moltin/models/customer';
 import { StripeService } from 'src/app/services/stripe.service';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { APIService } from 'src/app/services/api.service';
 import { AddressService } from 'src/app/services/address.service';
 import { OrderService } from 'src/app/services/order.service';
+import { MatSnackBar, MAT_SNACK_BAR_DATA } from '@angular/material';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -40,6 +37,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   cart;
   cardForm: any;
   formIsValid = false;
+  newAddressActive = false;
+  addresses = [];
 
   countries = [
     'US',
@@ -53,9 +52,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   ];
 
   matcher = new MyErrorStateMatcher();
-
-  public isSameAddressControl: FormControl = new FormControl(false);
-  formsSame = false;
+  formsSame = true;
 
   checkoutForm: FormGroup = this.fb.group({
     billingAddress: this.fb.group({
@@ -133,12 +130,12 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     private settingsService: SettingsService,
     private router: Router,
     private customerService: CustomerService,
-    private moltin: Moltin,
     private stripeService: StripeService,
     public dialog: MatDialog,
     private apiService: APIService,
     private addressService: AddressService,
-    private orderService: OrderService
+    private orderService: OrderService,
+    public snackBar: MatSnackBar,
   ) {
     this.settingsSubscription = this.settingsService.appInited.subscribe((inited) =>  { if (inited) this.init(); });
     this.tokenSubscription = this.customerService.customerToken.subscribe(
@@ -167,7 +164,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   init(): void {
     // grab cart
     this.cartSubscription = this.cartService.cartItems.subscribe(
-      items => this.cart = items.cartItemsByCartId.nodes
+      items => { this.cart = items.cartItemsByCartId.nodes; console.log(this.cart); }
     );
     this.getAddresses();
   }
@@ -177,7 +174,11 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     if (this.customerService.customerToken.getValue()) {
       this.addressService.getAddressesByCustomer(this.customerService.customerId).then(
         (addresses) => {
-          if (addresses.length) this.populateAddress(addresses[0], 'billingAddress');
+          if (addresses.length) {
+            this.addresses = addresses;
+            this.populateAddress(addresses[0], 'billingAddress');
+            this.newAddressActive = true;
+          }
         }
       );
     }
@@ -186,9 +187,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   getPaymentInfo(): void {
     // Check if customer logged in
     if (this.customerService.customerToken.getValue()) {
-      // check stripe to see if they have an account
       // race condition happening and this is a lame hack, but so be it for now
-      setTimeout(() => this.stripeService.fetchCustomer(this.customerService.customerObject.email), 50);
+      setTimeout(() => this.stripeService.fetchStripeCustomer(this.customerService.customerObject.email), 50);
     }
   }
 
@@ -211,17 +211,37 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     this.dialog.open(CardChangeDialogue);
   }
 
-  submitOrder() {
-    // need more validation for this
-    if (this.stripeService.selectedCard.id && this.checkoutForm.valid) {
+  submitOrder(e) {
+    e.preventDefault();
+    // disable or enable validation on shipping address
+    this.formsSame ? this.checkoutForm.get('shippingAddress').disable() : this.checkoutForm.get('shippingAddress').enable();
 
-      this.orderService.createOrder(this.checkoutForm.value.billingAddress, this.checkoutForm.value.shippingAddress, this.stripeService.selectedCard.id).then(
-        () => {
-          console.log('neat');
-          // this.router.navigateByUrl(`account/order/${order.id}`);
-          // this.moltin.deleteCart(this.customerService.customerUuid);
-        }
-      );
+    // need more validation for this
+    if (this.stripeService.selectedCard) {
+      if (this.checkoutForm.valid) {
+        this.orderService.createOrder(this.checkoutForm.value.billingAddress, this.formsSame ? null : this.checkoutForm.value.shippingAddress, this.stripeService.stripeCustomer.id, this.cart).then(
+          (orderId) => {
+            console.log('neat');
+            this.router.navigateByUrl(`account/order/${orderId}`);
+            // empty cart
+            // this.moltin.deleteCart(this.customerService.customerUuid);
+          }
+        );
+      } else {
+        this.snackBar.openFromComponent(OrderStateSnackbar, {
+          duration: 3000,
+          verticalPosition: 'top',
+          data: { message: 'Please make sure the address form is filled out correctly' },
+          panelClass: ['snackbar-theme']
+        });
+      }
+    } else {
+      this.snackBar.openFromComponent(OrderStateSnackbar, {
+        duration: 3000,
+        verticalPosition: 'top',
+        data: { message: 'Please select a payment type' },
+        panelClass: ['snackbar-theme']
+      });
     }
   }
 
@@ -234,7 +254,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       obj[formName][key] = value;
       return obj;
     };
-    this.isSameAddressControl.setValue(true);
     this.formsSame = true;
 
     if (address.first_name) this.checkoutForm.patchValue(createObject(form, 'first_name', address.first_name));
@@ -265,4 +284,23 @@ export class CardChangeDialogue {
   constructor(
     public dialogRef: MatDialogRef<CardChangeDialogue>
   ) {}
+}
+
+@Component({
+  selector: 'app-customer-state',
+  template: `
+    <div>"{{data.message}}"</div>
+  `,
+  styles: [
+    `
+
+    `
+  ]
+})
+export class OrderStateSnackbar {
+  constructor(
+    @Inject(MAT_SNACK_BAR_DATA) public data: any
+  ) {
+
+  }
 }
