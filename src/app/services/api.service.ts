@@ -25,14 +25,17 @@ import {
   LinkType,
   updateCartItemMutation,
   deleteCartItemMutation,
-  removeCartItemMutation
+  removeCartItemMutation,
+  ProductSize,
+  ProductOrientation
 } from '../api/mutations/cart.mutation';
 
 import {
   createOrderMutation,
   OrderPayment,
   OrderShipping,
-  OrderStatus
+  OrderStatus,
+  CurrencyType
 } from '../api/mutations/order.mutation';
 
 import {
@@ -45,6 +48,7 @@ import { cartByIdQuery } from '../api/queries/cart.query';
 import { productBySkuQuery } from '../api/queries/product.query';
 import { currentCustomerQuery } from '../api/queries/account.query';
 import { userAddressesQuery } from '../api/queries/address.query';
+import { ordersByCustomerQuery } from '../api/queries/order.query';
 
 @Injectable()
 export class APIService {
@@ -70,7 +74,7 @@ export class APIService {
       query: cartByIdQuery,
       variables: {
         cartId
-    }
+      }
     });
   }
 
@@ -79,7 +83,7 @@ export class APIService {
       query: productBySkuQuery,
       variables: {
         sku
-    }
+      }
     });
   }
 
@@ -88,7 +92,16 @@ export class APIService {
       query: userAddressesQuery,
       variables: {
         customerId
-    }
+      }
+    });
+  }
+
+  getOrdersByCustomer(customerId: string): any {
+    return this.apollo.watchQuery<any>({
+      query: ordersByCustomerQuery,
+      variables: {
+        customerId
+      }
     });
   }
 
@@ -185,13 +198,21 @@ export class APIService {
     });
   }
 
-  createCartItem(cartId: string, productSku: string, quantity: number) {
+  createCartItem(cartId: string, productSku: string, quantity: number, size: ProductSize, orientation: ProductOrientation, fontColor: string, backgroundColor: string, titleText: string, subtitleText: string, tagText: string, useLabel: boolean) {
     return this.apollo.mutate({
       mutation: createCartItemMutation,
       variables: {
         cartId,
         productSku,
-        quantity
+        quantity,
+        size,
+        orientation,
+        fontColor,
+        backgroundColor,
+        titleText,
+        subtitleText,
+        tagText,
+        useLabel
       }
     });
   }
@@ -227,7 +248,7 @@ export class APIService {
     });
   }
 
-  createOrder(status: OrderStatus, payment: OrderPayment, shipping: OrderShipping, customerId: string, billingAddressId: string, shippingAddressId: string) {
+  createOrder(status: OrderStatus, payment: OrderPayment, shipping: OrderShipping, customerId: string, billingAddressId: string, shippingAddressId: string, amount: number, currency: CurrencyType) {
     return this.apollo.mutate({
       mutation: createOrderMutation,
       variables: {
@@ -236,7 +257,9 @@ export class APIService {
         shipping,
         customerId,
         billingAddressId,
-        shippingAddressId
+        shippingAddressId,
+        amount,
+        currency
       }
     });
   }

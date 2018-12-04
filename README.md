@@ -68,26 +68,19 @@
 
     - Size as custom field and maybe custom fields for overlay stuff
 - Finish order flow
-    - Payment id didn't work - https://forum.moltin.com/t/saving-customer-card-information/1233/6
-    - Need to grab customer email at some point to refer to them on stripe
-    - Adding a card on checkout does not save it to the Stripe account
+    - ~~Payment id didn't work - https://forum.moltin.com/t/saving-customer-card-information/1233/6~~
+    - ~~Need to grab customer email at some point to refer to them on stripe~~
+    - ~~Adding a card on checkout does not save it to the Stripe account~~
     - Tweak validation for submission
     - Mobile tweaking for payment on checkout
     - Take to order page after successfull submission and reset cart
     - Add / See addresses
     - Display orders on account page
     - Account page similar to S&C with addresses / customer info / etc
-- Moltin Wiring
-    - Need add / save / fetch addresses for signed in users
-    - Paypal Integration
-        - https://forum.moltin.com/t/can-we-get-demo-app-on-nextjs-with-moltin-if-yes-then-how-can-you-please-help-me/809/7
-- Splash page -1 day
-- Wire in Moltin API and see what's left for needs with our own db - 2 day
-- Cart Reference Id:
-    - When user logging in (or starts adding first product to cart) I generate a uuid on client side and I store it in a cookie
-    - I create a cart with this uuid (via the carts/{uuid}) endpoint or with the Moltin.Cart({uuid}) JS method
-    - I use this cart until the user is logged in and I delete the cart on logout with the Moltin.Cart({uuid}).Delete() (or I keep it, depends…)
 - Poster generator for maps + custom trace pics. - 6 days - spent 3/6
+    - Allow user to return to generator page from cart to edit / work on their product
+        - Update the cart item model + make use of url params to make it work
+        - Will need to save overlay details + map details + cropped images even...
     - Patent:
         - Create modal to enlarge images / select
             - Bug with closing modal programmatically https://github.com/ionic-team/ionic/issues/15349
@@ -98,10 +91,6 @@
         - Bug when uploading an image with two iterations of file input on the dom. Doesn't fire change event
         - Trigger auto retrace when change trace color
 - Patents after launch - 2 days
-- Find a poster producer... - ???
-- Cart + checkout page - 2 days
-  - Moltin has some companies that use them listed. Check their UI
-  - Can't figure out fucking confirm pw - https://angular-templates.io/tutorials/about/angular-forms-and-validations
 - FAQ page - .5 day
 - About page - .5 day
 - Digital ocean setup - 3 days

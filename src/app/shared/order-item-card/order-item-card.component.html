@@ -1,0 +1,10 @@
+<div class="cardContainer">
+  <div class="imgWrapper">
+    <img *ngIf="thumbnail" [src]="thumbnail" />
+  </div>
+  <div class="infoWrapper">
+    <div>{{product.productByProductSku.name}}</div>
+    <div>{{product.size}}</div>
+    <div>Price: {{product.amount | currency: product.currency }}</div>
+  </div>
+</div>

@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Moltin } from 'src/app/providers/moltin/moltin';
 import { SubscriptionLike } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 
@@ -14,7 +13,6 @@ export class OrderComponent implements OnInit, OnDestroy {
   orderNumber: string;
 
   constructor(
-    private moltin: Moltin,
     private route: ActivatedRoute,
   ) {
     this.paramsSubscription = this.route.params.subscribe((params) => {

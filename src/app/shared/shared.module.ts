@@ -28,6 +28,8 @@ import {
 import { PaymentCardsComponent } from './payment-cards/payment-cards.component';
 import { CustomerAddressesComponent } from './customer-addresses/customer-addresses.component';
 import { AddressGridComponent } from './address-grid/address-grid.component';
+import { OrderCardComponent } from './order-card/order-card.component';
+import { OrderItemCardComponent } from './order-item-card/order-item-card.component';
 
 @NgModule({
   entryComponents: [
@@ -66,7 +68,9 @@ import { AddressGridComponent } from './address-grid/address-grid.component';
     SigninDialogueComponent,
     PaymentCardsComponent,
     CustomerAddressesComponent,
-    AddressGridComponent
+    AddressGridComponent,
+    OrderCardComponent,
+    OrderItemCardComponent
   ],
   exports: [
     PagewrapperComponent,
@@ -90,7 +94,9 @@ import { AddressGridComponent } from './address-grid/address-grid.component';
     PaymentCardsComponent,
     CustomerAddressesComponent,
     MatButtonToggleModule,
-    AddressGridComponent
+    AddressGridComponent,
+    OrderCardComponent,
+    OrderItemCardComponent
   ]
 })
 export class SharedModule { }

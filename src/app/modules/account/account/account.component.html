@@ -1,7 +1,29 @@
 <app-pagewrapper>
-  <div class="boldFont">Account</div>
-  <button mat-flat-button color="primary" (click)="logoutCustomer()">Logout</button>
-  <app-payment-cards [canDelete]="true" [canMakeDefault]="true"></app-payment-cards>
-  <h1>Orders</h1>
-  <div *ngFor="let order of orders;" (click)="router.navigateByUrl('account/order/' + order.id)">Go to #{{order.id}}</div>
+  <div class="accountContainer">
+    <div class="boldFont">Account</div>
+    <div>{{customerService.customerObject?.firstName}} {{customerService.customerObject?.lastName}}</div>
+    <button mat-button color="primary" (click)="logoutCustomer()">Logout</button>
+    <div class="tabContainer">
+      <div 
+        class="tab" 
+        *ngFor="let tab of tabs; let i = index;" 
+        [ngClass]="activeTab === i ? 'active' : ''"
+        (click)="activeTab = i"
+      >
+        <mat-icon>{{tab.icon}}</mat-icon>
+        <div class="tabLabel">{{tab.label}}</div>
+      </div>
+    </div>
+    <div class="ordersContainer" *ngIf="activeTab === 0">
+      <h1>Orders</h1>
+      <app-order-card *ngFor="let order of orders;" [order]="order"></app-order-card>
+      <div *ngIf="!orders?.length" class="emptyState">
+        <div><img class="logoImg" src="../../../assets/dino.svg" /></div>
+        <div>You haven't created any orders yet</div>
+      </div>
+    </div>
+    <div class="settingsContainer" *ngIf="activeTab === 1">
+      <app-payment-cards [canDelete]="true" [canMakeDefault]="true"></app-payment-cards>
+    </div>
+  </div>
 </app-pagewrapper>

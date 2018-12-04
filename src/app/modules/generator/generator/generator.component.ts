@@ -11,6 +11,7 @@ import { Map } from 'mapbox-gl';
 import { PrintMapComponent } from '../print-map/print-map.component';
 import { UtilService } from 'src/app/services/util.service';
 import { APIService } from 'src/app/services/api.service';
+import { ProductSize, ProductOrientation } from 'src/app/api/mutations/cart.mutation';
 
 
 @Component({
@@ -131,17 +132,19 @@ export class GeneratorComponent implements OnInit, OnDestroy {
 
   addToCart() {
     this.generatorService.isAddingToCart = true;
+    const productSize = this.generatorService.size === 'Small' ? ProductSize.SMALL : this.generatorService.size === 'Medium' ? ProductSize.MEDIUM : ProductSize.LARGE;
+    const productOrientation = this.generatorService.orientation === 'Portrait' ? ProductOrientation.PORTRAIT : ProductOrientation.LANDSCAPE;
     if (this.generatorService.generatorType === 'map-poster') {
       this.createPrintMap().then(
         (dataUrl) => {
           this.posterSrcHidden = dataUrl;
           setTimeout(() => {
-            this.captureImage().then((png) => this.cartService.addToCart(this.productSku, 1, png));
+            this.captureImage().then((png) => this.cartService.addToCart(this.productSku, 1, png, productSize, productOrientation, this.generatorService.overlayColor, this.generatorService.backgroundColor, this.generatorService.overlayTitle, this.generatorService.overlaySubtitle, this.generatorService.overlayTag, this.generatorService.displayOverlay));
           }, 50); // timeout so the dom element can populate correctly
         }
       );
     } else {
-      this.captureImage().then((png) => this.cartService.addToCart(this.productSku, 1, png));
+      this.captureImage().then((png) => this.cartService.addToCart(this.productSku, 1, png, productSize, productOrientation, this.generatorService.overlayColor, this.generatorService.backgroundColor, this.generatorService.overlayTitle, this.generatorService.overlaySubtitle, this.generatorService.overlayTag, this.generatorService.displayOverlay));
     }
   }
 

@@ -172,7 +172,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   getAddresses(): void {
     // Check if customer logged in. If so grab address
     if (this.customerService.customerToken.getValue()) {
-      this.addressService.getAddressesByCustomer(this.customerService.customerId).then(
+      this.addressService.getAddressesByCustomer(this.customerService.customerObject.id).then(
         (addresses) => {
           if (addresses.length) {
             this.addresses = addresses;
@@ -219,7 +219,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     // need more validation for this
     if (this.stripeService.selectedCard) {
       if (this.checkoutForm.valid) {
-        this.orderService.createOrder(this.checkoutForm.value.billingAddress, this.formsSame ? null : this.checkoutForm.value.shippingAddress, this.stripeService.stripeCustomer.id, this.cart).then(
+        this.orderService.createOrder(this.checkoutForm.value.billingAddress, this.formsSame ? null : this.checkoutForm.value.shippingAddress, this.stripeService.stripeCustomer.id, this.cart, this.cartService.quantifyCartTotal(this.cart)).then(
           (orderId) => {
             console.log('neat');
             this.router.navigateByUrl(`account/order/${orderId}`);

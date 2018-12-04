@@ -7,7 +7,7 @@ import { BehaviorSubject, Observable, SubscriptionLike} from 'rxjs';
 import { APIService } from './api.service';
 import { GeneratorService } from './generator.service';
 
-import { LinkType } from '../api/mutations/cart.mutation';
+import { LinkType, ProductOrientation, ProductSize } from '../api/mutations/cart.mutation';
 import { UtilService } from './util.service';
 
 @Injectable({
@@ -65,7 +65,7 @@ export class CartService implements OnDestroy {
     });
   }
 
-  addToCart(sku: string, quantity: number, dataUrl: string): void {
+  addToCart(sku: string, quantity: number, dataUrl: string, size: ProductSize, orientation: ProductOrientation, fontColor: string, backgroundColor: string, titleText: string, subtitleText: string, tagText: string, useLabel: boolean): void {
     const formData = new FormData();
     formData.append('poster', dataUrl);
     formData.append('orientation', this.generatorService.orientation);
@@ -74,7 +74,7 @@ export class CartService implements OnDestroy {
     this.apiService.processPoster(formData).subscribe(
       (links: { type: 'thumbnail' | 'pdf', S3Url: string }[]) => {
         console.log(links);
-        this.apiService.createCartItem(this.customerService.customerUuid, sku, quantity).subscribe(
+        this.apiService.createCartItem(this.customerService.customerUuid, sku, quantity, size, orientation, fontColor, backgroundColor, titleText, subtitleText, tagText, useLabel).subscribe(
           ({ data }) => {
             // bulk add links to post
             let query = `mutation {`;

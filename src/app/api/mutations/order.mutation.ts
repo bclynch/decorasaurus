@@ -17,6 +17,14 @@ export enum OrderShipping {
   UNFULFILLED = 'UNFULFILLED',
 }
 
+export enum CurrencyType {
+  USD = 'USD',
+  AUD = 'AUD',
+  CAD = 'CAD',
+  GBP = 'GBP',
+  EUR = 'EUR'
+}
+
 export const createOrderMutation: DocumentNode = gql`
   mutation createOrder(
     $status: OrderStatus!,
@@ -24,7 +32,9 @@ export const createOrderMutation: DocumentNode = gql`
     $shipping: OrderShipping!,
     $customerId: UUID!,
     $billingAddressId: UUID!,
-    $shippingAddressId: UUID!
+    $shippingAddressId: UUID!,
+    $amount: Int!,
+    $currency: CurrencyType!
   ) {
     createOrder(input: {
       order: {
@@ -33,7 +43,9 @@ export const createOrderMutation: DocumentNode = gql`
         shipping: $shipping,
         customerId: $customerId,
         billingAddressId: $billingAddressId,
-        shippingAddressId: $shippingAddressId
+        shippingAddressId: $shippingAddressId,
+        amount: $amount,
+        currency: $currency
       }
     }) {
       order {
@@ -44,11 +56,13 @@ export const createOrderMutation: DocumentNode = gql`
 `;
 
 export const createOrderItemMutation: DocumentNode = gql`
-  mutation createOrderItem($orderId: UUID!, $productSku: String!) {
+  mutation createOrderItem($orderId: UUID!, $productSku: String!, $amount: Int!, $currency: CurrencyType!) {
     createOrderItem(input: {
       orderItem: {
         orderId: $orderId,
-        productSku: $productSku
+        productSku: $productSku,
+        amount: $amount,
+        currency: $currency
       }
     }) {
       orderItem {

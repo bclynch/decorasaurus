@@ -9,6 +9,17 @@ export enum LinkType {
   CROP = 'CROP',
 }
 
+export enum ProductSize {
+  SMALL = 'SMALL',
+  MEDIUM = 'MEDIUM',
+  LARGE = 'LARGE',
+}
+
+export enum ProductOrientation {
+  PORTRAIT = 'PORTRAIT',
+  LANDSCAPE = 'LANDSCAPE'
+}
+
 // cart will be created for all users when they arrive to site
 // cookie created to keep track of their user id which is also their cart id
 // this means cart creation always for anonymous user so no need for customerId field here
@@ -45,12 +56,32 @@ export const deleteCartMutation: DocumentNode = gql`
 `;
 
 export const createCartItemMutation: DocumentNode = gql`
-  mutation createCartItem($cartId: UUID!, $productSku: String!, $quantity: Int!) {
+  mutation createCartItem(
+    $cartId: UUID!,
+    $productSku: String!,
+    $quantity: Int!,
+    $size: ProductSize!,
+    $orientation: ProductOrientation!,
+    $fontColor: String,
+    $backgroundColor: String,
+    $titleText: String,
+    $subtitleText: String,
+    $tagText: String,
+    $useLabel: Boolean
+  ) {
     createCartItem(input: {
       cartItem: {
         cartId: $cartId,
         productSku: $productSku,
-        quantity: $quantity
+        quantity: $quantity,
+        size: $size,
+        orientation: $orientation,
+        fontColor: $fontColor,
+        backgroundColor: $backgroundColor,
+        titleText: $titleText,
+        subtitleText: $subtitleText,
+        tagText: $tagText,
+        useLabel: $useLabel
       }
     }) {
       cartItem {

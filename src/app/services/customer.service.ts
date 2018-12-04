@@ -17,10 +17,15 @@ export class CustomerService implements OnDestroy {
 
   dialogueSubscription: SubscriptionLike;
   customerUuid: string;
-  customerId: string;
   currency: 'USD' | 'EUR' = 'EUR';
   isReloading = false;
-  customerObject;
+  customerObject: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    stripeId: string;
+    email: string;
+  };
 
   public customerToken: BehaviorSubject<string>;
   // private _subject: BehaviorSubject<string>;
@@ -56,11 +61,10 @@ export class CustomerService implements OnDestroy {
               if (!this.isReloading) {
                 // if logged in set our customer id and set the token
                 if (data.currentCustomer) {
-                  this.customerId = data.currentCustomer.id;
-                  const cookieToken = this.cookieService.get('decorasaurus-token');
-                  if (cookieToken) this.customerToken.next(cookieToken);
                   this.customerObject = data.currentCustomer;
                   console.log(this.customerObject);
+                  const cookieToken = this.cookieService.get('decorasaurus-token');
+                  if (cookieToken) this.customerToken.next(cookieToken);
                 } else {
                   // if it doesnt exist dump the token
                   this.cookieService.delete('decorasaurus-token');
@@ -140,7 +144,6 @@ export class CustomerService implements OnDestroy {
           // reset apollo cache and refetch queries
           this.apollo.getClient().resetStore();
 
-          // this.customerId = resp.token.customer_id;
           this.cookieService.set('decorasaurus-token', data.authenticateUserCustomer.jwtToken);
           this.customerToken.next(data.authenticateUserCustomer.jwtToken);
           // this.cookieService.set( 'decorasaurus-customer-id', resp.token.customer_id );
@@ -170,7 +173,7 @@ export class CustomerService implements OnDestroy {
       this.cookieService.delete('decorasaurus-token');
       this.cookieService.delete('decorasaurus-customer-id');
       this.customerToken.next(null);
-      this.customerId = null;
+      this.customerObject = null;
 
       // reset apollo cache and refetch queries
       this.apollo.getClient().resetStore();

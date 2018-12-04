@@ -10,6 +10,8 @@ export const fragments: {
       id,
       productSku,
       quantity,
+      size,
+      orientation,
       productLinksByCartItemId {
         nodes {
           type,

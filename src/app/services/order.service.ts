@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { APIService } from './api.service';
 import { CustomerService } from './customer.service';
-import { OrderStatus, OrderPayment, OrderShipping } from '../api/mutations/order.mutation';
+import { OrderStatus, OrderPayment, OrderShipping, CurrencyType } from '../api/mutations/order.mutation';
+import { ProductOrientation, ProductSize } from '../api/mutations/cart.mutation';
 import { StripeService } from './stripe.service';
 import { AddressService } from './address.service';
 import { AddressType } from '../api/mutations/address.mutation';
@@ -18,7 +19,7 @@ export class OrderService {
 
   }
 
-  createOrder(billingAddress, shippingAddress, stripeToken, cart): Promise<any> {
+  createOrder(billingAddress, shippingAddress, stripeToken, cart, amount): Promise<any> {
     return new Promise((resolve) => {
       // process stripe customer
       this.stripeService.checkCustomerState(stripeToken).then(
@@ -27,7 +28,7 @@ export class OrderService {
           this.addressService.createAddress(this.customerService.customerObject.id, AddressType.BILLING, null, billingAddress.first_name, billingAddress.last_name, billingAddress.company_name, billingAddress.line_1, billingAddress.line_2, billingAddress.city, billingAddress.postcode, billingAddress.country, '', true).then(
             (addressId: string) => {
               // create order
-              this.apiService.createOrder(OrderStatus.COMPLETE, OrderPayment.PAID, OrderShipping.UNFULFILLED, this.customerService.customerId, addressId, addressId).subscribe(
+              this.apiService.createOrder(OrderStatus.COMPLETE, OrderPayment.PAID, OrderShipping.UNFULFILLED, this.customerService.customerObject.id, addressId, addressId, amount, CurrencyType[this.customerService.currency]).subscribe(
                 ({ data }) => {
                   // create order items from cart items
                   this.generateOrderItems(data.createOrder.order.id, cart).then(
@@ -42,8 +43,12 @@ export class OrderService {
     });
   }
 
-  getOrder(id: string) {
+  orderById(id: string) {
 
+  }
+
+  ordersByCustomer(customerId: string) {
+    return this.apiService.getOrdersByCustomer(customerId);
   }
 
   private generateOrderItems(orderId: string, cart) {
@@ -54,7 +59,12 @@ export class OrderService {
           query += `a${i}: createOrderItem(input: {
             orderItem: {
               orderId: "${orderId}",
-              productSku: "${item.productSku}"
+              productSku: "${item.productSku}",
+              amount: ${item.productByProductSku.productPricesByProductSku.nodes.filter((price) => price.currency === this.customerService.currency)[0].amount},
+              currency: ${CurrencyType[this.customerService.currency]},
+              quantity: ${item.quantity},
+              size: ${ProductSize[item.size]},
+              orientation: ${ProductOrientation[item.orientation]}
             }
           }) {
             orderItem {

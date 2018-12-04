@@ -254,7 +254,7 @@
           <div>Total</div>
         </div>
         <div class="sectionContent">
-          <div class="cartItemWrapper" *ngFor="let product of cart?.data; let i = index;">
+          <div class="cartItemWrapper" *ngFor="let product of cart; let i = index;">
             <app-cart-item-card 
               [product]="product" 
               [isCheckout]="true"
