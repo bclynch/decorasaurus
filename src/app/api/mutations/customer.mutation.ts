@@ -64,10 +64,10 @@ export const resetPasswordMutation: DocumentNode = gql`
 `;
 
 export const updatePasswordMutation: DocumentNode = gql`
-  mutation($userId: Int!, $password: String!, $newPassword: String!) {
+  mutation($customerId: UUID!, $password: String!, $newPassword: String!) {
     updatePassword(
       input: {
-        userId: $userId,
+        customerId: $customerId,
         password: $password,
         newPassword: $newPassword
       }
@@ -77,10 +77,10 @@ export const updatePasswordMutation: DocumentNode = gql`
   }
 `;
 
-export const deleteAccountByIdMutation: DocumentNode = gql`
-  mutation($userId: UUID!) {
-    deleteAccountById(input: {
-      id: $userId
+export const deleteCustomerByIdMutation: DocumentNode = gql`
+  mutation($customerId: UUID!) {
+    deleteCustomerById(input: {
+      id: $customerId
     }) {
       clientMutationId
     }

@@ -121,9 +121,9 @@
     justify-content: center;
 
     .logoWrapper {
+      cursor: pointer;
 
       > span {
-        cursor: pointer;
         display: block!important;
       }
     }

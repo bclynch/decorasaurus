@@ -3,8 +3,9 @@
     <img *ngIf="thumbnail" [src]="thumbnail" />
   </div>
   <div class="infoWrapper">
-    <div>{{product.productByProductSku.name}}</div>
+    <div class="name">{{product.productByProductSku.name}}</div>
     <div>{{product.size}}</div>
-    <div>Price: {{product.amount | currency: product.currency }}</div>
+    <div>Price: {{product.amount / 100 | currency: product.currency }}</div>
+    <div>Quantity: {{product.quantity }}</div>
   </div>
 </div>

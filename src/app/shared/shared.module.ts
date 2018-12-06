@@ -23,7 +23,9 @@ import {
   MatSelectModule,
   MatCheckboxModule,
   MatRadioModule,
-  MatButtonToggleModule
+  MatButtonToggleModule,
+  MatTabsModule,
+  MatExpansionModule
 } from '@angular/material';
 import { PaymentCardsComponent } from './payment-cards/payment-cards.component';
 import { CustomerAddressesComponent } from './customer-addresses/customer-addresses.component';
@@ -54,7 +56,9 @@ import { OrderItemCardComponent } from './order-item-card/order-item-card.compon
     MatCheckboxModule,
     ReactiveFormsModule,
     MatRadioModule,
-    MatButtonToggleModule
+    MatButtonToggleModule,
+    MatTabsModule,
+    MatExpansionModule
   ],
   declarations: [
     PagewrapperComponent,
@@ -96,7 +100,9 @@ import { OrderItemCardComponent } from './order-item-card/order-item-card.compon
     MatButtonToggleModule,
     AddressGridComponent,
     OrderCardComponent,
-    OrderItemCardComponent
+    OrderItemCardComponent,
+    MatTabsModule,
+    MatExpansionModule
   ]
 })
 export class SharedModule { }

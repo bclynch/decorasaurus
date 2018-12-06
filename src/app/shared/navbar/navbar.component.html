@@ -22,12 +22,9 @@
           </div>
         </div>
       </div>
-      <div class="logoWrapper">
+      <div class="logoWrapper" (click)="routerService.navigateToPage('/')">
         <img class="logoImg" src="../../../assets/dino.svg" />
-        <span 
-          class="boldFont gradientText"
-          (click)="routerService.navigateToPage('/')" 
-        >Decorasaurus</span>
+        <span class="boldFont gradientText">Decorasaurus</span>
       </div>
       <div class="cartWrapper">
         <div class="account" (click)="goToAccount()">Account</div>

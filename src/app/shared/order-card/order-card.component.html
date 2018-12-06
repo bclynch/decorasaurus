@@ -1,10 +1,19 @@
-<div class="cardContainer" (click)="router.navigateByUrl('account/order/' + order.id)">
+<div class="cardContainer">
   <div class="productsContainer">
     <app-order-item-card *ngFor="let product of order?.orderItemsByOrderId.nodes" [product]="product"></app-order-item-card>
   </div>
-  <div class="orderInfoContainer">
-    <div>Order Placed: {{order.createdAt | date: 'mediumDate'}}</div>
-    <div>Order Number: {{order.id}}</div>
-    <div>Order Total: {{order.amount | currency: order.currency }}</div>
+  <div class="orderInfoContainer" (click)="router.navigateByUrl('account/order/' + order.id)">
+    <div class="wrapper">
+      <div class="header">Order Placed:</div>
+      <div class="content">{{order.createdAt | date: 'mediumDate'}}</div>
+    </div>
+    <div class="wrapper">
+      <div class="header">Order Number:</div>
+      <div class="content">{{order.id}}</div>
+    </div>
+    <div class="wrapper">
+      <div class="header">Order Total:</div>
+      <div class="content">{{order.amount | currency: order.currency }}</div>
+    </div>
   </div>
 </div>

@@ -9,26 +9,89 @@
     <div class="productName boldFont">{{generatorService.product?.name}}</div>
     <div class="productPrice">{{utilService.displayPrice(generatorService.product) | currency: customerService.currency}}</div>
   </div>
-  <div>
-    <div class="tabNav">
-      <div 
-        class="tab"
-        [ngClass]="i === selectedTab ? 'active' : ''" 
-        *ngFor="let tab of navTabs; let i = index;" 
-        (click)="generatorService.optionsTabSubject.next(i)"
-      >
-        <span>{{i + 1}}.</span>
-        <div>{{tab}}</div>
+  <mat-tab-group>
+    <mat-tab label="1. Basics">
+      <div class="basicContainer optionsWrapper">
+        <app-patent-basic-options *ngIf="generatorService.generatorType === 'patent-poster'"></app-patent-basic-options>
+        <app-map-basic-options *ngIf="generatorService.generatorType === 'map-poster'"></app-map-basic-options>
+        <app-fusion-basic-options *ngIf="generatorService.generatorType === 'fusion-poster'"></app-fusion-basic-options>
+        <app-trace-basic-options *ngIf="generatorService.generatorType === 'trace-poster'"></app-trace-basic-options>
       </div>
-    </div>
-  </div>
-  <div class="basicContainer optionsWrapper" *ngIf="selectedTab === 0">
+    </mat-tab>
+    <mat-tab label="2. Customize">
+      <div class="customizeContainer optionsWrapper">
+        <div class="optionHeader">Overlay Type</div>
+        <mat-button-toggle-group (change)="generatorService.overlayType = $event.value" [value]="generatorService.overlayType">
+          <mat-button-toggle value="Border">Border</mat-button-toggle>
+          <mat-button-toggle value="Block">Block</mat-button-toggle>
+          <mat-button-toggle value="Floating">Floating</mat-button-toggle>
+        </mat-button-toggle-group>
+        <app-colors-picker [colorValue]="generatorService.overlayColor" [backgroundValue]="generatorService.overlayBackground"></app-colors-picker>
+        <mat-form-field appearance="outline">
+          <mat-label>Title</mat-label>
+          <input 
+            [(ngModel)]="generatorService.overlayTitle" 
+            placeholder="Title" 
+            matInput 
+          />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Subtitle</mat-label>
+          <input 
+            [(ngModel)]="generatorService.overlaySubtitle" 
+            placeholder="Subtitle" 
+            matInput 
+          />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Tag</mat-label>
+          <input 
+            [(ngModel)]="generatorService.overlayTag" 
+            placeholder="Tag" 
+            matInput 
+          />
+        </mat-form-field>
+        <div class="optionHeader">Poster Labels</div>
+        <mat-button-toggle-group (change)="generatorService.displayOverlay = $event.value" [value]="generatorService.displayOverlay">
+          <mat-button-toggle [value]="true">On</mat-button-toggle>
+          <mat-button-toggle [value]="false">Off</mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+    </mat-tab>
+    <mat-tab label="3. Finish">
+      <div class="finishContainer optionsWrapper">
+        <div class="optionWrapper" *ngIf="generatorService.generatorType === 'map-poster'">
+          <div class="optionHeader">Orientation</div>
+          <mat-button-toggle-group (change)="generatorService.selectOrientation($event.value)" [value]="generatorService.orientation">
+            <mat-button-toggle 
+              [value]="orientationOption" 
+              *ngFor="let orientationOption of generatorService.orientationOptions"
+            >{{orientationOption}}</mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+        <div class="optionWrapper">
+          <div class="optionHeader">Sizing</div>
+          <mat-button-toggle-group (change)="generatorService.selectSize($event.value)" [value]="generatorService.size">
+            <mat-button-toggle 
+              [value]="sizeOption" 
+              *ngFor="let sizeOption of generatorService.sizeOptions"
+              class="sizeButtonToggle" 
+            >
+              <div>{{sizeOption}}</div>
+              <div>{{generatorService.dimensions[sizeOption].width}} x {{generatorService.dimensions[sizeOption].height}}</div>
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+  <!-- <div class="basicContainer optionsWrapper">
     <app-patent-basic-options *ngIf="generatorService.generatorType === 'patent-poster'"></app-patent-basic-options>
     <app-map-basic-options *ngIf="generatorService.generatorType === 'map-poster'"></app-map-basic-options>
     <app-fusion-basic-options *ngIf="generatorService.generatorType === 'fusion-poster'"></app-fusion-basic-options>
     <app-trace-basic-options *ngIf="generatorService.generatorType === 'trace-poster'"></app-trace-basic-options>
-  </div>
-  <div class="customizeContainer optionsWrapper" *ngIf="selectedTab === 1">
+  </div> -->
+  <!-- <div class="customizeContainer optionsWrapper" *ngIf="selectedTab === 1">
     <div class="optionHeader">Overlay Type</div>
     <mat-button-toggle-group (change)="generatorService.overlayType = $event.value" [value]="generatorService.overlayType">
       <mat-button-toggle value="Border">Border</mat-button-toggle>
@@ -65,8 +128,8 @@
       <mat-button-toggle [value]="true">On</mat-button-toggle>
       <mat-button-toggle [value]="false">Off</mat-button-toggle>
     </mat-button-toggle-group>
-  </div>
-  <div class="finishContainer optionsWrapper" *ngIf="selectedTab === 2">
+  </div> -->
+  <!-- <div class="finishContainer optionsWrapper" *ngIf="selectedTab === 2">
     <div class="optionWrapper" *ngIf="generatorService.generatorType === 'map-poster'">
       <div class="optionHeader">Orientation</div>
       <mat-button-toggle-group (change)="generatorService.selectOrientation($event.value)" [value]="generatorService.orientation">
@@ -89,7 +152,7 @@
         </mat-button-toggle>
       </mat-button-toggle-group>
     </div>
-  </div>
+  </div> -->
   <!-- <div class="help">Need Help? Contact Us</div> -->
   <button 
     class="addToCartBtn boldFont" 

@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AccountComponent } from './account/account.component';
+import { AccountComponent, AccountStateSnackbar } from './account/account.component';
 import { Routes, RouterModule } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 const routes: Routes = [
   {
@@ -12,15 +13,24 @@ const routes: Routes = [
   {
     path: 'order',
     loadChildren: '../order/order.module#OrderModule'
+  },
+  {
+    path: 'reset-password',
+    loadChildren: '../reset-password/reset-password.module#ResetPasswordModule'
   }
 ];
 
 @NgModule({
+  entryComponents: [
+    AccountStateSnackbar
+  ],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
-    SharedModule
+    SharedModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
-  declarations: [AccountComponent]
+  declarations: [AccountComponent, AccountStateSnackbar]
 })
 export class AccountModule { }

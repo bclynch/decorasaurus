@@ -173,3 +173,32 @@ mat-radio-button {
 app-ig-grid {
   align-self: flex-start;
 }
+
+.productsContainer {
+
+  app-order-item-card {
+
+    .cardContainer {
+      margin-bottom: 12px;
+    }
+  }
+  app-order-item-card:last-child {
+
+    .cardContainer {
+      margin-bottom: 0;
+    }
+  }
+}
+
+mat-tab-header {
+
+  .mat-tab-labels {
+    justify-content: space-around;
+  }
+  .mat-tab-label,
+  .mat-tab-label-active {
+    min-width: 0!important;
+    padding: 0 10px!important;
+    margin: 0!important;
+  }
+}

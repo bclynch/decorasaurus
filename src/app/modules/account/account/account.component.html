@@ -1,7 +1,7 @@
 <app-pagewrapper>
   <div class="accountContainer">
-    <div class="boldFont">Account</div>
-    <div>{{customerService.customerObject?.firstName}} {{customerService.customerObject?.lastName}}</div>
+    <div class="boldFont title">Account</div>
+    <div class="name">{{customerService.customerObject?.firstName}} {{customerService.customerObject?.lastName}}</div>
     <button mat-button color="primary" (click)="logoutCustomer()">Logout</button>
     <div class="tabContainer">
       <div 
@@ -23,7 +23,59 @@
       </div>
     </div>
     <div class="settingsContainer" *ngIf="activeTab === 1">
-      <app-payment-cards [canDelete]="true" [canMakeDefault]="true"></app-payment-cards>
+      <mat-tab-group>
+        <mat-tab label="Addresses">
+          
+        </mat-tab>
+        <mat-tab label="Credit Cards">
+          <app-payment-cards [canDelete]="true" [canMakeDefault]="true"></app-payment-cards>
+        </mat-tab>
+        <mat-tab label="Account">
+          <form [formGroup]="changeForm" (ngSubmit)="changePassword()">
+            <h1>Change Password</h1>
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="Current Password"
+                type="password"  
+                formControlName="currentPassword"
+                [errorStateMatcher]="matcher"
+              />
+              <mat-error *ngFor="let validation of formValidationMessages.currentPassword">
+                <mat-error class="error-message" *ngIf="changeForm.get('currentPassword').hasError(validation.type) && (changeForm.get('currentPassword').dirty || changeForm.get('currentPassword').touched)">{{validation.message}}</mat-error>
+              </mat-error>
+            </mat-form-field>
+            <ng-container formGroupName="matchingPassword">
+              <mat-form-field>
+                <input
+                  matInput
+                  placeholder="New Password"
+                  type="password" 
+                  formControlName="password"
+                  [errorStateMatcher]="matcher"
+                />
+                <mat-error *ngFor="let validation of formValidationMessages.password">
+                  <mat-error class="error-message" *ngIf="changeForm.get('matchingPassword').get('password').hasError(validation.type) && (changeForm.get('matchingPassword').get('password').dirty || changeForm.get('matchingPassword').get('password').touched)">{{validation.message}}</mat-error>
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <input
+                  matInput
+                  placeholder="Confirm Password"
+                  type="password" 
+                  formControlName="confirmPassword"
+                  [errorStateMatcher]="matcher"
+                />
+                <mat-error *ngFor="let validation of formValidationMessages.confirmPassword">
+                  <mat-error class="error-message" *ngIf="(changeForm.get('matchingPassword').get('confirmPassword').hasError(validation.type)|| changeForm.get('matchingPassword').hasError(validation.type)) && (changeForm.get('matchingPassword').get('confirmPassword').dirty || changeForm.get('matchingPassword').get('confirmPassword').touched)">{{validation.message}}</mat-error>
+                </mat-error>
+              </mat-form-field>
+            </ng-container>
+            <button mat-flat-button color="primary" type="submit">Change Password</button>
+            <div>Forgot Password? <button mat-button color="primary" (click)="router.navigateByUrl('/account/reset-password')">Reset Password</button></div>
+          </form>
+        </mat-tab>
+      </mat-tab-group>
     </div>
   </div>
 </app-pagewrapper>

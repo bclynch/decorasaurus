@@ -2,6 +2,12 @@
   padding: 10px;
   width: calc(100% - 20px); // accounting for padding
 
+  .title {
+    font-size: 38px;
+  }
+  .name {
+    font-size: 28px;
+  }
   .tabContainer {
     display: flex;
     border-bottom: solid 1px var(--color-black);
@@ -24,6 +30,22 @@
       }
       .tabLabel {
         margin: 0 5px;
+      }
+    }
+  }
+  .settingsContainer {
+
+    form {
+      max-width: 50vw;
+
+      .mat-form-field {
+        display: block;
+      }
+      button[type='submit'] {
+        color: var(--color-white);
+      }
+      .toggle {
+        margin-top: 15px;
       }
     }
   }

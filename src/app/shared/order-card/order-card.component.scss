@@ -1,5 +1,39 @@
 .cardContainer {
   display: flex;
-  align-items: center;
-  cursor: pointer;
+  flex-direction: column-reverse;
+  width: 100%;
+
+  .orderInfoContainer {
+    background: #ddd;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
+    cursor: pointer;
+    margin-bottom: 10px;
+
+    .wrapper {
+      margin-bottom: 10px;
+
+      .header {
+        font-size: 14px;
+      }
+      .content {
+        font-weight: bold;
+        font-size: 18px;
+      }
+    }
+  }
+  @media (min-width: 768px) {
+    flex-direction: row;
+
+    .productsContainer {
+      flex: 6;
+    }
+    .orderInfoContainer {
+      flex: 4;
+      margin-left: 10px;
+      margin-bottom: 0;
+    }
+  }
 }

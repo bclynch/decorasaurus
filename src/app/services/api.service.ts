@@ -13,7 +13,7 @@ import {
   authUserCustomerMutation,
   resetPasswordMutation,
   updatePasswordMutation,
-  deleteAccountByIdMutation,
+  deleteCustomerByIdMutation,
   updateCustomerByIdMutation
 } from '../api/mutations/customer.mutation';
 
@@ -160,24 +160,40 @@ export class APIService {
     });
   }
 
-  updatePassword(userId: string, password: string, newPassword: string) {
+  updatePassword(customerId: string, password: string, newPassword: string) {
     return this.apollo.mutate({
       mutation: updatePasswordMutation,
       variables: {
-        userId,
+        customerId,
         password,
         newPassword
       }
     });
   }
 
-  deleteAccountById(userId: string) {
+  deleteAccountById(customerId: string) {
     return this.apollo.mutate({
-      mutation: deleteAccountByIdMutation,
+      mutation: deleteCustomerByIdMutation,
       variables: {
-        userId
+        customerId
       }
     });
+  }
+
+  // Email endpoints
+  sendResetEmail(user: string, pw: string) {
+    return this.http.post(`${ENV.apiBaseURL}/mailing/reset`, { user, pw })
+      .pipe(map(
+        (response: Response) => {
+          const data = response.json();
+          return data;
+        }
+      )
+      ).pipe(catchError(
+        (error: Response) => {
+          return Observable.throw('Something went wrong');
+        }
+    ));
   }
 
   createCart(cartId: string) {
