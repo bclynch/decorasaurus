@@ -47,6 +47,7 @@
           transition: .3s;
           padding: 0 10px;
           position: relative;
+          transition: .3s;
 
           .dropdown {
             display: none;
@@ -64,6 +65,7 @@
             }
             > div {
               padding: 10px 0;
+              transition: .3s;
             }
             > div:hover {
               color: var(--color-secondary);

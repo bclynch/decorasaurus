@@ -71,12 +71,12 @@ export class NavbarComponent implements OnDestroy {
         {
           label: 'FAQs',
           value: 'faqs',
-          path: 'create/poster-generator/faqs'
+          path: 'faqs'
         },
         {
           label: 'Contact',
           value: 'contact',
-          path: 'create/poster-generator/contact'
+          path: 'contact'
         }
       ]
     }
@@ -124,6 +124,7 @@ export class NavbarComponent implements OnDestroy {
 
     this.dialogueSubscription = dialogRef.afterClosed().subscribe(result => {
 
+      console.log(result);
       if (result) {
         switch (result) {
           case 'About':
@@ -141,9 +142,23 @@ export class NavbarComponent implements OnDestroy {
           case 'Custom Trace Posters':
             this.routerService.navigateToPage('/create/poster-generator/trace-poster');
             break;
+          case 'FAQs':
+            this.routerService.modifyFragment('faqs', '/help');
+            break;
+          case 'Contact':
+            this.routerService.modifyFragment('contact', '/help');
+            break;
         }
       }
     });
+  }
+
+  navigate(path) {
+    if (path === 'faqs' || path === 'contact') {
+      this.routerService.modifyFragment(path, '/help');
+    } else {
+      this.routerService.navigateToPage(path);
+    }
   }
 
   goToAccount() {

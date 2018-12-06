@@ -1,0 +1,26 @@
+.logoWrapper {
+  margin-top: 50px;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  img {
+    width: 50vw;
+  }
+  button {
+    color: var(--color-white);
+    width: 50vw;
+    max-width: 300px;
+  }
+  @media (min-width: 768px) {
+
+    img {
+      width: 30vw;
+    }
+    button {
+      width: 25vw;
+    }
+  }
+}

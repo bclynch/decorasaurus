@@ -117,7 +117,7 @@ export class AccountComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl('/');
   }
 
-  changePassword() {
+  changePassword(formDirective: FormGroupDirective) {
     this.apiService.updatePassword(this.customerService.customerObject.id, this.changeForm.value.currentPassword, this.changeForm.value.matchingPassword.password).subscribe(
       result => {
         if (result.data.updatePassword.boolean) {
@@ -127,6 +127,8 @@ export class AccountComponent implements OnInit, OnDestroy {
             data: { message: 'Password changed' },
             panelClass: ['snackbar-theme']
           });
+          this.changeForm.reset();
+          formDirective.resetForm();
         } else {
           this.snackBar.openFromComponent(AccountStateSnackbar, {
             duration: 3000,

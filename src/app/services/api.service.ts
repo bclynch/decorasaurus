@@ -196,6 +196,21 @@ export class APIService {
     ));
   }
 
+  sendContactEmail(data: { why: string; name: string; email: string; content: string; }) {
+    return this.http.post(`${ENV.apiBaseURL}/mailing/contact`, { data })
+      .pipe(map(
+        (response: Response) => {
+          const json = response.json();
+          return json;
+        }
+      )
+      ).pipe(catchError(
+        (error: Response) => {
+          return Observable.throw('Something went wrong');
+        }
+      ));
+  }
+
   createCart(cartId: string) {
     return this.apollo.mutate({
       mutation: createCartMutation,

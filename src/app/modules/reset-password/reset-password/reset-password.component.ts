@@ -45,7 +45,7 @@ export class ResetPasswordComponent implements OnInit {
   ngOnInit() {
   }
 
-  sendReset() {
+  sendReset(formDirective: FormGroupDirective) {
     console.log(this.resetForm.value);
     this.apiService.resetPassword(this.resetForm.value.email).subscribe(
       ({ data }) => {
@@ -53,6 +53,8 @@ export class ResetPasswordComponent implements OnInit {
           data => {
             console.log(data);
             if (data.result === 'Forgot email sent') {
+              this.resetForm.reset();
+              formDirective.resetForm();
               this.snackBar.openFromComponent(ResetStateSnackbar, {
                 duration: 3000,
                 verticalPosition: 'top',

@@ -24,9 +24,9 @@ export class RouterService implements OnDestroy {
     this.paramsSubscription = this.route.queryParams.subscribe((params) => {
       this.params = params;
     });
-    // this.fragment = this.route.fragment.subscribe((fragment) => {
-    //   this.fragment = fragment;
-    // });
+    this.fragmentSubscription = this.route.fragment.subscribe((fragment) => {
+      this.fragment = fragment;
+    });
     // this.eventsSubscription = this.router.events.pipe(
     //   filter((event) => event instanceof NavigationStart))
     //   .subscribe((event) => {

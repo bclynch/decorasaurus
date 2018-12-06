@@ -20,11 +20,10 @@
         - Add customer id to cart when logged in and logic to fetch from any device
     - Order Endpoints
         - ~~Create order~~
-            - Remove endpoint on creation
-        - Delete Order
+            - Remove cart items on creation
         - Update order
         - ~~Convert cart items to order items~~
-        - Order page
+        - ~~Order page~~
     - Stripe Endpoints
         - ~~Create customer~~
         - Append card sources
@@ -33,6 +32,9 @@
         - Delete address
         - Update Address
             - Managing defaults
+    - Wishlist
+        - Create model
+        - Will be just like cart item except it'll be tied to user. Need a way to convert cart item to wishlist item and back easily.
 - Dashboard for orders
     - http://help.wanelo.com/customer/portal/articles/1790355-how-do-i-fulfill-an-order-
     - Shopify has solid responsive dash too

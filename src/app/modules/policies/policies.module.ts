@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HelpComponent, HelpStateSnackbar } from './help/help.component';
+import { PoliciesComponent } from './policies/policies.component';
 import { Routes, RouterModule } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -8,14 +8,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 const routes: Routes = [
   {
     path: '',
-    component: HelpComponent
+    component: PoliciesComponent
   }
 ];
 
 @NgModule({
-  entryComponents: [
-    HelpStateSnackbar
-  ],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
@@ -23,6 +20,6 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
   ],
-  declarations: [HelpComponent, HelpStateSnackbar]
+  declarations: [PoliciesComponent]
 })
-export class HelpModule { }
+export class PoliciesModule { }

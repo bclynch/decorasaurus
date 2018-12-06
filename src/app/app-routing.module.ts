@@ -10,6 +10,8 @@ const routes: Routes = [
   { path: 'checkout', loadChildren: './modules/checkout/checkout.module#CheckoutModule' },
   { path: 'create', loadChildren: './modules/create/create.module#CreateModule' },
   { path: 'account', loadChildren: './modules/account/account.module#AccountModule' },
+  { path: 'policies', loadChildren: './modules/policies/policies.module#PoliciesModule' },
+  { path: '**', loadChildren: './modules/not-found/not-found.module#NotFoundModule' }
 ];
 
 @NgModule({

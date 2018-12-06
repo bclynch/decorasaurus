@@ -1,0 +1,27 @@
+.aboutContainer {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  padding: 20px;
+
+  .logoWrapper {
+    margin-top: 35px;
+
+    img {
+      width: 96px;
+    }
+    .title {
+      font-size: 32px;
+    }
+  }
+  .section {
+
+    .header {
+      font-size: 24px;
+    }
+    .content {
+
+    }
+  }
+}

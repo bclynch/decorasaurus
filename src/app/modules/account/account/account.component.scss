@@ -35,22 +35,30 @@
   }
   .settingsContainer {
 
-    form {
-      max-width: 50vw;
+    .accountSettingsContainer {
+      display: flex;
+      justify-content: center;
 
-      .mat-form-field {
-        display: block;
-      }
-      button[type='submit'] {
-        color: var(--color-white);
-      }
-      .toggle {
-        margin-top: 15px;
+      form {
+        width: 100%;
+  
+        .mat-form-field {
+          display: block;
+        }
+        button[type='submit'] {
+          color: var(--color-white);
+        }
       }
     }
-  }
-  app-payment-cards {
-    width: 50vw;
+    .cardSettingsContainer {
+      display: flex;
+      justify-content: center;
+
+      app-payment-cards {
+        width: 100%;
+        margin-top: 20px;
+      }
+    }
   }
   .emptyState {
     font-size: 24px;
@@ -71,6 +79,21 @@
         .tabLabel {
           margin: 0 10px;
         }
+      }
+    }
+    .settingsContainer {
+
+      .accountSettingsContainer {
+  
+        form {
+          max-width: 50vw;
+        }
+      }
+    }
+    .cardSettingsContainer {
+
+      app-payment-cards {
+        max-width: 50vw;
       }
     }
   }

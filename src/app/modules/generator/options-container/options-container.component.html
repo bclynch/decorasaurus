@@ -9,7 +9,7 @@
     <div class="productName boldFont">{{generatorService.product?.name}}</div>
     <div class="productPrice">{{utilService.displayPrice(generatorService.product) | currency: customerService.currency}}</div>
   </div>
-  <mat-tab-group>
+  <mat-tab-group mat-stretch-tabs>
     <mat-tab label="1. Basics">
       <div class="basicContainer optionsWrapper">
         <app-patent-basic-options *ngIf="generatorService.generatorType === 'patent-poster'"></app-patent-basic-options>

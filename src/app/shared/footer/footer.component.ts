@@ -34,10 +34,10 @@ export class FooterComponent {
         this.router.navigateByUrl('/contact');
         break;
       case 'Terms':
-        this.router.navigateByUrl('/terms');
+        this.routerService.modifyFragment('terms', '/policies');
         break;
       case 'Privacy Policy':
-        this.routerService.modifyFragment('privacy', '/terms');
+        this.routerService.modifyFragment('privacy', '/policies');
         break;
     }
   }
