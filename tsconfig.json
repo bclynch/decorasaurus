@@ -17,7 +17,6 @@
       "es2017",
       "dom",
       "esnext.asynciterable"
-    ],
-    "paths": { "node-localstorage": ["./src/noop.js"] }
+    ]
   }
 }

@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Moltin } from '../../../providers/moltin/moltin';
-import { MoltinProduct } from '../../../providers/moltin/models/product';
 import { RouterService } from 'src/app/services/router.service';
 
 @Component({
@@ -10,16 +8,15 @@ import { RouterService } from 'src/app/services/router.service';
 })
 export class CreateComponent implements OnInit {
 
-  posters: MoltinProduct[] = [];
+  posters = [];
 
   constructor(
-    private moltin: Moltin,
     private routerService: RouterService
   ) {
-    this.moltin.getProducts().then(data => {
-      console.log(data);
-      this.posters = data.data;
-    });
+    // this.moltin.getProducts().then(data => {
+    //   console.log(data);
+    //   this.posters = data.data;
+    // });
   }
 
   ngOnInit() {

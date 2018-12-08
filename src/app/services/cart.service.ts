@@ -1,5 +1,4 @@
 import { Injectable, Component, Inject, OnDestroy } from '@angular/core';
-import { Moltin } from '../providers/moltin/moltin';
 import { CustomerService } from './customer.service';
 import { Router } from '@angular/router';
 import { MAT_BOTTOM_SHEET_DATA, MatBottomSheet, MatBottomSheetRef } from '@angular/material';
@@ -25,7 +24,6 @@ export class CartService implements OnDestroy {
   private cartSubject: BehaviorSubject<any>;
 
   constructor(
-    private moltin: Moltin,
     private customerService: CustomerService,
     private router: Router,
     private bottomSheet: MatBottomSheet,
@@ -155,9 +153,7 @@ export class CartService implements OnDestroy {
   }
 
   applyPromoCode(code) {
-    this.moltin.applyPromoCode(this.customerService.customerUuid, code).subscribe(
-      (data) => this.cartSubject.next(data)
-    );
+
   }
 
   quantifyCartTotal(cart): number {

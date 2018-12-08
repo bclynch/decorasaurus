@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy, ElementRef, ViewChild, ViewContainerRef, ComponentFactoryResolver } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Moltin } from '../../../providers/moltin/moltin';
 import { CartService } from 'src/app/services/cart.service';
 import { SubscriptionLike } from 'rxjs';
 import * as domtoimage from 'dom-to-image';
@@ -49,7 +48,6 @@ export class GeneratorComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private moltin: Moltin,
     private cartService: CartService,
     private elRef: ElementRef,
     private generatorService: GeneratorService,

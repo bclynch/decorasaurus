@@ -36,11 +36,7 @@
         - Create model
         - Will be just like cart item except it'll be tied to user. Need a way to convert cart item to wishlist item and back easily.
 - Dashboard for orders
-    - http://help.wanelo.com/customer/portal/articles/1790355-how-do-i-fulfill-an-order-
-    - Shopify has solid responsive dash too
-    - Moltin
-    - Nice to export to csv
-    - Filters of orders by date, fulfilled etc
+    - In progress
 - Splash Page
     - Carousel Top like https://www.thecriticalslidesociety.com/
     - Small divider section like 49th coffee https://49thcoffee.com/
@@ -70,9 +66,6 @@
 
     - Size as custom field and maybe custom fields for overlay stuff
 - Finish order flow
-    - ~~Payment id didn't work - https://forum.moltin.com/t/saving-customer-card-information/1233/6~~
-    - ~~Need to grab customer email at some point to refer to them on stripe~~
-    - ~~Adding a card on checkout does not save it to the Stripe account~~
     - Tweak validation for submission
     - Mobile tweaking for payment on checkout
     - Take to order page after successfull submission and reset cart
@@ -147,8 +140,8 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ### Updating Production
 
 - Web app uses a service worked so we need to break the cache when we update. Change the cache version in service-worker.js to do this and prompt users to do the same.
-- Run `$ ionic build --prod` to run an AoT build
-- Use SFTP (cyber duck) to replace the www folder in /var/www/packonmyback.com/html on the server
+- Run `$ ng build --prod` to run an AoT build
+- Use SFTP (cyber duck) to replace the www folder in /var/www/decorasaurus.com/html on the server
 
 ### Cookie Info
 -Using three cookies to track user logged in or not

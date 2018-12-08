@@ -9,7 +9,6 @@ import { AppComponent } from './app.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ENV } from '../environments/environment';
 
-import { Moltin } from './providers/moltin/moltin';
 import { HttpLinkModule, HttpLink } from 'apollo-angular-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloModule, Apollo } from 'apollo-angular';
@@ -55,7 +54,6 @@ import { AddressService } from './services/address.service';
     UtilService,
     APIService,
     RouterService,
-    Moltin,
     CookieService,
     CustomerService,
     CartService,

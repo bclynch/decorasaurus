@@ -224,7 +224,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
             console.log('neat');
             this.router.navigateByUrl(`account/order/${orderId}`);
             // empty cart
-            // this.moltin.deleteCart(this.customerService.customerUuid);
+
           }
         );
       } else {

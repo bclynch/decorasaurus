@@ -5,7 +5,6 @@ import { SubscriptionLike, Observable, BehaviorSubject } from 'rxjs';
 import { APIService } from './api.service';
 import { v4 as uuid } from 'uuid';
 import { CookieService } from 'ngx-cookie-service';
-import { MoltinCustomer } from '../providers/moltin/models/customer';
 import { MatSnackBar, MAT_SNACK_BAR_DATA } from '@angular/material';
 import { Router } from '@angular/router';
 import { Apollo } from 'apollo-angular';
