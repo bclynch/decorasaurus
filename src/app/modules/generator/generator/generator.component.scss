@@ -42,7 +42,7 @@
       }
       &.fusion-poster {
         width: auto;
-
+           
         img {
 
           // this will just be for an in browser demo so low res is fine
@@ -315,6 +315,7 @@
         left: 0;
         width: 100%;
         border-radius: 0;
+        z-index: 9999;
       }
     }
   }

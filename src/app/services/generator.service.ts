@@ -14,6 +14,8 @@ export class GeneratorService {
   posterElement;
   processingFusion = false;
   cropperImgUrl: string | ArrayBuffer;
+  fusionCropped: string; // saving to db for processing later if user chooses it
+  fuseType: 'udnie' | 'rain_princess' | 'scream' | 'wave' | 'wreck' | 'la_muse';
   isAddingToCart = false;
 
   // poster props
@@ -99,10 +101,11 @@ export class GeneratorService {
     this.croppingComplete = new BehaviorSubject<boolean>(false);
   }
 
-  fuseImages(model: string) {
+  fuseImages(model: 'udnie' | 'rain_princess' | 'scream' | 'wave' | 'wreck' | 'la_muse') {
     this.tracingSubject.next(true);
     this.processingFusion = true;
     this.posterSrcSubject.next(null);
+    this.fuseType = model;
     ml5.styleTransfer(`assets/models/${model}`)
     .then(style => {
       // console.log(style.transfer(elem));

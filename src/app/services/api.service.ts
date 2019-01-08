@@ -229,7 +229,7 @@ export class APIService {
     });
   }
 
-  createCartItem(cartId: string, productSku: string, quantity: number, size: ProductSize, orientation: ProductOrientation, fontColor: string, backgroundColor: string, titleText: string, subtitleText: string, tagText: string, useLabel: boolean) {
+  createCartItem(cartId: string, productSku: string, quantity: number, size: ProductSize, orientation: ProductOrientation, fusionType: 'udnie' | 'rain_princess' | 'scream' | 'wave' | 'wreck' | 'la_muse', fontColor: string, backgroundColor: string, titleText: string, subtitleText: string, tagText: string, useLabel: boolean) {
     return this.apollo.mutate({
       mutation: createCartItemMutation,
       variables: {
@@ -238,6 +238,7 @@ export class APIService {
         quantity,
         size,
         orientation,
+        fusionType,
         fontColor,
         backgroundColor,
         titleText,

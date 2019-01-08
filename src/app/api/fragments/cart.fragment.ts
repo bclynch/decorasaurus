@@ -12,6 +12,7 @@ export const fragments: {
       quantity,
       size,
       orientation,
+      fusionType,
       productLinksByCartItemId {
         nodes {
           type,

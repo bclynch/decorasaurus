@@ -2,6 +2,11 @@
 
 
 ## Todos
+- There is an observer.complete() method worth looking into for certain subscriptions so there are not memory leaks
+- Bug with creating an order in which orientation and size come in undefined for some reason 
+- Wire in Shippo
+    - Validate addresses with Shippo
+    - Create tracking page for orders
 - Wire in New API
     - Customer Endpoints
         - ~~Register~~

@@ -75,6 +75,7 @@
     bottom: 0;
     width: 100%;
     border-radius: 0;
+    z-index: 9999;
   }
   .toggleWrapper {
     display: flex;
@@ -122,8 +123,15 @@
       display: block;
     }
     .optionsWrapper {
-      padding: 10px 10px 50px; // needs to be 50px for correct padding with patents
+      padding: 0 10px;
       height: 100%;
+
+      &.fusion-poster {
+
+      }
+      &.patent-poster {
+        padding: 10px 10px 50px; // needs to be 50px for correct padding with patents
+      }
     }
     .addToCartBtn {
       display: block;

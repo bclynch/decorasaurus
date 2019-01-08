@@ -1,7 +1,7 @@
 <div class="basicOptionsContainer">
   <app-upload-crop></app-upload-crop>
   <div class="fusionContainer" *ngIf="showFusion">
-    <div>Select A Painting To Fuse With</div>
+    <div class="advisory">Select a painting to fuse with. This process will take a few moments.</div>
     <div class="paintingsContainer">
       <div class="paintingWrapper" *ngFor="let painting of paintings;" (click)="generatorService.fuseImages(painting.value)">
         <img [src]="painting.img" />

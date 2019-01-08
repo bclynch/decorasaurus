@@ -63,16 +63,18 @@ export class CartService implements OnDestroy {
     });
   }
 
-  addToCart(sku: string, quantity: number, dataUrl: string, size: ProductSize, orientation: ProductOrientation, fontColor: string, backgroundColor: string, titleText: string, subtitleText: string, tagText: string, useLabel: boolean): void {
+  addToCart(sku: string, quantity: number, dataUrl: string, size: ProductSize, orientation: ProductOrientation, fusionType: 'udnie' | 'rain_princess' | 'scream' | 'wave' | 'wreck' | 'la_muse', fontColor: string, backgroundColor: string, titleText: string, subtitleText: string, tagText: string, useLabel: boolean): void {
     const formData = new FormData();
     formData.append('poster', dataUrl);
     formData.append('orientation', this.generatorService.orientation);
     formData.append('size', this.generatorService.size);
+    formData.append('crop', this.generatorService.generatorType === 'fusion-poster' ? this.generatorService.fusionCropped : 'undefined');
+    // return;
     // Need to create thumbnail for product + pdf to s3 then add to cart
     this.apiService.processPoster(formData).subscribe(
-      (links: { type: 'thumbnail' | 'pdf', S3Url: string }[]) => {
+      (links: { type: 'thumbnail' | 'pdf' | 'crop', S3Url: string }[]) => {
         console.log(links);
-        this.apiService.createCartItem(this.customerService.customerUuid, sku, quantity, size, orientation, fontColor, backgroundColor, titleText, subtitleText, tagText, useLabel).subscribe(
+        this.apiService.createCartItem(this.customerService.customerUuid, sku, quantity, size, orientation, fusionType, fontColor, backgroundColor, titleText, subtitleText, tagText, useLabel).subscribe(
           ({ data }) => {
             // bulk add links to post
             let query = `mutation {`;

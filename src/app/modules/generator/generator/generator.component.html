@@ -7,7 +7,7 @@
         *ngIf="posterSrc || generatorService.mapBounds" 
         [ngClass]="[ generatorService.orientation, generatorService.generatorType ]"
       >
-        <div class="background" [style.background]="generatorService.backgroundColor" *ngIf="posterSrc">
+        <div class="background" [style.background]="generatorService.backgroundColor" *ngIf="posterSrc" id="fuzeit">
           <img [src]="posterSrc" />
         </div>
         <div class="mapContainer" *ngIf="generatorService.mapBounds">

@@ -77,6 +77,7 @@ export class CropperComponent implements OnInit {
     croppedCanvas.toBlob((blob) => {
       this.generatorService.posterBlob = blob;
       this.generatorService.posterSrcSubject.next(croppedCanvas.toDataURL());
+      this.generatorService.fusionCropped = this.generatorService.generatorType === 'fusion-poster' ? croppedCanvas.toDataURL() : null;
       this.generatorService.tracingSubject.next(false);
       // this.generatorService.optionsTabSubject.next(1);
       this.generatorService.croppingComplete.next(true);
@@ -85,6 +86,7 @@ export class CropperComponent implements OnInit {
 
   reset() {
     this.generatorService.cropperImgUrl = null;
+    this.generatorService.fusionCropped = null;
     this.generatorService.croppingComplete.next(false);
   }
 }

@@ -64,7 +64,8 @@ export class OrderService {
               currency: ${CurrencyType[this.customerService.currency]},
               quantity: ${item.quantity},
               size: ${ProductSize[item.size]},
-              orientation: ${ProductOrientation[item.orientation]}
+              orientation: ${ProductOrientation[item.orientation]},
+              fusionType: "${item.fusionType}"
             }
           }) {
             orderItem {
