@@ -2,12 +2,13 @@ import { Injectable, OnDestroy, Component, Inject } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { SigninDialogueComponent } from '../shared/signin-dialogue/signin-dialogue.component';
 import { SubscriptionLike, Observable, BehaviorSubject } from 'rxjs';
-import { APIService } from './api.service';
 import { v4 as uuid } from 'uuid';
 import { CookieService } from 'ngx-cookie-service';
 import { MatSnackBar, MAT_SNACK_BAR_DATA } from '@angular/material';
 import { Router } from '@angular/router';
 import { Apollo } from 'apollo-angular';
+import { CurrentCustomerGQL, RegisterUserCustomerGQL, AuthenticateUserCustomerGQL, UpdateCustomerByIdGQL } from '../generated/graphql';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -31,11 +32,14 @@ export class CustomerService implements OnDestroy {
 
   constructor(
     public dialog: MatDialog,
-    private apiService: APIService,
     private cookieService: CookieService,
     public snackBar: MatSnackBar,
     private router: Router,
-    private apollo: Apollo
+    private apollo: Apollo,
+    private currentCustomerGQL: CurrentCustomerGQL,
+    private registerUserCustomerGQL: RegisterUserCustomerGQL,
+    private authenticateUserCustomerGQL: AuthenticateUserCustomerGQL,
+    private updateCustomerByIdGQL: UpdateCustomerByIdGQL
   ) {
     // this._subject = new BehaviorSubject<string>(null);
     this.customerToken = new BehaviorSubject<string>(null);
@@ -45,33 +49,34 @@ export class CustomerService implements OnDestroy {
     this.dialogueSubscription.unsubscribe();
   }
 
-  fetchUser(): Promise<void> {
+  fetchUser(): Promise<string> {
     return new Promise((resolve, reject) => {
       this.checkNewUser().then(
         (isNew) => {
           console.log('FETCH USER RESULT: ', isNew);
           if (isNew) {
-            resolve();
+            resolve('isNew');
           } else {
             // uses token to check if logged in / expired
-            this.apiService.getCurrentCustomer().valueChanges.subscribe(({ data }) => {
-              console.log(data);
-
-              if (!this.isReloading) {
-                // if logged in set our customer id and set the token
-                if (data.currentCustomer) {
-                  this.customerObject = data.currentCustomer;
-                  console.log(this.customerObject);
-                  const cookieToken = this.cookieService.get('decorasaurus-token');
-                  if (cookieToken) this.customerToken.next(cookieToken);
-                } else {
-                  // if it doesnt exist dump the token
-                  this.cookieService.delete('decorasaurus-token');
-                  this.cookieService.delete('decorasaurus-customer-id');
-                }
-              }
-              resolve();
-            });
+            this.currentCustomerGQL.fetch()
+              .pipe(
+                map(result => {
+                  if (!this.isReloading) {
+                    // if logged in set our customer id and set the token
+                    if (result.data.currentCustomer) {
+                      this.customerObject = result.data.currentCustomer;
+                      console.log(this.customerObject);
+                      const cookieToken = this.cookieService.get('decorasaurus-token');
+                      if (cookieToken) this.customerToken.next(cookieToken);
+                    } else {
+                      // if it doesnt exist dump the token
+                      this.cookieService.delete('decorasaurus-token');
+                      this.cookieService.delete('decorasaurus-customer-id');
+                    }
+                  }
+                  resolve();
+                })
+              );
           }
         }
       );
@@ -89,11 +94,7 @@ export class CustomerService implements OnDestroy {
         const userUuid = uuid();
         this.cookieService.set( 'decorasaurus-user', userUuid );
         this.customerUuid = userUuid;
-
-        // need to create cart for new user as well
-        this.apiService.createCart(this.customerUuid).subscribe(
-          () => resolve(true)
-        );
+        resolve(true);
       }
     });
   }
@@ -113,57 +114,57 @@ export class CustomerService implements OnDestroy {
 
   createCustomer(data): void {
     console.log(data);
-    this.apiService.registerCustomer(data.firstName, data.lastName, data.email, data.matchingPassword.password).subscribe(
-      () =>  {
-        this.loginCustomer(data.email, data.matchingPassword.password).then(
-          (result) => console.log(result)
-        );
-      },
-      err => console.log(err)
-    );
+    this.registerUserCustomerGQL.mutate({ firstName: data.firstName, lastName: data.lastName, email: data.email, password: data.matchingPassword.password })
+      .subscribe(
+        () => {
+          this.loginCustomer(data.email, data.matchingPassword.password).then(
+            (result) => console.log(result)
+          );
+        },
+        err => console.log(err)
+      );
   }
 
   updateCustomer(customerId: string, firstName: string, lastName: string, stripeId: string): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.apiService.updateCustomer(customerId, firstName, lastName, stripeId).subscribe(
-        ({ data }) =>  {
-          console.log(data);
-          resolve();
-        },
-        err => console.log(err)
-      );
+      this.updateCustomerByIdGQL.mutate({ customerId, firstName, lastName, stripeId })
+        .subscribe(
+          () => resolve()
+        );
     });
   }
 
   loginCustomer(email: string, password: string): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.apiService.authCustomer(email, password).subscribe(({data}) => {
-        console.log(data);
-        if (data.authenticateUserCustomer.jwtToken) {
-          // reset apollo cache and refetch queries
-          this.apollo.getClient().resetStore();
 
-          this.cookieService.set('decorasaurus-token', data.authenticateUserCustomer.jwtToken);
-          this.customerToken.next(data.authenticateUserCustomer.jwtToken);
-          // this.cookieService.set( 'decorasaurus-customer-id', resp.token.customer_id );
+      this.authenticateUserCustomerGQL.mutate({ email, password })
+        .subscribe(
+          (result) => {
+            console.log(result.data);
+            const token = result.data.authenticateUserCustomer.jwtToken;
+            if (token) {
+              // reset apollo cache and refetch queries
+              this.apollo.getClient().resetStore();
 
-          // reload window to update db role
-          this.isReloading = true;
-          window.location.reload();
-          resolve();
-        } else {
-          // incorrect login warning
-          this.snackBar.openFromComponent(CustomerStateSnackbar, {
-            duration: 3000,
-            verticalPosition: 'top',
-            data: { message: `Incorrect login credentials, try again.` },
-            panelClass: ['snackbar-theme']
-          });
-        }
-      }, (error) => {
-        console.log('there was an error sending the query', error);
-        reject(error);
-      });
+              this.cookieService.set('decorasaurus-token', token);
+              this.customerToken.next(token);
+              // this.cookieService.set( 'decorasaurus-customer-id', resp.token.customer_id );
+
+              // reload window to update db role
+              this.isReloading = true;
+              window.location.reload();
+              resolve();
+            } else {
+              // incorrect login warning
+              this.snackBar.openFromComponent(CustomerStateSnackbar, {
+                duration: 3000,
+                verticalPosition: 'top',
+                data: { message: `Incorrect login credentials, try again.` },
+                panelClass: ['snackbar-theme']
+              });
+            }
+          }
+        );
     });
   }
 

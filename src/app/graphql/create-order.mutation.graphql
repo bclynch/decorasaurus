@@ -1,0 +1,27 @@
+mutation createOrder(
+  $status: OrderStatus!,
+  $payment: OrderPayment!,
+  $shipping: OrderShipping!,
+  $customerId: UUID!,
+  $billingAddressId: UUID!,
+  $shippingAddressId: UUID!,
+  $amount: Int!,
+  $currency: CurrencyType!
+) {
+  createOrder(input: {
+    order: {
+      status: $status,
+      payment: $payment,
+      shipping: $shipping,
+      customerId: $customerId,
+      billingAddressId: $billingAddressId,
+      shippingAddressId: $shippingAddressId,
+      amount: $amount,
+      currency: $currency
+    }
+  }) {
+    order {
+      id
+    }
+  }
+}

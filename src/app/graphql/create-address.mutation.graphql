@@ -1,13 +1,4 @@
-import { DocumentNode } from 'graphql';
-import gql from 'graphql-tag';
-
-export enum AddressType {
-  BILLING = 'BILLING',
-  SHIPPING = 'SHIPPING'
-}
-
-export const createAddressMutation: DocumentNode = gql`
-  mutation createAddress(
+mutation createAddress(
     $customerId: UUID!,
     $type: AddressType!,
     $name: String,
@@ -44,4 +35,3 @@ export const createAddressMutation: DocumentNode = gql`
       }
     }
   }
-`;

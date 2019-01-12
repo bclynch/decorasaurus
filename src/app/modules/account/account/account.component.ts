@@ -7,8 +7,8 @@ import { SubscriptionLike } from 'rxjs';
 import { SettingsService } from 'src/app/services/settings.service';
 import { FormControl, FormGroupDirective, NgForm, Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { APIService } from 'src/app/services/api.service';
 import { MatSnackBar, MAT_SNACK_BAR_DATA } from '@angular/material';
+import { UpdatePasswordGQL } from '../../../generated/graphql';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -86,8 +86,8 @@ export class AccountComponent implements OnInit, OnDestroy {
     private ordersService: OrderService,
     private settingsService: SettingsService,
     private fb: FormBuilder,
-    private apiService: APIService,
     public snackBar: MatSnackBar,
+    private updatePasswordGQL: UpdatePasswordGQL
   ) {
     this.initSubscription = this.settingsService.appInited.subscribe((inited) =>  { if (inited) this.init(); });
   }
@@ -95,9 +95,9 @@ export class AccountComponent implements OnInit, OnDestroy {
   init() {
     // needs to be fetched for payment cards if not there
     if (!this.stripeService.sources) this.stripeService.fetchStripeCustomer(this.customerService.customerObject.id);
-    this.ordersSubscription = this.ordersService.ordersByCustomer(this.customerService.customerObject.id).valueChanges.subscribe(
-      ({ data }) => {
-        this.orders = data.allOrders.nodes;
+    this.ordersSubscription = this.ordersService.ordersByCustomer(this.customerService.customerObject.id).subscribe(
+      (orders) => {
+        this.orders = orders;
         console.log(this.orders);
       }
     );
@@ -118,27 +118,28 @@ export class AccountComponent implements OnInit, OnDestroy {
   }
 
   changePassword(formDirective: FormGroupDirective) {
-    this.apiService.updatePassword(this.customerService.customerObject.id, this.changeForm.value.currentPassword, this.changeForm.value.matchingPassword.password).subscribe(
-      result => {
-        if (result.data.updatePassword.boolean) {
-          this.snackBar.openFromComponent(AccountStateSnackbar, {
-            duration: 3000,
-            verticalPosition: 'top',
-            data: { message: 'Password changed' },
-            panelClass: ['snackbar-theme']
-          });
-          this.changeForm.reset();
-          formDirective.resetForm();
-        } else {
-          this.snackBar.openFromComponent(AccountStateSnackbar, {
-            duration: 3000,
-            verticalPosition: 'top',
-            data: { message: 'Something went wrong. Make sure you have the correct current password' },
-            panelClass: ['snackbar-theme']
-          });
+    this.updatePasswordGQL.mutate({ customerId: this.customerService.customerObject.id, password: this.changeForm.value.currentPassword, newPassword: this.changeForm.value.matchingPassword.password })
+      .subscribe(
+        (result) => {
+          if (result.data.updatePassword.boolean) {
+            this.snackBar.openFromComponent(AccountStateSnackbar, {
+              duration: 3000,
+              verticalPosition: 'top',
+              data: { message: 'Password changed' },
+              panelClass: ['snackbar-theme']
+            });
+            this.changeForm.reset();
+            formDirective.resetForm();
+          } else {
+            this.snackBar.openFromComponent(AccountStateSnackbar, {
+              duration: 3000,
+              verticalPosition: 'top',
+              data: { message: 'Something went wrong. Make sure you have the correct current password' },
+              panelClass: ['snackbar-theme']
+            });
+          }
         }
-      }
-    );
+      );
   }
 }
 

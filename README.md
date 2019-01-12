@@ -159,6 +159,18 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 - Wire in Google analytics for page views
 - Wire in analytics for events
 
+## Graphql / Apollo
+
+### Code Generation
+
+#### Run
+`$ npm run generate`
+
+#### Setup
+- Make sure both graphql-code-generator and graphql are installed globally for this to work.
+- Can run `$ gql-gen init` to get it working which will install some things and setup an npm script and codegen.yml file
+- Create schemas in the src/app/graphql folder for each and the script will pull from there and generate code in src/app/generated/graphql.ts
+
 ## Feature Ideas
 
 - Maps of cities

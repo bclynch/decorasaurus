@@ -1,0 +1,7 @@
+mutation deleteCartById($cartId: UUID!) {
+  deleteCartById(input: {
+    id: $cartId
+  }) {
+    deletedCartId
+  }
+}

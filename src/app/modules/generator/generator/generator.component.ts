@@ -9,8 +9,8 @@ import { Map } from 'mapbox-gl';
 
 import { PrintMapComponent } from '../print-map/print-map.component';
 import { UtilService } from 'src/app/services/util.service';
-import { APIService } from 'src/app/services/api.service';
-import { ProductSize, ProductOrientation } from 'src/app/api/mutations/cart.mutation';
+import { ProductSize, ProductOrientation, ProductBySkuGQL } from '../../../generated/graphql';
+import { map } from 'rxjs/operators';
 
 
 @Component({
@@ -23,7 +23,6 @@ export class GeneratorComponent implements OnInit, OnDestroy {
   @ViewChild('hiddenMap', {read: ViewContainerRef}) hiddenMap: ViewContainerRef;
 
   paramsSubscription: SubscriptionLike;
-  productSubscription: SubscriptionLike;
   tracingSubscription: SubscriptionLike;
   posterSourceSubscription: SubscriptionLike;
   mapSubscription: SubscriptionLike;
@@ -53,7 +52,7 @@ export class GeneratorComponent implements OnInit, OnDestroy {
     private generatorService: GeneratorService,
     private componentFactoryResolver: ComponentFactoryResolver,
     private utilService: UtilService,
-    private apiService: APIService
+    private productBySkuGQL: ProductBySkuGQL
   ) {
     this.paramsSubscription = this.route.params.subscribe((params) => {
       this.generatorService.generatorType = params.type;
@@ -85,10 +84,10 @@ export class GeneratorComponent implements OnInit, OnDestroy {
       }
 
       // fetch product info
-      this.productSubscription = this.apiService.getProductBySku(this.productSku).valueChanges.subscribe(({data}) => {
-        console.log(data);
-        this.generatorService.product = data.productBySku;
-      });
+      this.productBySkuGQL.fetch({ sku: this.productSku })
+        .pipe(
+          map(result => this.generatorService.product = result.data.productBySku)
+        );
     });
 
     this.tracingSubscription = this.generatorService.tracing.subscribe(
@@ -121,7 +120,6 @@ export class GeneratorComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.paramsSubscription.unsubscribe();
-    this.productSubscription.unsubscribe();
     this.tracingSubscription.unsubscribe();
     this.posterSourceSubscription.unsubscribe();
     this.orientationSubscription.unsubscribe();
@@ -130,8 +128,8 @@ export class GeneratorComponent implements OnInit, OnDestroy {
 
   addToCart() {
     this.generatorService.isAddingToCart = true;
-    const productSize = this.generatorService.size === 'Small' ? ProductSize.SMALL : this.generatorService.size === 'Medium' ? ProductSize.MEDIUM : ProductSize.LARGE;
-    const productOrientation = this.generatorService.orientation === 'Portrait' ? ProductOrientation.PORTRAIT : ProductOrientation.LANDSCAPE;
+    const productSize = this.generatorService.size === 'Small' ? ProductSize.Small : this.generatorService.size === 'Medium' ? ProductSize.Medium : ProductSize.Large;
+    const productOrientation = this.generatorService.orientation === 'Portrait' ? ProductOrientation.Portrait : ProductOrientation.Landscape;
     console.log(this.generatorService.size);
     console.log(this.generatorService.orientation);
     if (this.generatorService.generatorType === 'map-poster') {

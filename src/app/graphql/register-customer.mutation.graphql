@@ -1,0 +1,13 @@
+mutation registerUserCustomer($firstName: String!, $lastName: String!, $email: String!, $password: String!) {
+  registerUserCustomer(input: {
+    firstName: $firstName,
+    lastName: $lastName,
+    email: $email,
+    password: $password
+  })
+  {
+    customer {
+      id
+    }
+  }
+}

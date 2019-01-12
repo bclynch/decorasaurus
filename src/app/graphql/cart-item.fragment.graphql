@@ -1,0 +1,25 @@
+fragment CartItemFragment on CartItem {
+  id,
+  productSku,
+  quantity,
+  size,
+  orientation,
+  fusionType,
+  productLinksByCartItemId {
+    nodes {
+      type,
+      url,
+      id
+    }
+  },
+  productByProductSku {
+    name,
+    description,
+    productPricesByProductSku {
+      nodes {
+        amount,
+        currency
+      }
+    }
+  }
+}

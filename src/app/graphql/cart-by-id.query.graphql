@@ -1,0 +1,13 @@
+# import './cart-item.fragment.graphql'
+
+query cartById($cartId: UUID!) {
+  cartById(id: $cartId) {
+    id,
+    customerId,
+    cartItemsByCartId {
+      nodes {
+        ...CartItemFragment
+      }
+    }
+  }
+}

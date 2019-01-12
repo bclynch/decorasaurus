@@ -1,0 +1,19 @@
+# import './cart-item.fragment.graphql'
+
+mutation createCart($cartId: UUID!) {
+  createCart(input: {
+    cart: {
+      id: $cartId
+    }
+  }) {
+    cart {
+      id,
+      customerId,
+      cartItemsByCartId {
+        nodes {
+          ...CartItemFragment
+        }
+      }
+    }
+  }
+}

@@ -1,32 +1,32 @@
 import { Injectable } from '@angular/core';
-import { APIService } from './api.service';
-import { AddressType } from '../api/mutations/address.mutation';
+import { AllAddressesByCustomerGQL, CreateAddressGQL, AddressType } from '../generated/graphql';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class AddressService {
 
   constructor(
-    private apiService: APIService
+    private allAddressesByCustomerGQL: AllAddressesByCustomerGQL,
+    private createAddressGQL: CreateAddressGQL
   ) {
 
   }
 
   getAddressesByCustomer(customerId: string): Promise<any> {
     return new Promise((resolve) => {
-      this.apiService.getAddressesByCustomer(customerId).valueChanges.subscribe(
-        ({ data }) => {
-          console.log(data.allAddresses.nodes);
-          resolve(data.allAddresses.nodes);
-        }
-      );
+      this.allAddressesByCustomerGQL.fetch({ customerId })
+        .pipe(
+          map(result => resolve(result.data.allAddresses.nodes))
+        );
     });
   }
 
   createAddress(customerId: string, type: AddressType, name: string, firstName: string, lastName: string, company: string, line1: string, line2: string, city: string, postcode: string, country: string, instructions: string, defaultAddress: boolean) {
     return new Promise((resolve) => {
-      this.apiService.createAddress(customerId, type, name, firstName, lastName, company, line1, line2, city, postcode, country, instructions, defaultAddress).subscribe(
-        ({ data }) => resolve(data.createAddress.address.id)
-      );
+      this.createAddressGQL.mutate({ customerId, type, name, firstName, lastName, company, line1, line2, city, postcode, country, instructions, defaultAddress })
+        .subscribe(
+          (result) => resolve(result.data.createAddress.address.id)
+        );
     });
   }
 }

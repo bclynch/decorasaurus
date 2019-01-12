@@ -1,0 +1,13 @@
+query productBySku($sku: String!) {
+  productBySku(sku: $sku) {
+    name,
+    slug,
+    description,
+    productPricesByProductSku {
+      nodes {
+        currency,
+        amount
+      }
+    }
+  }
+}

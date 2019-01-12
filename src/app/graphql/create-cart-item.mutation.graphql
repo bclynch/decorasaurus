@@ -1,0 +1,44 @@
+# import './cart-item.fragment.graphql'
+
+mutation createCartItem(
+  $cartId: UUID!,
+  $productSku: String!,
+  $quantity: Int!,
+  $size: ProductSize!,
+  $orientation: ProductOrientation!,
+  $fusionType: String,
+  $fontColor: String,
+  $backgroundColor: String,
+  $titleText: String,
+  $subtitleText: String,
+  $tagText: String,
+  $useLabel: Boolean
+) {
+  createCartItem(input: {
+    cartItem: {
+      cartId: $cartId,
+      productSku: $productSku,
+      quantity: $quantity,
+      size: $size,
+      orientation: $orientation,
+      fusionType: $fusionType,
+      fontColor: $fontColor,
+      backgroundColor: $backgroundColor,
+      titleText: $titleText,
+      subtitleText: $subtitleText,
+      tagText: $tagText,
+      useLabel: $useLabel
+    }
+  }) {
+    cartItem {
+      id
+    }
+    cartByCartId {
+      cartItemsByCartId {
+        nodes {
+          ...CartItemFragment
+        }
+      }
+    }
+  }
+}

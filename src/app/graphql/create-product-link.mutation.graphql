@@ -1,0 +1,12 @@
+mutation createProductLink($cartItemId: UUID, $orderItemId: UUID, $type: LinkType!, $url: String!) {
+  createProductLink(input: {
+    productLink: {
+      cartItemId: $cartItemId,
+      orderItemId: $orderItemId,
+      type: $type,
+      url: $url
+    }
+  }) {
+    clientMutationId
+  }
+}

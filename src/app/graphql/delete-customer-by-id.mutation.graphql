@@ -1,0 +1,7 @@
+mutation deleteCustomerById($customerId: UUID!) {
+  deleteCustomerById(input: {
+    id: $customerId
+  }) {
+    clientMutationId
+  }
+}

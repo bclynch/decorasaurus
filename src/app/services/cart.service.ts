@@ -1,25 +1,30 @@
-import { Injectable, Component, Inject, OnDestroy } from '@angular/core';
+import { Injectable, Component, Inject } from '@angular/core';
 import { CustomerService } from './customer.service';
 import { Router } from '@angular/router';
 import { MAT_BOTTOM_SHEET_DATA, MatBottomSheet, MatBottomSheetRef } from '@angular/material';
 import { BehaviorSubject, Observable, SubscriptionLike} from 'rxjs';
 import { APIService } from './api.service';
 import { GeneratorService } from './generator.service';
-
-import { LinkType, ProductOrientation, ProductSize } from '../api/mutations/cart.mutation';
 import { UtilService } from './util.service';
+import {
+  ProductSize,
+  ProductOrientation,
+  LinkType,
+  CreateCartItemGQL,
+  CreateCartGQL,
+  RemoveCartItemByIdGQL,
+  UpdateCartItemByIdGQL,
+  CartByIdGQL,
+  CartById
+} from '../generated/graphql';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CartService implements OnDestroy {
+export class CartService {
 
-  getCartSubscription: SubscriptionLike;
-  addToCartSubscription: SubscriptionLike;
-  removeFromCartSubscription: SubscriptionLike;
-  updateCartSubscription: SubscriptionLike;
-
-  cart;
+  cart: CartById.CartById;
   public cartItems: Observable<any>;
   private cartSubject: BehaviorSubject<any>;
 
@@ -29,37 +34,46 @@ export class CartService implements OnDestroy {
     private bottomSheet: MatBottomSheet,
     private apiService: APIService,
     private generatorService: GeneratorService,
-    private utilService: UtilService
+    private utilService: UtilService,
+    private createCartItemGQL: CreateCartItemGQL,
+    private createCartGQL: CreateCartGQL,
+    private removeCartItemByIdGQL: RemoveCartItemByIdGQL,
+    private updateCartItemByIdGQL: UpdateCartItemByIdGQL,
+    private cartByIdGQL: CartByIdGQL
   ) {
     this.cartSubject = new BehaviorSubject<any[]>(null);
     this.cartItems = this.cartSubject;
   }
 
-  ngOnDestroy() {
-    this.getCartSubscription.unsubscribe();
-    this.addToCartSubscription.unsubscribe();
-    this.removeFromCartSubscription.unsubscribe();
-    this.updateCartSubscription.unsubscribe();
-  }
-
   getCart(): Promise<void> {
     return new Promise((resolve) => {
       console.log(this.customerService.customerUuid);
-      this.getCartSubscription = this.apiService.getCartById(this.customerService.customerUuid).valueChanges.subscribe(({ data }) => {
-        console.log(data.cartById);
-        if (data.cartById) {
-          this.cartSubject.next(data.cartById);
-          resolve();
-        } else {
-          this.apiService.createCart(this.customerService.customerUuid).subscribe(
-            (cart) => {
-              console.log(cart);
-              this.cartSubject.next(cart.data.createCart.cart);
+
+      this.cartByIdGQL.fetch({ cartId: this.customerService.customerUuid })
+        .pipe(
+          map(result => {
+            if (result.data.cartById) {
+              this.cartSubject.next(result.data.cartById);
               resolve();
+            } else {
+              this.createCart().then(
+                () => resolve()
+              );
             }
-          );
-        }
-      });
+          })
+        );
+    });
+  }
+
+  createCart() {
+    return new Promise((resolve) => {
+      this.createCartGQL.mutate({ cartId: this.customerService.customerUuid })
+        .subscribe(
+          (cart) => {
+            this.cartSubject.next(cart.data.createCart.cart);
+            resolve();
+          }
+        );
     });
   }
 
@@ -74,84 +88,84 @@ export class CartService implements OnDestroy {
     this.apiService.processPoster(formData).subscribe(
       (links: { type: 'thumbnail' | 'pdf' | 'crop', S3Url: string }[]) => {
         console.log(links);
-        this.apiService.createCartItem(this.customerService.customerUuid, sku, quantity, size, orientation, fusionType, fontColor, backgroundColor, titleText, subtitleText, tagText, useLabel).subscribe(
-          ({ data }) => {
-            // bulk add links to post
-            let query = `mutation {`;
-            links.forEach((link, i) => {
-                query += `a${i}: createProductLink(input: {
-                  productLink: {
-                    cartItemId: "${data.createCartItem.cartItem.id}",
-                    orderItemId: null,
-                    type: ${link.type === 'thumbnail' ? LinkType.THUMBNAIL : link.type === 'pdf' ? LinkType.PDF : LinkType.CROP},
-                    url: "${link.S3Url}"
-                  }
-                }) {
-                  query {
-                    cartById(id: "${this.customerService.customerUuid}") {
-                      cartItemsByCartId {
-                        nodes {
-                          id,
-                          productSku,
-                          quantity,
-                          productLinksByCartItemId {
-                            nodes {
-                              type,
-                              url,
-                              id
-                            }
-                          },
-                          productByProductSku {
-                            name,
-                            description,
-                            productPricesByProductSku {
+
+        this.createCartItemGQL.mutate({ cartId: this.customerService.customerUuid, productSku: sku, quantity, size, orientation, fusionType, fontColor, backgroundColor, titleText, subtitleText, tagText, useLabel })
+          .subscribe(
+            (result) => {
+              // bulk add links to post
+              let query = `mutation {`;
+              links.forEach((link, i) => {
+                  query += `a${i}: createProductLink(input: {
+                    productLink: {
+                      cartItemId: "${result.data.createCartItem.cartItem.id}",
+                      orderItemId: null,
+                      type: ${link.type === 'thumbnail' ? LinkType.Thumbnail : link.type === 'pdf' ? LinkType.Pdf : LinkType.Crop},
+                      url: "${link.S3Url}"
+                    }
+                  }) {
+                    query {
+                      cartById(id: "${this.customerService.customerUuid}") {
+                        cartItemsByCartId {
+                          nodes {
+                            id,
+                            productSku,
+                            quantity,
+                            productLinksByCartItemId {
                               nodes {
-                                amount,
-                                currency
+                                type,
+                                url,
+                                id
+                              }
+                            },
+                            productByProductSku {
+                              name,
+                              description,
+                              productPricesByProductSku {
+                                nodes {
+                                  amount,
+                                  currency
+                                }
                               }
                             }
                           }
                         }
                       }
                     }
-                  }
-                }`;
-            });
-            query += `}`;
+                  }`;
+              });
+              query += `}`;
 
-            this.apiService.genericCall(query).subscribe(
-              (resp) => {
-                console.log(resp);
-                this.cartSubject.next(resp.data['a1'].query.cartById);
-                this.generatorService.isAddingToCart = false;
+              this.apiService.genericCall(query).subscribe(
+                (resp) => {
+                  console.log(resp);
+                  this.cartSubject.next(resp.data['a1'].query.cartById);
+                  this.generatorService.isAddingToCart = false;
 
-                this.bottomSheet.open(AddCartNav, {
-                  data: this.generatorService.product.name,
-                  hasBackdrop: false
-                });
-              },
-              err => console.log(err)
-            );
-          }
-        );
+                  this.bottomSheet.open(AddCartNav, {
+                    data: this.generatorService.product.name,
+                    hasBackdrop: false
+                  });
+                },
+                err => console.log(err)
+              );
+            }
+          );
       }
     );
   }
 
   removeFromCart(product): void {
-    this.removeFromCartSubscription = this.apiService.removeCartItem(product.id, this.customerService.customerUuid).subscribe(
-      ({ data }) => {
-        this.cartSubject.next(data.updateCartItemById.query.cartById);
-      }
-    );
+    this.removeCartItemByIdGQL.mutate({ cartItemId: product.id, cartId: this.customerService.customerUuid })
+      .subscribe(
+        (result) => this.cartSubject.next(result.data.updateCartItemById.query.cartById)
+      );
   }
 
   updateCartItem(product, quantity: number) {
-    this.apiService.updateCartItem(product.id, quantity).subscribe(
-      ({ data }) => {
-        this.cartSubject.next(data.updateCartItemById.cartByCartId);
-      }
-    );
+    this.updateCartItemByIdGQL.mutate({ cartItemId: product.id, quantity })
+      .subscribe(
+        (result) => this.cartSubject.next(result.data.updateCartItemById.cartByCartId)
+      );
   }
 
   applyPromoCode(code) {

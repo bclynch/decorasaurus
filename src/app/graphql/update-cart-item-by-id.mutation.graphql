@@ -1,0 +1,18 @@
+# import './cart-item.fragment.graphql'
+
+mutation updateCartItemById($cartItemId: UUID!, $quantity: Int) {
+  updateCartItemById(input: {
+    id: $cartItemId,
+    cartItemPatch: {
+      quantity: $quantity
+    }
+  }) {
+    cartByCartId {
+      cartItemsByCartId {
+        nodes {
+          ...CartItemFragment
+        }
+      }
+    }
+  }
+}

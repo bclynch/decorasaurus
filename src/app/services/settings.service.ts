@@ -20,7 +20,10 @@ export class SettingsService {
 
   appInit() {
     this.customerService.fetchUser().then(
-      () => this.cartService.getCart().then(() => this._subject.next(true))
+      (result) => {
+        if (result === 'isNew') this.cartService.createCart().then(() => this.cartService.getCart().then(() => this._subject.next(true)));
+        this.cartService.getCart().then(() => this._subject.next(true));
+      }
     );
   }
 }

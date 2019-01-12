@@ -1,11 +1,20 @@
 import { Injectable } from '@angular/core';
 import { APIService } from './api.service';
 import { CustomerService } from './customer.service';
-import { OrderStatus, OrderPayment, OrderShipping, CurrencyType } from '../api/mutations/order.mutation';
-import { ProductOrientation, ProductSize } from '../api/mutations/cart.mutation';
 import { StripeService } from './stripe.service';
 import { AddressService } from './address.service';
-import { AddressType } from '../api/mutations/address.mutation';
+import {
+  ProductOrientation,
+  ProductSize,
+  AddressType,
+  OrderStatus,
+  OrderPayment,
+  OrderShipping,
+  CurrencyType,
+  CreateOrderGQL,
+  OrdersByCustomerGQL
+} from '../generated/graphql';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class OrderService {
@@ -14,7 +23,9 @@ export class OrderService {
     private apiService: APIService,
     private customerService: CustomerService,
     private stripeService: StripeService,
-    private addressService: AddressService
+    private addressService: AddressService,
+    private createOrderGQL: CreateOrderGQL,
+    private ordersByCustomerGQL: OrdersByCustomerGQL
   ) {
 
   }
@@ -25,17 +36,18 @@ export class OrderService {
       this.stripeService.checkCustomerState(stripeToken).then(
         () => {
           // add addresses as required
-          this.addressService.createAddress(this.customerService.customerObject.id, AddressType.BILLING, null, billingAddress.first_name, billingAddress.last_name, billingAddress.company_name, billingAddress.line_1, billingAddress.line_2, billingAddress.city, billingAddress.postcode, billingAddress.country, '', true).then(
+          this.addressService.createAddress(this.customerService.customerObject.id, AddressType.Billing, null, billingAddress.first_name, billingAddress.last_name, billingAddress.company_name, billingAddress.line_1, billingAddress.line_2, billingAddress.city, billingAddress.postcode, billingAddress.country, '', true).then(
             (addressId: string) => {
               // create order
-              this.apiService.createOrder(OrderStatus.COMPLETE, OrderPayment.PAID, OrderShipping.UNFULFILLED, this.customerService.customerObject.id, addressId, addressId, amount, CurrencyType[this.customerService.currency]).subscribe(
-                ({ data }) => {
-                  // create order items from cart items
-                  this.generateOrderItems(data.createOrder.order.id, cart).then(
-                    () => resolve(data.createOrder.order.id)
+              this.createOrderGQL.mutate({ status: OrderStatus.Complete, payment: OrderPayment.Paid, shipping: OrderShipping.Unfulfilled, customerId: this.customerService.customerObject.id, billingAddressId: addressId, shippingAddressId: addressId, amount, currency: CurrencyType[this.customerService.currency] })
+                .subscribe(
+                  (result) => {
+                    // create order items from cart items
+                  this.generateOrderItems(result.data.createOrder.order.id, cart).then(
+                    () => resolve(result.data.createOrder.order.id)
                   );
-                }
-              );
+                  }
+                );
             }
           );
         }
@@ -48,7 +60,13 @@ export class OrderService {
   }
 
   ordersByCustomer(customerId: string) {
-    return this.apiService.getOrdersByCustomer(customerId);
+    // return this.apiService.getOrdersByCustomer(customerId);
+
+    return this.ordersByCustomerGQL.watch({ customerId })
+      .valueChanges
+        .pipe(
+          map(result => result.data.allOrders.nodes)
+        );
   }
 
   private generateOrderItems(orderId: string, cart) {
@@ -65,7 +83,8 @@ export class OrderService {
               quantity: ${item.quantity},
               size: ${ProductSize[item.size]},
               orientation: ${ProductOrientation[item.orientation]},
-              fusionType: "${item.fusionType}"
+              fusionType: "${item.fusionType}",
+              isProcessed: ${item.fusionType !== 'fusion'}
             }
           }) {
             orderItem {

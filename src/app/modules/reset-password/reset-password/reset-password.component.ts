@@ -3,6 +3,7 @@ import { FormControl, FormGroupDirective, NgForm, Validators, FormGroup, FormBui
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MatSnackBar, MAT_SNACK_BAR_DATA } from '@angular/material';
 import { APIService } from 'src/app/services/api.service';
+import { ResetPasswordGQL } from '../../../generated/graphql';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -39,7 +40,8 @@ export class ResetPasswordComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     public snackBar: MatSnackBar,
-    private apiService: APIService
+    private apiService: APIService,
+    private resetPasswordGQL: ResetPasswordGQL
   ) { }
 
   ngOnInit() {
@@ -47,52 +49,53 @@ export class ResetPasswordComponent implements OnInit {
 
   sendReset(formDirective: FormGroupDirective) {
     console.log(this.resetForm.value);
-    this.apiService.resetPassword(this.resetForm.value.email).subscribe(
-      ({ data }) => {
-        this.apiService.sendResetEmail(this.resetForm.value, data.resetPassword.string).subscribe(
-          data => {
-            console.log(data);
-            if (data.result === 'Forgot email sent') {
-              this.resetForm.reset();
-              formDirective.resetForm();
+    this.resetPasswordGQL.mutate({ email: this.resetForm.value.email })
+      .subscribe(
+        (result) => {
+          this.apiService.sendResetEmail(this.resetForm.value, result.data.resetPassword.string).subscribe(
+            data => {
+              console.log(data);
+              if (data.result === 'Forgot email sent') {
+                this.resetForm.reset();
+                formDirective.resetForm();
+                this.snackBar.openFromComponent(ResetStateSnackbar, {
+                  duration: 3000,
+                  verticalPosition: 'top',
+                  data: { message: 'Your password reset email has been sent. Please check your inbox for the new password. It might take a minute or two to send.' },
+                  panelClass: ['snackbar-theme']
+                });
+              }
+            }
+          );
+        },
+        err => {
+          switch (err.message) {
+            case 'GraphQL error: permission denied for function reset_password':
               this.snackBar.openFromComponent(ResetStateSnackbar, {
                 duration: 3000,
                 verticalPosition: 'top',
-                data: { message: 'Your password reset email has been sent. Please check your inbox for the new password. It might take a minute or two to send.' },
+                data: { message: 'Cannot reset password while user is logged in' },
                 panelClass: ['snackbar-theme']
               });
-            }
+              break;
+            case 'GraphQL error: column "user does not exist" does not exist':
+              this.snackBar.openFromComponent(ResetStateSnackbar, {
+                duration: 3000,
+                verticalPosition: 'top',
+                data: { message: 'That email doesn\t exist. Check what you entered and try again' },
+                panelClass: ['snackbar-theme']
+              });
+              break;
+            default:
+              this.snackBar.openFromComponent(ResetStateSnackbar, {
+                duration: 3000,
+                verticalPosition: 'top',
+                data: { message: 'Something went wrong. Check your email address and try again' },
+                panelClass: ['snackbar-theme']
+              });
           }
-        );
-      },
-      err => {
-        switch (err.message) {
-          case 'GraphQL error: permission denied for function reset_password':
-            this.snackBar.openFromComponent(ResetStateSnackbar, {
-              duration: 3000,
-              verticalPosition: 'top',
-              data: { message: 'Cannot reset password while user is logged in' },
-              panelClass: ['snackbar-theme']
-            });
-            break;
-          case 'GraphQL error: column "user does not exist" does not exist':
-            this.snackBar.openFromComponent(ResetStateSnackbar, {
-              duration: 3000,
-              verticalPosition: 'top',
-              data: { message: 'That email doesn\t exist. Check what you entered and try again' },
-              panelClass: ['snackbar-theme']
-            });
-            break;
-          default:
-            this.snackBar.openFromComponent(ResetStateSnackbar, {
-              duration: 3000,
-              verticalPosition: 'top',
-              data: { message: 'Something went wrong. Check your email address and try again' },
-              panelClass: ['snackbar-theme']
-            });
         }
-      }
-    );
+      );
   }
 }
 

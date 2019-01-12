@@ -1,0 +1,9 @@
+query currentCustomer {
+  currentCustomer {
+    id,
+    firstName,
+    lastName,
+    email,
+    stripeId
+  }
+}

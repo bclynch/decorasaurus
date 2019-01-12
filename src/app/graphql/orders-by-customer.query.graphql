@@ -1,0 +1,38 @@
+query ordersByCustomer($customerId: UUID!) {
+  allOrders(filter:{
+    customerId: {
+      equalTo: $customerId
+    }
+  }) {
+    nodes {
+      id,
+      status,
+      shipping,
+      createdAt,
+      amount,
+      currency
+      orderItemsByOrderId {
+        nodes {
+          quantity,
+          amount,
+          orientation,
+          size,
+          currency,
+          productByProductSku {
+            name
+          }
+          productLinksByOrderItemId(filter: {
+            type:{
+              equalTo: THUMBNAIL
+            }
+          }) {
+            nodes {
+              type,
+              url
+            }
+          }
+        }
+      }
+    }
+  }
+}
