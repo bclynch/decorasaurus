@@ -173,6 +173,7 @@
           .mapContainer {
             width: 80vw;
             height: calc(80vw * 1.5);
+            overflow: hidden;
   
             .mapWrapper {
               // width: calc(80vw * 4);
@@ -261,6 +262,7 @@
         background-size: cover;
         background-repeat: no-repeat;
         box-sizing: content-box;
+        overflow: hidden;
 
         .mapWrapper {
           position: absolute;

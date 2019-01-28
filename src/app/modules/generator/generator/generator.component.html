@@ -13,7 +13,7 @@
         <div class="mapContainer" *ngIf="generatorService.mapBounds">
           <div class="mapWrapper" [ngClass]="generatorService.size">
             <mgl-map
-              [style]="generatorService.mapStyle"
+              [style]="generatorService.mapStyles[generatorService.selectedMapStyle].url"
               [zoom]="[12]"
               [center]="generatorService.mapCenter"
               [fitBounds]="generatorService.mapBounds"

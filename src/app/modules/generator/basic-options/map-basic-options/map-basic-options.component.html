@@ -21,4 +21,21 @@
       </div>
     </form>
   </div>
+  <div class="optionWrapper">
+    <div class="optionHeader">Styles</div>
+    <div class="stylesContainer">
+      <div 
+        class="mapStyle" 
+        *ngFor="let style of generatorService.mapStyles; let i = index;" 
+        (click)="generatorService.selectedMapStyle = i"
+      >
+        <div class="styleImage" [ngStyle]="{ 'background-image': 'url(' + style.img + ')'}">
+          <div class="iconWrapper" *ngIf="generatorService.selectedMapStyle === i">
+            <mat-icon>terrain</mat-icon>
+          </div>
+        </div>
+        <div>{{style.name}}</div>
+      </div>
+    </div>
+  </div>
 </div>

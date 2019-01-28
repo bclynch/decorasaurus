@@ -2,7 +2,8 @@
 
 
 ## Todos
-- There is an observer.complete() method worth looking into for certain subscriptions so there are not memory leaks
+- Looks like it is officially recommended to unsubscribe from observables when a component is destroyed. Official recs in this thread, but the whole thing is a bit convoluted. The takeUntil() solution seems to be standard for now, but perhaps a better one in the future.
+    - https://stackoverflow.com/questions/38008334/angular-rxjs-when-should-i-unsubscribe-from-subscription
 - Bug with creating an order in which orientation and size come in undefined for some reason 
 - Wire in Shippo
     - Validate addresses with Shippo

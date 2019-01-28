@@ -61,9 +61,52 @@ export class GeneratorService {
   patentNumber: string;
 
   // map props
-  redStyle = 'mapbox://styles/bclynch/cjnen2de28pey2rrwy4z4ql7t';
-  yellowStyle = 'mapbox://styles/bclynch/cjndjsgnu19kq2so4pwcsvtks';
-  mapStyle = this.redStyle;
+  mapStyles = [
+    {
+      img: 'assets/images/map-styles/style-red.png',
+      name: 'Red',
+      url: 'mapbox://styles/bclynch/cjnen2de28pey2rrwy4z4ql7t'
+    },
+    {
+      img: 'assets/images/map-styles/style-candy.png',
+      name: 'Candy',
+      url: 'mapbox://styles/bclynch/cjrgpb1p9891r2smdakm340zb'
+    },
+    {
+      img: 'assets/images/map-styles/style-yellow.png',
+      name: 'Yellow',
+      url: 'mapbox://styles/bclynch/cjndjsgnu19kq2so4pwcsvtks'
+    },
+    {
+      img: 'assets/images/map-styles/style-teal.png',
+      name: 'Teal',
+      url: 'mapbox://styles/bclynch/cjrgnv3k50z3y2sogcwf2fzog'
+    },
+    {
+      img: 'assets/images/map-styles/style-pink.png',
+      name: 'Pink',
+      url: 'mapbox://styles/bclynch/cjrgnvd358die2sl3xzcip4dd'
+    },
+    {
+      img: 'assets/images/map-styles/style-black.png',
+      name: 'Black',
+      url: 'mapbox://styles/bclynch/cjrgnvk9n113r2so1ekc0em8i'
+    },
+    {
+      img: 'assets/images/map-styles/style-orange.png',
+      name: 'Orange',
+      url: 'mapbox://styles/bclynch/cjrgp2cfm88ta2smd83uqowpz'
+    },
+    {
+      img: 'assets/images/map-styles/style-steel.png',
+      name: 'Steel',
+      url: 'mapbox://styles/bclynch/cjrgnvpiu7pla2sq3fqd0up0t'
+    }
+  ];
+  selectedMapStyle = 0;
+  // redStyle = 'mapbox://styles/bclynch/cjnen2de28pey2rrwy4z4ql7t';
+  // yellowStyle = 'mapbox://styles/bclynch/cjndjsgnu19kq2so4pwcsvtks';
+  // mapStyle = this.redStyle;
   mapCenter = [-74.0059728, 40.7127753];
   mapBounds;
   cityQuery: string;
