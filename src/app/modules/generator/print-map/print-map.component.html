@@ -1,6 +1,6 @@
 <div class="mapWrapper" [style.width]="generatorService.hiddenWidth" [style.height]="generatorService.hiddenHeight">
     <mgl-map
-    [style]="generatorService.mapStyle"
+    [style]="generatorService.mapStyles[generatorService.selectedMapStyle].url"
     [zoom]="generatorService.hiddenZoom"
     [center]="generatorService.hiddenCenter"
     [pitch]="generatorService.hiddenPitch"

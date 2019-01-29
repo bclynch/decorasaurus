@@ -1,7 +1,9 @@
+<!-- 16 px is default for the user preview, but scaling it up for the pdf prints assuming 29.5625 is about the multiplier -->
 <div 
   class="overlayContainer" 
   *ngIf="generatorService.displayOverlay" 
   [ngClass]="hiRes ? 'hiRes' : ''"
+  [style.font-size]="hiRes ? (generatorService.posterHeight * 300) / 29.5625 + 'px' : '16px'"
 >
   <div 
     class="borderOverlay" 

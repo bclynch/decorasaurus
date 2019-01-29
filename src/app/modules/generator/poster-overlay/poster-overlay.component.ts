@@ -8,6 +8,7 @@ import { GeneratorService } from 'src/app/services/generator.service';
 })
 export class PosterOverlayComponent implements OnInit {
   @Input() hiRes = false;
+  @Input() height: number;
 
   constructor(
     private generatorService: GeneratorService

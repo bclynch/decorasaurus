@@ -130,8 +130,6 @@ export class GeneratorComponent implements OnInit, OnDestroy {
     this.generatorService.isAddingToCart = true;
     const productSize = this.generatorService.size === 'Small' ? ProductSize.Small : this.generatorService.size === 'Medium' ? ProductSize.Medium : ProductSize.Large;
     const productOrientation = this.generatorService.orientation === 'Portrait' ? ProductOrientation.Portrait : ProductOrientation.Landscape;
-    console.log(this.generatorService.size);
-    console.log(this.generatorService.orientation);
     if (this.generatorService.generatorType === 'map-poster') {
       this.createPrintMap().then(
         (dataUrl) => {
@@ -160,10 +158,7 @@ export class GeneratorComponent implements OnInit, OnDestroy {
       this.generatorService.hiddenWidth = this.utilService.toPixels(this.generatorService.posterWidth);
       this.generatorService.hiddenHeight = this.utilService.toPixels(this.generatorService.posterHeight);
 
-      // dynamically create map component
-      const componentFactory = this.componentFactoryResolver.resolveComponentFactory(PrintMapComponent);
-      this.hiddenMap.createComponent(componentFactory);
-
+      // subscribe to subject with hidden print map info
       this.mapSubscription = this.generatorService.mapSubject.subscribe(
         (dataUrl) => {
           if (dataUrl) {
@@ -178,6 +173,10 @@ export class GeneratorComponent implements OnInit, OnDestroy {
           }
         }
       );
+
+      // dynamically create map component
+      const componentFactory = this.componentFactoryResolver.resolveComponentFactory(PrintMapComponent);
+      this.hiddenMap.createComponent(componentFactory);
     });
   }
 
@@ -194,5 +193,9 @@ export class GeneratorComponent implements OnInit, OnDestroy {
           console.error('oops, something went wrong!', error);
         });
     });
+  }
+
+  fetchHeight(): number {
+    return document.querySelector('.posterWrapper').clientHeight;
   }
 }

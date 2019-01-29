@@ -2,6 +2,12 @@
 
 
 ## Todos
+- Login / signup + cart generation jacked up. Would be nice to find an example that actually works well...
+- Finish poster / pdf / thumbnail creation flow. Really looking for MVP here... We are getting there
+    - Map - check
+    - Patent - check
+    - Fusion - 
+    - Trace - later
 - Looks like it is officially recommended to unsubscribe from observables when a component is destroyed. Official recs in this thread, but the whole thing is a bit convoluted. The takeUntil() solution seems to be standard for now, but perhaps a better one in the future.
     - https://stackoverflow.com/questions/38008334/angular-rxjs-when-should-i-unsubscribe-from-subscription
 - Bug with creating an order in which orientation and size come in undefined for some reason 
@@ -38,7 +44,7 @@
         - Delete address
         - Update Address
             - Managing defaults
-    - Wishlist
+    - Wishlist (later)
         - Create model
         - Will be just like cart item except it'll be tied to user. Need a way to convert cart item to wishlist item and back easily.
 - Dashboard for orders
@@ -56,10 +62,7 @@
         - https://www.pexels.com/search/bedroom/
         - Add a 'frame' with Gimp with filters -> decor -> add border
 - Map Posters
-    - Add new map styles
-    - Figure out rerender on orientation change - check
     - There are size differences between small, medium, and large with how much map is depicted so on size change we need to reformat size of the depicted map too for the user - getting there, but computer locking up too much....
-    - Overlay still wonky size-wise between small / m / large
 - Fusion
     - Psuedo Flow:
         - User selects / uploads an image and crops it.
@@ -91,23 +94,6 @@
     - Trace / Fusion
         - Bug when uploading an image with two iterations of file input on the dom. Doesn't fire change event
         - Trigger auto retrace when change trace color
-- Patents after launch - 2 days
-- FAQ page - .5 day
-- About page - .5 day
-- Digital ocean setup - 3 days
-  - Nginx
-  - Connect with cloudlare
-  - Load balancing
-    - Decide how many servers needed and how powerful
-  - Custom email
-  - domain name
-- Site branding / design - 3 days
-- Tracking - 1 day
-- SEO / Marketing shit
-- Business stuff - 3 days
-  - LLC
-  - w/e
-- Setup language selection .5 day
 
 - General
     - There are a bunch of cart subscriptons scattered around services/ components and it would be nice to consolidate all into a service for like optimization

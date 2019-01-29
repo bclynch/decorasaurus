@@ -78,7 +78,7 @@
           id="inputImage" 
           [ngClass]="[generatorService.orientation, generatorService.processingFusion ? 'processing' : '']"
         />
-        <app-poster-overlay [hiRes]="true"></app-poster-overlay>
+        <app-poster-overlay [hiRes]="true" [height]="fetchHeight()"></app-poster-overlay>
       </div>
       <ng-template #hiddenMap class="hiddenMapWrapper"></ng-template>
     </div>
