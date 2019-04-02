@@ -3,6 +3,12 @@
 
 ## Todos
 - Login / signup + cart generation jacked up. Would be nice to find an example that actually works well...
+    - Some good stuff with passport auth + server middleware setup
+        - https://github.com/graphile/bootstrap-react-apollo
+    - Examples with postraphile. Maybe pick and choose what we want / need?
+        - https://github.com/graphile/examples/tree/7951e87a772d7e5e601f42545769a7cc55aa7ad7/db
+    - More complex graphile example https://github.com/graphile/examples/blob/7951e87a772d7e5e601f42545769a7cc55aa7ad7/db/400_users.sql
+    - https://blog.angular-university.io/angular-jwt-authentication/
 - Finish poster / pdf / thumbnail creation flow. Really looking for MVP here... We are getting there
     - Map - check
     - Patent - check
