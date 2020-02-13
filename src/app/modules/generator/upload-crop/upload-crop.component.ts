@@ -86,7 +86,7 @@ export class UploadCropComponent implements OnInit {
 
   selectPhoto(url: string) {
     this.utilService.convertImageToDataURL(url).then(
-      (result) => this.generatorService.cropperImgUrl = result
+      (result) => { this.generatorService.cropperImgUrl = result; }
     );
   }
 }

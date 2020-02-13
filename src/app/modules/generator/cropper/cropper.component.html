@@ -1,8 +1,8 @@
-<!-- <div class="cropperContainer">
+<div class="cropperContainer">
   <div class="resetWrapper">
     <button mat-button color="primary" (click)="reset()">Reset and Upload New Image</button>
   </div>
-  <angular-cropper #angularCropper [cropperOptions]="cropperConfig" [imageUrl]="imgUrl"></angular-cropper>
+  <img #imgToBeCropped [src]="imgUrl">
   <div class="buttonsWrapper">
     <button 
       mat-button 
@@ -61,4 +61,4 @@
       (click)="processCrop()"
     >Crop and Continue</button>
   </div>
-</div> -->
+</div>

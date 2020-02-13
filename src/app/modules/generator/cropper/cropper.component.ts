@@ -1,14 +1,15 @@
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, AfterViewInit } from '@angular/core';
 import { GeneratorService } from 'src/app/services/generator.service';
+import * as Cropper from 'cropperjs/dist/cropper';
 
 @Component({
   selector: 'app-cropper',
   templateUrl: './cropper.component.html',
   styleUrls: ['./cropper.component.scss']
 })
-export class CropperComponent implements OnInit {
+export class CropperComponent implements OnInit, AfterViewInit {
   @Input() imgUrl: string;
-  @ViewChild('angularCropper', { static: true }) public angularCropper: any;
+  @ViewChild('imgToBeCropped', { static: true }) public imgToBeCropped: any;
 
   cropperConfig = {
     aspectRatio: 2 / 3,
@@ -28,6 +29,7 @@ export class CropperComponent implements OnInit {
   };
 
   orientation: 'Portrait' | 'Landscape' = 'Portrait';
+  cropper;
 
   constructor(
     private generatorService: GeneratorService
@@ -36,33 +38,37 @@ export class CropperComponent implements OnInit {
   ngOnInit() {
   }
 
+  ngAfterViewInit() {
+    this.cropper = new Cropper(this.imgToBeCropped.nativeElement, this.cropperConfig);
+  }
+
   zoom(direction: string) {
 
     if (direction === 'in') {
-      this.angularCropper.cropper.zoom(0.1);
+      this.cropper.zoom(0.1);
     } else {
-      this.angularCropper.cropper.zoom(-0.1);
+      this.cropper.zoom(-0.1);
     }
   }
 
   rotate(direction: string) {
     if (direction === 'left') {
-      this.angularCropper.cropper.rotate(45);
+      this.cropper.rotate(45);
     } else {
       // broken https://github.com/fengyuanchen/cropperjs/issues/346
-      this.angularCropper.cropper.rotate(-45);
+      this.cropper.rotate(-45);
     }
   }
 
   flipRatio(type: 'vertical' | 'horizontal') {
     if (type === 'horizontal') {
-      this.angularCropper.cropper.reset();
-      this.angularCropper.cropper.setAspectRatio(3 / 2);
+      this.cropper.reset();
+      this.cropper.setAspectRatio(3 / 2);
       this.cropperConfig.aspectRatio = 3 / 2;
       this.orientation = 'Landscape';
     } else {
-      this.angularCropper.cropper.reset();
-      this.angularCropper.cropper.setAspectRatio(2 / 3);
+      this.cropper.reset();
+      this.cropper.setAspectRatio(2 / 3);
       this.cropperConfig.aspectRatio = 2 / 3;
       this.orientation = 'Portrait';
     }
@@ -73,7 +79,7 @@ export class CropperComponent implements OnInit {
     this.generatorService.posterSrcSubject.next(null);
     this.generatorService.selectOrientation(this.orientation);
 
-    const croppedCanvas = this.angularCropper.cropper.getCroppedCanvas();
+    const croppedCanvas = this.cropper.getCroppedCanvas();
     croppedCanvas.toBlob((blob) => {
       this.generatorService.posterBlob = blob;
       this.generatorService.posterSrcSubject.next(croppedCanvas.toDataURL());

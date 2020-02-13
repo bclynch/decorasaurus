@@ -237,7 +237,20 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     }
   }
 
-  populateAddress(address, form: 'billingAddress' | 'shippingAddress') {
+  populateAddress({
+    first_name,
+    last_name,
+    company_name,
+    country,
+    line_1,
+    line_2,
+    city,
+    county,
+    postcode,
+    phone_number
+  },
+  form: 'billingAddress' | 'shippingAddress'
+  ) {
     // eventually would be nice to have a naming scheme to identify a default
     // perhaps could look at most recent order to see what address they used
     const createObject = (formName: string, key: string, value: any) => {
@@ -248,16 +261,16 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     };
     this.formsSame = true;
 
-    if (address.first_name) this.checkoutForm.patchValue(createObject(form, 'first_name', address.first_name));
-    if (address.last_name) this.checkoutForm.patchValue(createObject(form, 'last_name', address.last_name));
-    if (address.company_name) this.checkoutForm.patchValue(createObject(form, 'company_name', address.company_name));
-    if (address.country) this.checkoutForm.patchValue(createObject(form, 'country', address.country));
-    if (address.line_1) this.checkoutForm.patchValue(createObject(form, 'line_1', address.line_1));
-    if (address.line_2) this.checkoutForm.patchValue(createObject(form, 'line_2', address.line_2));
-    if (address.city) this.checkoutForm.patchValue(createObject(form, 'city', address.city));
-    if (address.county) this.checkoutForm.patchValue(createObject(form, 'county', address.county));
-    if (address.postcode) this.checkoutForm.patchValue(createObject(form, 'postcode', address.postcode));
-    if (address.phone_number) this.checkoutForm.patchValue(createObject(form, 'phone_number', address.phone_number));
+    if (first_name) this.checkoutForm.patchValue(createObject(form, 'first_name', first_name));
+    if (last_name) this.checkoutForm.patchValue(createObject(form, 'last_name', last_name));
+    if (company_name) this.checkoutForm.patchValue(createObject(form, 'company_name', company_name));
+    if (country) this.checkoutForm.patchValue(createObject(form, 'country', country));
+    if (line_1) this.checkoutForm.patchValue(createObject(form, 'line_1', line_1));
+    if (line_2) this.checkoutForm.patchValue(createObject(form, 'line_2', line_2));
+    if (city) this.checkoutForm.patchValue(createObject(form, 'city', city));
+    if (county) this.checkoutForm.patchValue(createObject(form, 'county', county));
+    if (postcode) this.checkoutForm.patchValue(createObject(form, 'postcode', postcode));
+    if (phone_number) this.checkoutForm.patchValue(createObject(form, 'phone_number', phone_number));
   }
 }
 

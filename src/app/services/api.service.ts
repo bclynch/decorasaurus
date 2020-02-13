@@ -24,12 +24,8 @@ export class APIService {
   sendResetEmail(user: string, pw: string) {
     return this.httpClient.post(`${ENV.apiBaseURL}/mailing/reset`, { user, pw })
       .pipe(map(
-        (response: Response) => {
-          const data = response.json();
-          return data;
-        }
-      )
-      ).pipe(catchError(
+        response => (response)
+      )).pipe(catchError(
         (error: HttpErrorResponse) => throwError(error.message || 'server error.')
     ));
   }
@@ -37,12 +33,8 @@ export class APIService {
   sendContactEmail(data: { why: string; name: string; email: string; content: string; }) {
     return this.httpClient.post(`${ENV.apiBaseURL}/mailing/contact`, { data })
       .pipe(map(
-        (response: Response) => {
-          const json = response.json();
-          return json;
-        }
-      )
-      ).pipe(catchError(
+        response => (response)
+      )).pipe(catchError(
         (error: HttpErrorResponse) => throwError(error.message || 'server error.')
       ));
   }
@@ -51,12 +43,8 @@ export class APIService {
   posterizeImage(formData: FormData) {
     return this.httpClient.post(`${ENV.apiBaseURL}/posterize`, formData)
     .pipe(map(
-        (response: Response) => {
-          const data = response.json();
-          return data;
-        }
-      )
-    ).pipe(catchError(
+      response => (response)
+    )).pipe(catchError(
       (error: HttpErrorResponse) => throwError(error.message || 'server error.')
     ));
   }
@@ -65,10 +53,7 @@ export class APIService {
   fetchPatent(patentNumber: string) {
     return this.httpClient.post(`${ENV.apiBaseURL}/patent/fetch`, { patent: patentNumber })
     .pipe(map(
-        (response: Response) => {
-          const data = response.json();
-          return data;
-        }
+      response => (response)
       )
     ).pipe(catchError(
       (error: HttpErrorResponse) => throwError(error.message || 'server error.')
@@ -78,12 +63,8 @@ export class APIService {
   tracePatent(url: string, color: string) {
     return this.httpClient.post(`${ENV.apiBaseURL}/patent/trace`, { patent: url, color })
     .pipe(map(
-        (response: Response) => {
-          const data = response.json();
-          return data;
-        }
-      )
-    ).pipe(catchError(
+      response => (response)
+    )).pipe(catchError(
       (error: HttpErrorResponse) => throwError(error.message || 'server error.')
     ));
   }
@@ -94,12 +75,8 @@ export class APIService {
   createStripeCustomer(email: string, token: string) {
     return this.httpClient.post(`${ENV.apiBaseURL}/stripe/create-customer`, { email, token })
     .pipe(map(
-        (response: Response) => {
-          const data = response.json();
-          return data;
-        }
-      )
-    ).pipe(catchError(
+      response => (response)
+    )).pipe(catchError(
       (error: HttpErrorResponse) => throwError(error.message || 'server error.')
     ));
   }
@@ -107,12 +84,8 @@ export class APIService {
   fetchStripeCustomer(email: string) {
     return this.httpClient.post(`${ENV.apiBaseURL}/stripe/fetch-customer`, { email })
     .pipe(map(
-        (response: Response) => {
-          const data = response.json();
-          return data;
-        }
-      )
-    ).pipe(catchError(
+      response => (response)
+    )).pipe(catchError(
       (error: HttpErrorResponse) => throwError(error.message || 'server error.')
     ));
   }
@@ -120,12 +93,8 @@ export class APIService {
   deleteCard(customerId: string, cardId: string) {
     return this.httpClient.post(`${ENV.apiBaseURL}/stripe/delete-card`, { customerId, cardId })
     .pipe(map(
-        (response: Response) => {
-          const data = response.json();
-          return data;
-        }
-      )
-    ).pipe(catchError(
+      response => (response)
+    )).pipe(catchError(
       (error: HttpErrorResponse) => throwError(error.message || 'server error.')
     ));
   }
@@ -133,12 +102,8 @@ export class APIService {
   changeDefaultCard(customerId: string, sourceId: string) {
     return this.httpClient.post(`${ENV.apiBaseURL}/stripe/change-default-card`, { customerId, sourceId })
     .pipe(map(
-        (response: Response) => {
-          const data = response.json();
-          return data;
-        }
-      )
-    ).pipe(catchError(
+      response => (response)
+    )).pipe(catchError(
       (error: HttpErrorResponse) => throwError(error.message || 'server error.')
     ));
   }
@@ -146,12 +111,8 @@ export class APIService {
   processPoster(formData: FormData) {
     return this.httpClient.post(`${ENV.apiBaseURL}/poster/process`, formData)
     .pipe(map(
-        (response: Response) => {
-          const data = response.json();
-          return data;
-        }
-      )
-    ).pipe(catchError(
+      response => (response)
+    )).pipe(catchError(
       (error: HttpErrorResponse) => throwError(error.message || 'server error.')
     ));
   }

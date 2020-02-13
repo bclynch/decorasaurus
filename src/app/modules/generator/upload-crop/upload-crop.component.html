@@ -31,10 +31,12 @@
   </div>
   <div class="fileUploadContainer" *ngIf="!generatorService.cropperImgUrl && !readingFile && !searchActive">
     <label for="file">
-      <file-drop (onFileDrop)="dropped($event)" customstyle="fileDrop">
-        <div><mat-icon>cloud_upload</mat-icon></div>
-        <div>Drag and drop image here or click to select</div>
-      </file-drop>
+      <ngx-file-drop (onFileDrop)="dropped($event)" dropZoneClassName="fileDrop">
+        <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
+          <div><mat-icon>cloud_upload</mat-icon></div>
+          <div>Drag and drop image here or click to select</div>
+        </ng-template>
+      </ngx-file-drop>
     </label>
     <input 
       type="file" 
@@ -52,6 +54,6 @@
       <div>{{isCollapsed ? 'Show Cropper' : 'Hide Cropper'}}</div>
       <mat-icon>{{isCollapsed ? 'arrow_downward' : 'arrow_upward'}}</mat-icon>
     </div>
-    <!-- <app-cropper [imgUrl]="generatorService.cropperImgUrl"></app-cropper> -->
+    <app-cropper [imgUrl]="generatorService.cropperImgUrl"></app-cropper>
   </div>
 </div>

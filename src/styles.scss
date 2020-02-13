@@ -1,7 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
 // @import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
 @import './app/theme.scss';
-@import "~@ngx-share/button/themes/material/material-dark-theme";
+@import '~@ngx-share/button/themes/material/material-dark-theme';
+@import '~cropperjs/dist/cropper.css';
+@import '~mapbox-gl/dist/mapbox-gl.css';
 
 // global css4 vars
 :root {
@@ -75,6 +77,7 @@ button:focus {
 .fileDrop {
   border: dashed 1px var(--color-primary);
   height: 100%;
+  box-sizing: border-box;
 
   > div {
     flex-direction: column;
