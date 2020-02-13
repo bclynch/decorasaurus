@@ -14,7 +14,7 @@ export class CartTotalsComponent implements OnInit, OnChanges {
 
   constructor(
     private cartService: CartService,
-    private customerService: CustomerService
+    public customerService: CustomerService
   ) { }
 
   ngOnInit() {

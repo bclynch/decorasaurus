@@ -1,7 +1,7 @@
 import { Injectable, Component, Inject } from '@angular/core';
 import { CustomerService } from './customer.service';
 import { Router } from '@angular/router';
-import { MAT_BOTTOM_SHEET_DATA, MatBottomSheet, MatBottomSheetRef } from '@angular/material';
+import { MAT_BOTTOM_SHEET_DATA, MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { BehaviorSubject, Observable, SubscriptionLike} from 'rxjs';
 import { APIService } from './api.service';
 import { GeneratorService } from './generator.service';

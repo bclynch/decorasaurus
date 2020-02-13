@@ -1,5 +1,4 @@
 import { Component, OnInit, NgZone } from '@angular/core';
-import { APIService } from 'src/app/services/api.service';
 import { GeneratorService } from 'src/app/services/generator.service';
 import { MapsAPILoader } from '@agm/core'; // using to spin up google ready for geocoding with current location
 declare var google: any;
@@ -15,8 +14,7 @@ export class MapBasicOptionsComponent implements OnInit {
   hasDownBeenPressed = false;
 
   constructor(
-    private apiService: APIService,
-    private generatorService: GeneratorService,
+    public generatorService: GeneratorService,
     private mapsAPILoader: MapsAPILoader,
     private ngZone: NgZone
   ) {

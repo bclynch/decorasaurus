@@ -10,28 +10,28 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CartItemCardComponent, RemoveSnackbar } from './cart-item-card/cart-item-card.component';
 import { CartTotalsComponent } from './cart-totals/cart-totals.component';
 import { SigninDialogueComponent } from './signin-dialogue/signin-dialogue.component';
-import {
-  MatButtonModule,
-  MatProgressSpinnerModule,
-  MatTooltipModule,
-  MatDialogModule,
-  MatInputModule,
-  MatIconModule,
-  MatBadgeModule,
-  MatBottomSheetModule,
-  MatSnackBarModule,
-  MatSelectModule,
-  MatCheckboxModule,
-  MatRadioModule,
-  MatButtonToggleModule,
-  MatTabsModule,
-  MatExpansionModule
-} from '@angular/material';
 import { PaymentCardsComponent } from './payment-cards/payment-cards.component';
 import { CustomerAddressesComponent } from './customer-addresses/customer-addresses.component';
 import { AddressGridComponent } from './address-grid/address-grid.component';
 import { OrderCardComponent } from './order-card/order-card.component';
 import { OrderItemCardComponent } from './order-item-card/order-item-card.component';
+
+// Third party modules
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   entryComponents: [

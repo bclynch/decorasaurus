@@ -2,7 +2,7 @@ import { Injectable, Component, Inject } from '@angular/core';
 import { ENV } from '../../environments/environment';
 import { APIService } from './api.service';
 import { BehaviorSubject } from 'rxjs';
-import { MatSnackBar, MAT_SNACK_BAR_DATA } from '@angular/material';
+import { MatSnackBar, MAT_SNACK_BAR_DATA } from '@angular/material/snack-bar';
 import { CustomerService } from './customer.service';
 
 declare const Stripe: any;

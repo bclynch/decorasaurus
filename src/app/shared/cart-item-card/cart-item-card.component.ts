@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Inject, OnChanges } from '@angular/core';
-import { MatSnackBar, MAT_SNACK_BAR_DATA } from '@angular/material';
+import { MatSnackBar, MAT_SNACK_BAR_DATA } from '@angular/material/snack-bar';
 import { CartService } from 'src/app/services/cart.service';
 import { UtilService } from 'src/app/services/util.service';
 import { CustomerService } from 'src/app/services/customer.service';
@@ -20,7 +20,7 @@ export class CartItemCardComponent implements OnInit, OnChanges {
     public snackBar: MatSnackBar,
     private cartService: CartService,
     private utilService: UtilService,
-    private customerService: CustomerService
+    public customerService: CustomerService
   ) { }
 
   ngOnInit() {

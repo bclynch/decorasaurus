@@ -1,11 +1,9 @@
 import { Component, Input, OnDestroy } from '@angular/core';
-
-import { UtilService } from '../../services/util.service';
 import { RouterService } from '../../services/router.service';
 import { MobileNavDialogueComponent } from '../mobile-nav-dialogue/mobile-nav-dialogue.component';
 import { CartService } from 'src/app/services/cart.service';
 import { SubscriptionLike } from 'rxjs';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { CustomerService } from 'src/app/services/customer.service';
 
 interface Section {
@@ -89,8 +87,7 @@ export class NavbarComponent implements OnDestroy {
   regions;
 
   constructor(
-    private utilService: UtilService,
-    private routerService: RouterService,
+    public routerService: RouterService,
     private cartService: CartService,
     public dialog: MatDialog,
     private customerService: CustomerService

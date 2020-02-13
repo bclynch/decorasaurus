@@ -1,10 +1,10 @@
 import { Injectable, OnDestroy, Component, Inject } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { SigninDialogueComponent } from '../shared/signin-dialogue/signin-dialogue.component';
 import { SubscriptionLike, Observable, BehaviorSubject } from 'rxjs';
 import { v4 as uuid } from 'uuid';
 import { CookieService } from 'ngx-cookie-service';
-import { MatSnackBar, MAT_SNACK_BAR_DATA } from '@angular/material';
+import { MatSnackBar, MAT_SNACK_BAR_DATA } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Apollo } from 'apollo-angular';
 import { CurrentCustomerGQL, RegisterUserCustomerGQL, AuthenticateUserCustomerGQL, UpdateCustomerByIdGQL } from '../generated/graphql';
@@ -92,7 +92,7 @@ export class CustomerService implements OnDestroy {
         resolve(false);
       } else {
         const userUuid = uuid();
-        this.cookieService.set( 'decorasaurus-user', userUuid );
+        this.cookieService.set('decorasaurus-user', userUuid, null, null, null, false, 'Strict');
         this.customerUuid = userUuid;
         resolve(true);
       }
@@ -146,9 +146,9 @@ export class CustomerService implements OnDestroy {
               // reset apollo cache and refetch queries
               this.apollo.getClient().resetStore();
 
-              this.cookieService.set('decorasaurus-token', token);
+              this.cookieService.set('decorasaurus-token', token, null, null, null, false, 'Strict');
               this.customerToken.next(token);
-              // this.cookieService.set( 'decorasaurus-customer-id', resp.token.customer_id );
+              // this.cookieService.set('decorasaurus-customer-id', resp.token.customer_id, null, null, null, false, 'Strict');
 
               // reload window to update db role
               this.isReloading = true;

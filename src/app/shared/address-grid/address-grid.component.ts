@@ -8,6 +8,8 @@ import { Component, OnInit, Input } from '@angular/core';
 export class AddressGridComponent implements OnInit {
   @Input() addresses;
 
+  selectedAddress;
+
   constructor() { }
 
   ngOnInit() {

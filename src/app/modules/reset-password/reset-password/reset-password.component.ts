@@ -1,17 +1,9 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { FormControl, FormGroupDirective, NgForm, Validators, FormGroup, FormBuilder } from '@angular/forms';
-import { ErrorStateMatcher } from '@angular/material/core';
-import { MatSnackBar, MAT_SNACK_BAR_DATA } from '@angular/material';
+import { FormGroupDirective, Validators, FormGroup, FormBuilder } from '@angular/forms';
+import { MatSnackBar, MAT_SNACK_BAR_DATA } from '@angular/material/snack-bar';
 import { APIService } from 'src/app/services/api.service';
 import { ResetPasswordGQL } from '../../../generated/graphql';
-
-/** Error when invalid control is dirty, touched, or submitted. */
-export class MyErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    const isSubmitted = form && form.submitted;
-    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
-  }
-}
+import { MyErrorStateMatcher } from 'src/app/shared/errorMatcher';
 
 @Component({
   selector: 'app-reset-password',
@@ -29,6 +21,8 @@ export class ResetPasswordComponent implements OnInit {
       ])
     ]
   });
+
+  matcher = new MyErrorStateMatcher();
 
   formValidationMessages = {
     'email': [

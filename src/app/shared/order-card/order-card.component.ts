@@ -10,7 +10,7 @@ export class OrderCardComponent implements OnInit {
   @Input() order;
 
   constructor(
-    private router: Router,
+    public router: Router,
   ) { }
 
   ngOnInit() {

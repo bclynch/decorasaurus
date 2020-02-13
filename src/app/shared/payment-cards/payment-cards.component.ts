@@ -15,7 +15,7 @@ export class PaymentCardsComponent implements OnInit {
   selectedCard;
 
   constructor(
-    private stripeService: StripeService
+    public stripeService: StripeService
   ) { }
 
   ngOnInit() {

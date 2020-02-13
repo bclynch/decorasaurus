@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { APIService } from '../../../../services/api.service';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { PatentExpandDialogueComponent } from '../../patent-expand-dialogue/patent-expand-dialogue.component';
 import { SubscriptionLike } from 'rxjs';
 import { GeneratorService } from 'src/app/services/generator.service';
@@ -24,7 +24,7 @@ export class PatentBasicOptionsComponent implements OnInit, OnDestroy {
   constructor(
     private apiService: APIService,
     public dialog: MatDialog,
-    private generatorService: GeneratorService,
+    public generatorService: GeneratorService,
     private _DomSanitizationService: DomSanitizer,
   ) { }
 

@@ -1,18 +1,10 @@
 import { Component, OnInit, Inject} from '@angular/core';
-import { FormControl, FormGroupDirective, NgForm, Validators, FormGroup, FormBuilder } from '@angular/forms';
-import { ErrorStateMatcher } from '@angular/material/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MyErrorStateMatcher } from '../errorMatcher';
 
 export interface DialogData {
   isLogin: boolean;
-}
-
-/** Error when invalid control is dirty, touched, or submitted. */
-export class MyErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    const isSubmitted = form && form.submitted;
-    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
-  }
 }
 
 @Component({
@@ -80,6 +72,8 @@ export class SigninDialogueComponent implements OnInit {
       { type: 'pattern', message: 'Your password must contain at least one uppercase, one lowercase, and one number' }
     ]
   };
+
+  matcher = new MyErrorStateMatcher();
 
   constructor(
     private fb: FormBuilder,

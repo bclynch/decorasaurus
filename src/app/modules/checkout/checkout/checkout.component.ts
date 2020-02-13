@@ -1,25 +1,17 @@
 import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
-import { FormControl, FormGroupDirective, NgForm, Validators, FormGroup, FormBuilder } from '@angular/forms';
-import { ErrorStateMatcher } from '@angular/material/core';
+import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { SubscriptionLike, Observable } from 'rxjs';
 import { CartService } from 'src/app/services/cart.service';
 import { SettingsService } from 'src/app/services/settings.service';
 import { Router } from '@angular/router';
 import { CustomerService } from 'src/app/services/customer.service';
 import { StripeService } from 'src/app/services/stripe.service';
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { APIService } from 'src/app/services/api.service';
 import { AddressService } from 'src/app/services/address.service';
 import { OrderService } from 'src/app/services/order.service';
-import { MatSnackBar, MAT_SNACK_BAR_DATA } from '@angular/material';
-
-/** Error when invalid control is dirty, touched, or submitted. */
-export class MyErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    const isSubmitted = form && form.submitted;
-    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
-  }
-}
+import { MatSnackBar, MAT_SNACK_BAR_DATA } from '@angular/material/snack-bar';
+import { MyErrorStateMatcher } from 'src/app/shared/errorMatcher';
 
 @Component({
   selector: 'app-checkout',
@@ -128,8 +120,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private cartService: CartService,
     private settingsService: SettingsService,
-    private router: Router,
-    private customerService: CustomerService,
+    public router: Router,
+    public customerService: CustomerService,
     private stripeService: StripeService,
     public dialog: MatDialog,
     private apiService: APIService,

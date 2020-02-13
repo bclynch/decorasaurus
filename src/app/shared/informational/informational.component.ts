@@ -14,7 +14,7 @@ export class InformationalComponent implements OnInit {
   ngOnInit() {
   }
 
-  submitEmail() {
+  submitEmail(e) {
     // something happens
   }
 }

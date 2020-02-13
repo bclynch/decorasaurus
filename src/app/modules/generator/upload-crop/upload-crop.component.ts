@@ -23,7 +23,7 @@ export class UploadCropComponent implements OnInit {
   isCollapsed = true;
 
   constructor(
-    private generatorService: GeneratorService,
+    public generatorService: GeneratorService,
     private apiService: APIService,
     private utilService: UtilService
   ) {

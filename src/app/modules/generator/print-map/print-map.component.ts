@@ -14,7 +14,7 @@ export class PrintMapComponent implements OnInit {
   @Output() loaded: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(
-    private generatorService: GeneratorService
+    public generatorService: GeneratorService
   ) {}
 
   ngOnInit() {

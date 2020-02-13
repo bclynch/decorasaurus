@@ -11,7 +11,7 @@ export class PosterOverlayComponent implements OnInit {
   @Input() height: number;
 
   constructor(
-    private generatorService: GeneratorService
+    public generatorService: GeneratorService
   ) { }
 
   ngOnInit() {

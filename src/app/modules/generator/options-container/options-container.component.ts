@@ -13,9 +13,9 @@ export class OptionsContainerComponent implements OnInit {
   @Output() addToCart: EventEmitter<void> = new EventEmitter<void>();
 
   constructor(
-    private generatorService: GeneratorService,
-    private utilService: UtilService,
-    private customerService: CustomerService
+    public generatorService: GeneratorService,
+    public utilService: UtilService,
+    public customerService: CustomerService
   ) {
 
   }

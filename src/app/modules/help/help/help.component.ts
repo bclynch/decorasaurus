@@ -2,7 +2,8 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { RouterService } from 'src/app/services/router.service';
 import { FormGroup, FormBuilder, Validators, FormGroupDirective } from '@angular/forms';
 import { APIService } from 'src/app/services/api.service';
-import { MatSnackBar, MAT_SNACK_BAR_DATA } from '@angular/material';
+import { MatSnackBar, MAT_SNACK_BAR_DATA } from '@angular/material/snack-bar';
+import { MyErrorStateMatcher } from 'src/app/shared/errorMatcher';
 
 @Component({
   selector: 'app-help',
@@ -57,6 +58,7 @@ export class HelpComponent implements OnInit {
       content: 'Vape distillery swag, vice kickstarter tacos direct trade cornhole palo santo. Subway tile narwhal squid cronut.'
     },
   ];
+  matcher = new MyErrorStateMatcher();
 
   constructor(
     private routerService: RouterService,

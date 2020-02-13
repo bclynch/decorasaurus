@@ -49,7 +49,7 @@ export class GeneratorComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private cartService: CartService,
     private elRef: ElementRef,
-    private generatorService: GeneratorService,
+    public generatorService: GeneratorService,
     private componentFactoryResolver: ComponentFactoryResolver,
     private utilService: UtilService,
     private productBySkuGQL: ProductBySkuGQL

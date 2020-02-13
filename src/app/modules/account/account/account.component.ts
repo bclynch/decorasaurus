@@ -5,18 +5,9 @@ import { StripeService } from 'src/app/services/stripe.service';
 import { OrderService } from 'src/app/services/order.service';
 import { SubscriptionLike } from 'rxjs';
 import { SettingsService } from 'src/app/services/settings.service';
-import { FormControl, FormGroupDirective, NgForm, Validators, FormGroup, FormBuilder } from '@angular/forms';
-import { ErrorStateMatcher } from '@angular/material/core';
-import { MatSnackBar, MAT_SNACK_BAR_DATA } from '@angular/material';
+import { FormControl, FormGroupDirective, Validators, FormGroup, FormBuilder } from '@angular/forms';
+import { MatSnackBar, MAT_SNACK_BAR_DATA } from '@angular/material/snack-bar';
 import { UpdatePasswordGQL } from '../../../generated/graphql';
-
-/** Error when invalid control is dirty, touched, or submitted. */
-export class MyErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    const isSubmitted = form && form.submitted;
-    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
-  }
-}
 
 @Component({
   selector: 'app-account',
@@ -80,7 +71,7 @@ export class AccountComponent implements OnInit, OnDestroy {
   ordersSubscription: SubscriptionLike;
 
   constructor(
-    private customerService: CustomerService,
+    public customerService: CustomerService,
     private router: Router,
     private stripeService: StripeService,
     private ordersService: OrderService,

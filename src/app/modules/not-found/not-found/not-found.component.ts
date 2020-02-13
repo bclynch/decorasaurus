@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 export class NotFoundComponent implements OnInit {
 
   constructor(
-    private router: Router
+    public router: Router
   ) { }
 
   ngOnInit() {
