@@ -53,7 +53,7 @@ export class ResetPasswordComponent implements OnInit {
       .subscribe(
         (result) => {
           this.apiService.sendResetEmail(this.resetForm.value, result.data.resetPassword.string).subscribe(
-            data => {
+            (data: any) => {
               console.log(data);
               if (data.result === 'Forgot email sent') {
                 this.resetForm.reset();

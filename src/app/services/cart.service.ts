@@ -86,7 +86,7 @@ export class CartService {
     // return;
     // Need to create thumbnail for product + pdf to s3 then add to cart
     this.apiService.processPoster(formData).subscribe(
-      (links: { type: 'thumbnail' | 'pdf' | 'crop', S3Url: string }[]) => {
+      (links: any) => {
         console.log(links);
 
         this.createCartItemGQL.mutate({ cartId: this.customerService.customerUuid, productSku: sku, quantity, size, orientation, fusionType, fontColor, backgroundColor, titleText, subtitleText, tagText, useLabel })

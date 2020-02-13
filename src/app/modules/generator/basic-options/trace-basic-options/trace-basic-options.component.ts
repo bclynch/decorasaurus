@@ -41,8 +41,8 @@ export class TraceBasicOptionsComponent implements OnInit, OnDestroy {
     formData.append('color', this.generatorService.traceColor);
 
     this.traceSubscription = this.apiService.posterizeImage(formData).subscribe(
-      result => {
-        this.generatorService.posterSrcSubject.next(this._DomSanitizationService.bypassSecurityTrustUrl(result.image));
+      ({ image }: any) => {
+        this.generatorService.posterSrcSubject.next(this._DomSanitizationService.bypassSecurityTrustUrl(image));
         this.generatorService.tracingSubject.next(false);
       }
     );

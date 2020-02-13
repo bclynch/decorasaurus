@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { GeneratorComponent } from './generator/generator.component';
 import { Routes, RouterModule } from '@angular/router';
 
-import { AngularCropperjsModule } from 'angular-cropperjs';
-import { FileDropModule } from 'ngx-file-drop';
+// import { AngularCropperjsModule } from 'angular-cropperjs';
+import { NgxFileDropModule } from 'ngx-file-drop';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
 
@@ -36,8 +36,8 @@ const routes: Routes = [
   ],
   imports: [
     CommonModule,
-    AngularCropperjsModule,
-    FileDropModule,
+    // AngularCropperjsModule,
+    NgxFileDropModule,
     ColorPickerModule,
     RouterModule.forChild(routes),
     NgxMapboxGLModule.withConfig({

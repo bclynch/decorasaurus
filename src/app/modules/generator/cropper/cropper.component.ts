@@ -8,7 +8,7 @@ import { GeneratorService } from 'src/app/services/generator.service';
 })
 export class CropperComponent implements OnInit {
   @Input() imgUrl: string;
-  @ViewChild('angularCropper') public angularCropper: any;
+  @ViewChild('angularCropper', { static: true }) public angularCropper: any;
 
   cropperConfig = {
     aspectRatio: 2 / 3,

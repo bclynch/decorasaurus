@@ -1,8 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 // @import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
 @import './app/theme.scss';
-@import '../node_modules/ngx-sharebuttons/styles/share-buttons.scss';
-@import '../node_modules/ngx-sharebuttons/styles/themes/material/material-dark-theme.scss';
+@import "~@ngx-share/button/themes/material/material-dark-theme";
 
 // global css4 vars
 :root {

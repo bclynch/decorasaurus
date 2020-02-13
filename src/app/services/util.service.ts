@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Observable } from 'rxjs';
-import { Http } from '@angular/http';
 import { map } from 'rxjs/operators';
 import { CustomerService } from './customer.service';
+import { HttpHeaders, HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 @Injectable()
 export class UtilService {
@@ -18,7 +18,7 @@ export class UtilService {
   public infiniteActive: boolean;
 
   constructor(
-    private http: Http,
+    private httpClient: HttpClient,
     private customerService: CustomerService
   ) {
     this.infiniteActiveSubject = new BehaviorSubject(null);
@@ -27,7 +27,7 @@ export class UtilService {
   }
 
   getJSON(path: string) {
-    return this.http.get(path).pipe(map(res => res.json()));
+    return this.httpClient.get(path).pipe(map((res: any) => res.json()));
   }
 
   convertImageToDataURL(url: string): Promise<any> {

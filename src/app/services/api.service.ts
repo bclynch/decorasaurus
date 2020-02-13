@@ -1,17 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { ENV } from '../../environments/environment';
 import gql from 'graphql-tag';
 import { Apollo } from 'apollo-angular';
-import { HttpHeaders, HttpClient } from '@angular/common/http';
+import { HttpHeaders, HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 @Injectable()
 export class APIService {
 
   constructor(
-    private http: Http,
     private httpClient: HttpClient,
     private apollo: Apollo
   ) {}
@@ -24,7 +22,7 @@ export class APIService {
 
   // Email endpoints
   sendResetEmail(user: string, pw: string) {
-    return this.http.post(`${ENV.apiBaseURL}/mailing/reset`, { user, pw })
+    return this.httpClient.post(`${ENV.apiBaseURL}/mailing/reset`, { user, pw })
       .pipe(map(
         (response: Response) => {
           const data = response.json();
@@ -32,14 +30,12 @@ export class APIService {
         }
       )
       ).pipe(catchError(
-        (error: Response) => {
-          return Observable.throw('Something went wrong');
-        }
+        (error: HttpErrorResponse) => throwError(error.message || 'server error.')
     ));
   }
 
   sendContactEmail(data: { why: string; name: string; email: string; content: string; }) {
-    return this.http.post(`${ENV.apiBaseURL}/mailing/contact`, { data })
+    return this.httpClient.post(`${ENV.apiBaseURL}/mailing/contact`, { data })
       .pipe(map(
         (response: Response) => {
           const json = response.json();
@@ -47,15 +43,13 @@ export class APIService {
         }
       )
       ).pipe(catchError(
-        (error: Response) => {
-          return Observable.throw('Something went wrong');
-        }
+        (error: HttpErrorResponse) => throwError(error.message || 'server error.')
       ));
   }
 
   // Posterize Uploads
   posterizeImage(formData: FormData) {
-    return this.http.post(`${ENV.apiBaseURL}/posterize`, formData)
+    return this.httpClient.post(`${ENV.apiBaseURL}/posterize`, formData)
     .pipe(map(
         (response: Response) => {
           const data = response.json();
@@ -63,15 +57,13 @@ export class APIService {
         }
       )
     ).pipe(catchError(
-        (error: Response) => {
-          return Observable.throw('Something went wrong');
-        }
+      (error: HttpErrorResponse) => throwError(error.message || 'server error.')
     ));
   }
 
   // patent endpoints
   fetchPatent(patentNumber: string) {
-    return this.http.post(`${ENV.apiBaseURL}/patent/fetch`, { patent: patentNumber })
+    return this.httpClient.post(`${ENV.apiBaseURL}/patent/fetch`, { patent: patentNumber })
     .pipe(map(
         (response: Response) => {
           const data = response.json();
@@ -79,14 +71,12 @@ export class APIService {
         }
       )
     ).pipe(catchError(
-        (error: Response) => {
-          return Observable.throw('Something went wrong');
-        }
+      (error: HttpErrorResponse) => throwError(error.message || 'server error.')
     ));
   }
 
   tracePatent(url: string, color: string) {
-    return this.http.post(`${ENV.apiBaseURL}/patent/trace`, { patent: url, color })
+    return this.httpClient.post(`${ENV.apiBaseURL}/patent/trace`, { patent: url, color })
     .pipe(map(
         (response: Response) => {
           const data = response.json();
@@ -94,9 +84,7 @@ export class APIService {
         }
       )
     ).pipe(catchError(
-        (error: Response) => {
-          return Observable.throw('Something went wrong');
-        }
+      (error: HttpErrorResponse) => throwError(error.message || 'server error.')
     ));
   }
 
@@ -104,7 +92,7 @@ export class APIService {
   // ************************* Stripe Routes *********************************
   // *******************************************************************
   createStripeCustomer(email: string, token: string) {
-    return this.http.post(`${ENV.apiBaseURL}/stripe/create-customer`, { email, token })
+    return this.httpClient.post(`${ENV.apiBaseURL}/stripe/create-customer`, { email, token })
     .pipe(map(
         (response: Response) => {
           const data = response.json();
@@ -112,14 +100,12 @@ export class APIService {
         }
       )
     ).pipe(catchError(
-        (error: Response) => {
-          return Observable.throw('Something went wrong');
-        }
+      (error: HttpErrorResponse) => throwError(error.message || 'server error.')
     ));
   }
 
   fetchStripeCustomer(email: string) {
-    return this.http.post(`${ENV.apiBaseURL}/stripe/fetch-customer`, { email })
+    return this.httpClient.post(`${ENV.apiBaseURL}/stripe/fetch-customer`, { email })
     .pipe(map(
         (response: Response) => {
           const data = response.json();
@@ -127,14 +113,12 @@ export class APIService {
         }
       )
     ).pipe(catchError(
-        (error: Response) => {
-          return Observable.throw('Something went wrong');
-        }
+      (error: HttpErrorResponse) => throwError(error.message || 'server error.')
     ));
   }
 
   deleteCard(customerId: string, cardId: string) {
-    return this.http.post(`${ENV.apiBaseURL}/stripe/delete-card`, { customerId, cardId })
+    return this.httpClient.post(`${ENV.apiBaseURL}/stripe/delete-card`, { customerId, cardId })
     .pipe(map(
         (response: Response) => {
           const data = response.json();
@@ -142,14 +126,12 @@ export class APIService {
         }
       )
     ).pipe(catchError(
-        (error: Response) => {
-          return Observable.throw('Something went wrong');
-        }
+      (error: HttpErrorResponse) => throwError(error.message || 'server error.')
     ));
   }
 
   changeDefaultCard(customerId: string, sourceId: string) {
-    return this.http.post(`${ENV.apiBaseURL}/stripe/change-default-card`, { customerId, sourceId })
+    return this.httpClient.post(`${ENV.apiBaseURL}/stripe/change-default-card`, { customerId, sourceId })
     .pipe(map(
         (response: Response) => {
           const data = response.json();
@@ -157,14 +139,12 @@ export class APIService {
         }
       )
     ).pipe(catchError(
-        (error: Response) => {
-          return Observable.throw('Something went wrong');
-        }
+      (error: HttpErrorResponse) => throwError(error.message || 'server error.')
     ));
   }
 
   processPoster(formData: FormData) {
-    return this.http.post(`${ENV.apiBaseURL}/poster/process`, formData)
+    return this.httpClient.post(`${ENV.apiBaseURL}/poster/process`, formData)
     .pipe(map(
         (response: Response) => {
           const data = response.json();
@@ -172,9 +152,7 @@ export class APIService {
         }
       )
     ).pipe(catchError(
-        (error: Response) => {
-          return Observable.throw('Something went wrong');
-        }
+      (error: HttpErrorResponse) => throwError(error.message || 'server error.')
     ));
   }
 
@@ -187,10 +165,7 @@ export class APIService {
     return this.httpClient.get(`https://api.pexels.com/v1/search?query=${query}&per_page=30&page=1`, httpOptions)
     .pipe(map((response: any) => response.photos))
     .pipe(catchError(
-        (error: Response) => {
-          console.log(error);
-          return Observable.throw('Something went wrong');
-        }
+      (error: HttpErrorResponse) => throwError(error.message || 'server error.')
     ));
   }
 }

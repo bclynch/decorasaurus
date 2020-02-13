@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UploadEvent, FileSystemFileEntry, FileSystemDirectoryEntry } from 'ngx-file-drop';
+import { FileSystemFileEntry, FileSystemDirectoryEntry, NgxFileDropEntry } from 'ngx-file-drop';
 import { GeneratorService } from 'src/app/services/generator.service';
 import { APIService } from 'src/app/services/api.service';
 import { UtilService } from 'src/app/services/util.service';
@@ -35,11 +35,11 @@ export class UploadCropComponent implements OnInit {
   ngOnInit() {
   }
 
-  public dropped(event: UploadEvent) {
-    if (event.files.length > 1) {
+  public dropped(files: NgxFileDropEntry[]) {
+    if (files.length > 1) {
       alert('Only upload one image at a time');
     } else {
-      this.uploadedFile = event.files[0];
+      this.uploadedFile = files[0];
 
       if (this.uploadedFile.fileEntry.isFile) {
         const fileEntry = this.uploadedFile.fileEntry as FileSystemFileEntry;

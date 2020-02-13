@@ -12,11 +12,11 @@ const routes: Routes = [
   },
   {
     path: 'order',
-    loadChildren: '../order/order.module#OrderModule'
+    loadChildren: () => import('../order/order.module').then(m => m.OrderModule)
   },
   {
     path: 'reset-password',
-    loadChildren: '../reset-password/reset-password.module#ResetPasswordModule'
+    loadChildren: () => import('../reset-password/reset-password.module').then(m => m.ResetPasswordModule)
   }
 ];
 

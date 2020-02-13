@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpModule } from '@angular/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HttpHeaders } from '@angular/common/http';
 
@@ -45,7 +44,6 @@ import { AddressService } from './services/address.service';
     AppRoutingModule,
     HttpLinkModule,
     ApolloModule,
-    HttpModule,
     BrowserAnimationsModule,
     HttpClientModule,
     SharedModule

@@ -23,7 +23,7 @@ const routes: Routes = [
   // }
   {
     path: 'poster-generator',
-    loadChildren: '../generator/generator.module#GeneratorModule'
+    loadChildren: () => import('../generator/generator.module').then(m => m.GeneratorModule)
   }
 ];
 

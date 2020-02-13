@@ -20,7 +20,7 @@ import { map } from 'rxjs/operators';
 })
 
 export class GeneratorComponent implements OnInit, OnDestroy {
-  @ViewChild('hiddenMap', {read: ViewContainerRef}) hiddenMap: ViewContainerRef;
+  @ViewChild('hiddenMap', { read: ViewContainerRef, static: true }) hiddenMap: ViewContainerRef;
 
   paramsSubscription: SubscriptionLike;
   tracingSubscription: SubscriptionLike;

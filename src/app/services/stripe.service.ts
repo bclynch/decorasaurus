@@ -53,7 +53,7 @@ export class StripeService {
       }
 
       this.createStripeCustomer(this.customerService.customerObject.email, token).subscribe(
-        ({ data }) => {
+        ({ data }: any) => {
           console.log(data);
           // update customer object
           this.customerService.updateCustomer(this.customerService.customerObject.id, this.customerService.customerObject.firstName, this.customerService.customerObject.lastName, data.id).then(
@@ -71,7 +71,7 @@ export class StripeService {
   fetchStripeCustomer(email: string): Promise<void> {
     return new Promise((resolve, reject) => {
       this.apiService.fetchStripeCustomer(email).subscribe(
-        ({ data }) => {
+        ({ data }: any) => {
           if (data.data.length) {
             this.stripeCustomer = data.data[0];
             console.log(this.stripeCustomer);
@@ -150,10 +150,10 @@ export class StripeService {
 
   deleteCard(card) {
     this.apiService.deleteCard(card.customer, card.id).subscribe(
-      (resp) => {
-        console.log(resp);
-        if (resp.data.deleted) {
-          this.sources = this.sources.filter((source) => source.id !== resp.data.id);
+      ({ data }: any) => {
+        console.log(data);
+        if (data && data.deleted) {
+          this.sources = this.sources.filter((source) => source.id !== data.id);
           this.snackBar.openFromComponent(AddedSnackbar, {
             duration: 3000,
             verticalPosition: 'top',
@@ -168,9 +168,9 @@ export class StripeService {
 
   changeDefaultCard(card) {
     this.apiService.changeDefaultCard(card.customer, card.id).subscribe(
-      (resp) => {
-        console.log(resp);
-        this.stripeCustomer = resp.data;
+      ({ data }: any) => {
+        console.log(data);
+        this.stripeCustomer = data;
         this.snackBar.openFromComponent(AddedSnackbar, {
           duration: 3000,
           verticalPosition: 'top',

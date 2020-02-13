@@ -3,15 +3,15 @@ import { Routes, RouterModule } from '@angular/router';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: 'home', loadChildren: './modules/home/home.module#HomeModule' },
-  { path: 'about', loadChildren: './modules/about/about.module#AboutModule' },
-  { path: 'help', loadChildren: './modules/help/help.module#HelpModule' },
-  { path: 'cart', loadChildren: './modules/cart/cart.module#CartModule' },
-  { path: 'checkout', loadChildren: './modules/checkout/checkout.module#CheckoutModule' },
-  { path: 'create', loadChildren: './modules/create/create.module#CreateModule' },
-  { path: 'account', loadChildren: './modules/account/account.module#AccountModule' },
-  { path: 'policies', loadChildren: './modules/policies/policies.module#PoliciesModule' },
-  { path: '**', loadChildren: './modules/not-found/not-found.module#NotFoundModule' }
+  { path: 'home', loadChildren: () => import('./modules/home/home.module').then(m => m.HomeModule) },
+  { path: 'about', loadChildren: () => import('./modules/about/about.module').then(m => m.AboutModule) },
+  { path: 'help', loadChildren: () => import('./modules/help/help.module').then(m => m.HelpModule) },
+  { path: 'cart', loadChildren: () => import('./modules/cart/cart.module').then(m => m.CartModule) },
+  { path: 'checkout', loadChildren: () => import('./modules/checkout/checkout.module').then(m => m.CheckoutModule) },
+  { path: 'create', loadChildren: () => import('./modules/create/create.module').then(m => m.CreateModule) },
+  { path: 'account', loadChildren: () => import('./modules/account/account.module').then(m => m.AccountModule) },
+  { path: 'policies', loadChildren: () => import('./modules/policies/policies.module').then(m => m.PoliciesModule) },
+  { path: '**', loadChildren: () => import('./modules/not-found/not-found.module').then(m => m.NotFoundModule) }
 ];
 
 @NgModule({
